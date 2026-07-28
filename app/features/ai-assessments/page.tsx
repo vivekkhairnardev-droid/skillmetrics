@@ -61,16 +61,14 @@ export default function AIAssessmentsPage() {
         <div className="container max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
-              <span className="text-brand-red font-extrabold text-xs uppercase tracking-widest block">
-                Continuous Capability Evaluation
-              </span>
+
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                 Evaluate Practical Skills in Minutes, Not Weeks
               </h2>
               <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
                 Traditional pre-hire screening platforms rely on static databases of coding questions, which candidates can quickly find online. SkillMetrics AI creates bespoke evaluations tailored to your company's actual tech stack, database schemas, and standard operating procedures (SOPs).
               </p>
-              
+
               <div className="space-y-4">
                 <div className="flex gap-4">
                   <div className="h-10 w-10 shrink-0 rounded-lg bg-slate-100 dark:bg-slate-900 flex items-center justify-center text-brand-red">
@@ -147,9 +145,7 @@ export default function AIAssessmentsPage() {
       <section className="py-16 sm:py-20 bg-slate-50 dark:bg-slate-900/40 border-b border-border/60">
         <div className="container max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-12">
           <div className="space-y-3 max-w-3xl mx-auto">
-            <span className="text-brand-red font-extrabold text-xs uppercase tracking-widest block">
-              The Assessment Lifecycle
-            </span>
+
             <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
               How the SkillMetrics AI Evaluation Engine Operates
             </h2>
@@ -210,9 +206,7 @@ export default function AIAssessmentsPage() {
       <section className="py-16 sm:py-20 bg-white dark:bg-background border-b border-border/60">
         <div className="container max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-12">
           <div className="space-y-3 max-w-3xl mx-auto">
-            <span className="text-brand-yellow font-extrabold text-xs uppercase tracking-widest block">
-              Platform Features
-            </span>
+
             <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
               Enterprise Features Built for Security & Scale
             </h2>
