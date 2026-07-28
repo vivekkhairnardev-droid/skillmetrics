@@ -93,7 +93,7 @@ export const defaultSiteSettings: SiteSettings = {
   footerVariant: "dark_matrix",
   navLinks: [
     { id: "1", label: "Integrations", url: "/integrations" },
-    { id: "2", label: "Resources Hub", url: "/resources" },
+    { id: "2", label: "Resources", url: "/resources" },
     { id: "3", label: "Contact Us", url: "/contact" },
   ],
   heroTitle: "India's #1 Skill Management Software",
@@ -147,8 +147,8 @@ interface SiteSettingsContextType {
 
 const SiteSettingsContext = createContext<SiteSettingsContextType>({
   settings: defaultSiteSettings,
-  updateSettings: () => {},
-  resetSettings: () => {},
+  updateSettings: () => { },
+  resetSettings: () => { },
 });
 
 const STORAGE_KEY = "skillmetrics_site_settings";
