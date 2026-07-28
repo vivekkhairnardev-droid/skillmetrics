@@ -35,7 +35,7 @@ export function BookDemoModal({ open, onOpenChange, calendlyUrl }: BookDemoModal
     calendlyUrl ||
     process.env.NEXT_PUBLIC_CALENDLY_URL ||
     (settings as any)?.calendlyUrl ||
-    "https://calendly.com/d/cfs8-7x6-q4h"; // Default Calendly Link
+    "https://calendly.com/vivekkhairnar-dev/new-meeting"; // Default Calendly Link
 
   // Clean URL to ensure iframe friendliness
   const formattedCalendlyUrl = targetCalendlyUrl.includes("?")
@@ -72,22 +72,20 @@ export function BookDemoModal({ open, onOpenChange, calendlyUrl }: BookDemoModal
           <div className="flex items-center gap-2 pt-4">
             <button
               onClick={() => setActiveTab("calendly")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                activeTab === "calendly"
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${activeTab === "calendly"
                   ? "bg-brand-red text-white shadow-md"
                   : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-              }`}
+                }`}
             >
               <CalendarIcon className="h-3.5 w-3.5" />
               Instant Calendar Booking
             </button>
             <button
               onClick={() => setActiveTab("form")}
-              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                activeTab === "form"
+              className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${activeTab === "form"
                   ? "bg-brand-red text-white shadow-md"
                   : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
-              }`}
+                }`}
             >
               <FormInput className="h-3.5 w-3.5" />
               Direct Request Form

@@ -28,8 +28,8 @@ export const siteSettings = defineType({
       name: "calendlyUrl",
       title: "Calendly Booking URL",
       type: "url",
-      description: "Custom Calendly link for live demo scheduling (e.g. https://calendly.com/your-org/demo)",
-      initialValue: "https://calendly.com/d/cfs8-7x6-q4h",
+      description: "Custom Calendly link for live demo scheduling (e.g. https://calendly.com/vivekkhairnar-dev/new-meeting)",
+      initialValue: "https://calendly.com/vivekkhairnar-dev/new-meeting",
     }),
 
     // Feature Section
