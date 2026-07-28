@@ -37,6 +37,7 @@ export interface SiteSettings {
   heroTitle: string;
   heroSub: string;
   heroCtaText: string;
+  calendlyUrl: string;
   heroBgStyle: "dark_grid" | "crisp_light" | "brand_gradient" | "obsidian_minimal";
 
   // Feature Card Images
@@ -99,6 +100,7 @@ export const defaultSiteSettings: SiteSettings = {
   heroTitle: "India's #1 Skill Management Software",
   heroSub: "Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments.",
   heroCtaText: "Book a Demo",
+  calendlyUrl: "https://calendly.com/d/cfs8-7x6-q4h",
   heroBgStyle: "dark_grid",
 
   card1Image: "/skillmetrics.png",

@@ -66,8 +66,6 @@ export default function Home() {
   const { settings } = useSiteSettings();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [bookDemoOpen, setBookDemoOpen] = useState(false);
-  const [demoSubmitted, setDemoSubmitted] = useState(false);
   const [copiedText, setCopiedText] = useState<string | null>(null);
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
@@ -122,15 +120,6 @@ export default function Home() {
     }
   };
 
-  const handleBookDemoSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setDemoSubmitted(true);
-    setTimeout(() => {
-      setDemoSubmitted(false);
-      setBookDemoOpen(false);
-    }, 2000);
-  };
-
   const copyToClipboard = (text: string, label: string) => {
     navigator.clipboard.writeText(text);
     setCopiedText(label);
@@ -155,27 +144,30 @@ export default function Home() {
 
           {/* Main Display Heading */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.12] max-w-4xl mx-auto">
-            {settings.heroTitle || "India's #1 Skill Management Software"}
+            India&apos;s 1<sup className="text-[0.45em] text-white font-extrabold align-super ml-0.5">st</sup> <span className="text-brand-red">Skill Management Software</span>
           </h1>
 
           {/* Subtitle */}
-          <p className="text-base sm:text-lg lg:text-xl leading-relaxed text-slate-400 max-w-2xl mx-auto font-normal">
-            {settings.heroSub || "Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments."}
+          <p className="text-base sm:text-lg lg:text-xl leading-relaxed text-slate-400 max-w-2xl mx-auto font-normal font-sans">
+            Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments.
           </p>
 
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-            <Button
-              size="lg"
-              className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red border-none hover:scale-[1.02] transition-transform"
-              onClick={() => setBookDemoOpen(true)}
-            >
-              {settings.heroCtaText || "Book a Demo"}
-            </Button>
+            <Link href="/book-demo">
+              <Button
+                size="lg"
+                className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red border-none hover:scale-[1.02] transition-transform"
+              >
+                {settings.heroCtaText || "Book a Demo"}
+              </Button>
+            </Link>
 
-            <Button variant="dark" size="lg" className="hover:scale-[1.02] transition-transform" onClick={() => setBookDemoOpen(true)}>
-              Start Free Trial
-            </Button>
+            <Link href="/book-demo">
+              <Button variant="dark" size="lg" className="hover:scale-[1.02] transition-transform">
+                Start Free Trial
+              </Button>
+            </Link>
           </div>
 
         </div>
@@ -1139,12 +1131,16 @@ export default function Home() {
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 justify-center lg:justify-start">
-                  <Button size="lg" onClick={() => setBookDemoOpen(true)}>
-                    Get a Quote
-                  </Button>
-                  <Button variant="outline" size="lg" onClick={() => setBookDemoOpen(true)}>
-                    Calculate Your ROI
-                  </Button>
+                  <Link href="/book-demo">
+                    <Button size="lg">
+                      Get a Quote
+                    </Button>
+                  </Link>
+                  <Link href="/book-demo">
+                    <Button variant="outline" size="lg">
+                      Calculate Your ROI
+                    </Button>
+                  </Link>
                 </div>
               </div>
 

@@ -299,6 +299,7 @@ export interface SiteSettingsData {
   bannerEnabled?: boolean;
   bannerText?: string;
   bannerLink?: string;
+  calendlyUrl?: string;
   metaTitle?: string;
   metaDescription?: string;
 }
@@ -314,6 +315,7 @@ export async function getSiteSettings(): Promise<SiteSettingsData> {
         heroTitle,
         heroSubtitle,
         heroCtaText,
+        calendlyUrl,
         featuresTitle,
         featuresSubtitle,
         "card1Image": card1Image.asset->url,

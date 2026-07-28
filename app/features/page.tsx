@@ -11,7 +11,9 @@ import {
   ArrowRight,
   CheckCircle2,
   Sparkles,
-  ShieldCheck
+  ShieldCheck,
+  TrendingUp,
+  LayoutDashboard
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
@@ -88,6 +90,48 @@ const features = [
       "Functional competency radar vectors",
       "Junior to Senior capability frameworks",
       "1-Click HR & leadership analytics"
+    ]
+  },
+  {
+    slug: "up-reskilling",
+    title: "Up & Re-Skilling",
+    category: "Workforce Learning",
+    description: "Equip your engineering and plant workforces with structured learning pathways, objective milestone tracking, and automated progress scorecards.",
+    icon: TrendingUp,
+    href: "/features/up-reskilling",
+    image: "/skillmetrics.png",
+    highlights: [
+      "Automated training pathway recommendation",
+      "LMS course integration & milestone tracking",
+      "Competency validation post-learning"
+    ]
+  },
+  {
+    slug: "powerful-dashboards",
+    title: "Powerful Dashboards",
+    category: "Real-time Analytics",
+    description: "Gain immediate insight into site compliance, plant coverage, upskilling metrics, and team skill distributions from unified executive boards.",
+    icon: LayoutDashboard,
+    href: "/features/powerful-dashboards",
+    image: "/emp.jpg",
+    highlights: [
+      "No manual data entry reporting",
+      "ISO compliance audit exports",
+      "Upskilling velocity analytics"
+    ]
+  },
+  {
+    slug: "anticheat-suite",
+    title: "Anti-Cheat Suite",
+    category: "Enterprise Security",
+    description: "Enforce maximum integrity during developer assessments and plant certifications with smart proctoring, session locks, and plagiarism verification.",
+    icon: ShieldCheck,
+    href: "/features/anticheat-suite",
+    image: "/ai_asses.png",
+    highlights: [
+      "Webcam, tab-switch and copy-paste logging",
+      "Geofencing and biometric lock features",
+      "Automatic plagiarism code similarity hashes"
     ]
   }
 ];

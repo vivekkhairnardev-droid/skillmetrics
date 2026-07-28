@@ -24,6 +24,13 @@ export const siteSettings = defineType({
       type: "string",
       initialValue: "Book a Demo",
     }),
+    defineField({
+      name: "calendlyUrl",
+      title: "Calendly Booking URL",
+      type: "url",
+      description: "Custom Calendly link for live demo scheduling (e.g. https://calendly.com/your-org/demo)",
+      initialValue: "https://calendly.com/d/cfs8-7x6-q4h",
+    }),
 
     // Feature Section
     defineField({

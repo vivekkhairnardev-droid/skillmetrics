@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
 import {
   Grid,
@@ -22,14 +22,11 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { BookDemoModal } from "@/components/book-demo-modal";
+import { SubscribeSection } from "@/components/subscribe-section";
 
 export default function SkillMatrixPage() {
-  const [demoOpen, setDemoOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
       <Navbar />
@@ -38,50 +35,23 @@ export default function SkillMatrixPage() {
       <section className="bg-brand-dark text-white py-14 sm:py-20 border-b border-border/20 relative overflow-hidden">
         <div className="absolute -left-24 -top-24 w-96 h-96 bg-brand-red/20 rounded-full blur-3xl pointer-events-none" />
         <div className="container max-w-5xl mx-auto px-4 sm:px-8 text-center space-y-6 relative z-10">
-          <Badge className="bg-brand-red/20 text-brand-red border border-brand-red/30 px-3 py-1 text-xs uppercase font-extrabold tracking-wider">
-            Competency Mapping, Audits &amp; Skill Matrix
-          </Badge>
-
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
             Familiarize yourself with the <span className="text-brand-yellow">Skill Matrix</span>
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 max-w-3xl mx-auto leading-relaxed font-normal">
-            Skill Metrics skill management software helps you create customizable training &amp; skill matrices, perform instant gap analysis, and streamline manpower allocation.
+            A real-time, unbreakable tool showcasing essential skills and core competencies of your staff members to optimize task performance and operational efficiency.
           </p>
 
-          {/* Key Bullet Points from Homepage */}
-          <div className="max-w-3xl mx-auto bg-slate-900/80 border border-slate-800 rounded-xl p-5 text-left space-y-2.5 shadow-xl backdrop-blur-xs">
-            <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
-              <CheckCircle2 className="h-4 w-4 text-brand-yellow shrink-0 mt-0.5" />
-              <span>Create a Training &amp; Skill matrix of any size</span>
-            </div>
-            <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
-              <CheckCircle2 className="h-4 w-4 text-brand-yellow shrink-0" />
-              <span>Choose any combination of people, skills, job roles, or functions</span>
-            </div>
-            <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
-              <CheckCircle2 className="h-4 w-4 text-brand-yellow shrink-0" />
-              <span>Customizable or generic skill targets for individuals/job roles</span>
-            </div>
-            <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
-              <CheckCircle2 className="h-4 w-4 text-brand-yellow shrink-0" />
-              <span>Instant access to historical training &amp; assessment data, certification, and evidence</span>
-            </div>
-            <div className="flex items-start gap-3 text-xs sm:text-sm text-slate-200">
-              <CheckCircle2 className="h-4 w-4 text-brand-yellow shrink-0" />
-              <span>Accompanied by a variety of powerful functionality</span>
-            </div>
-          </div>
-
-          <div className="pt-3 flex items-center justify-center gap-4">
-            <Button
-              size="lg"
-              className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red"
-              onClick={() => setDemoOpen(true)}
-            >
-              Request Demo <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+          <div className="pt-2 flex items-center justify-center gap-4">
+            <Link href="/book-demo">
+              <Button
+                size="lg"
+                className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red"
+              >
+                Request Demo <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
             <Link href="/features">
               <Button variant="dark" size="lg">
                 View All Features
@@ -91,15 +61,11 @@ export default function SkillMatrixPage() {
         </div>
       </section>
 
-      {/* SECTION 1: ROBUST TRAINING & COMPETENCY */}
-      <main className="flex-1 py-16 bg-slate-50 dark:bg-background space-y-16">
-        <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-16">
-
+      {/* SECTION 1: ROBUST TRAINING & COMPETENCY (White Background) */}
+      <section className="py-16 sm:py-20 bg-white dark:bg-background border-b border-border/60">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-brand-red/10 text-brand-red font-extrabold text-xs uppercase tracking-wider">
-                <Grid className="h-4 w-4" /> Centralized Skill Software
-              </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                 Robust Training, Competency, Audits, Assessment, and Skill Matrix
               </h2>
@@ -119,13 +85,14 @@ export default function SkillMatrixPage() {
               />
             </div>
           </div>
+        </div>
+      </section>
 
-          {/* SIMPLE ASSESSMENT WORKFLOW BANNER */}
+      {/* SECTION 2: SIMPLE ASSESSMENT WORKFLOW BANNER (Gray Background) */}
+      <section className="py-16 sm:py-20 bg-slate-50 dark:bg-slate-900/40 border-b border-border/60">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-8">
           <div className="bg-card border border-border/80 rounded-2xl p-6 sm:p-10 shadow-lg space-y-6">
             <div className="space-y-2 text-center max-w-2xl mx-auto">
-              <Badge variant="outline" className="bg-brand-red/10 text-brand-red border-brand-red/20 font-bold uppercase text-[10px]">
-                Simple Evaluation Workflow
-              </Badge>
               <h3 className="text-2xl font-black text-foreground">
                 With Skill Metrics, Assessment of Employees is as Simple As:
               </h3>
@@ -162,128 +129,171 @@ export default function SkillMatrixPage() {
               Easily fetched skill results help in monitoring the skill gaps within seconds, hence results in a trouble-free and accurate allocation of manpower through your organization/organizations.
             </p>
           </div>
+        </div>
+      </section>
 
-          {/* TOP FEATURES GRID */}
-          <div className="space-y-8">
-            <div className="border-b border-border pb-4 space-y-1">
-              <Badge variant="outline" className="text-xs uppercase font-extrabold text-brand-red">Core Capabilities</Badge>
-              <h3 className="text-2xl font-black text-foreground">Top Features</h3>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
-                <CardHeader className="space-y-2">
-                  <div className="h-10 w-10 rounded-lg bg-brand-red/10 text-brand-red flex items-center justify-center font-bold">
-                    <Clock className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base font-bold">Training Scheduling</CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    Schedule internal upskilling sessions, assign trainees, and track progress effortlessly.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
-                <CardHeader className="space-y-2">
-                  <div className="h-10 w-10 rounded-lg bg-brand-yellow/10 text-slate-900 dark:text-brand-yellow flex items-center justify-center font-bold">
-                    <Cpu className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base font-bold">Assessment</CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    Automated &amp; proctored skill testing for employees across departments and skill levels.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
-                <CardHeader className="space-y-2">
-                  <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
-                    <Layers className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base font-bold">Competency Mapping</CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    Map individual proficiency ratings against target role benchmarks in real-time.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
-                <CardHeader className="space-y-2">
-                  <div className="h-10 w-10 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold">
-                    <Users className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base font-bold">Accurate Manpower Distribution</CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    Ensure qualified operators and staff are assigned to the right workstations at all times.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
-                <CardHeader className="space-y-2">
-                  <div className="h-10 w-10 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold">
-                    <FileCheck2 className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base font-bold">Cut Down in Spreadsheets</CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    Eliminate manual Excel calculations, versioning errors, and missing certificate data.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
-                <CardHeader className="space-y-2">
-                  <div className="h-10 w-10 rounded-lg bg-slate-500/10 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold">
-                    <Server className="h-5 w-5" />
-                  </div>
-                  <CardTitle className="text-base font-bold">Centralized System</CardTitle>
-                  <CardDescription className="text-xs leading-relaxed">
-                    One single source of truth for plant managers, HR leads, and compliance auditors.
-                  </CardDescription>
-                </CardHeader>
-              </Card>
-            </div>
+      {/* SECTION 3: TOP FEATURES GRID (White Background) */}
+      <section className="py-16 sm:py-20 bg-white dark:bg-background border-b border-border/60">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+          <div className="border-b border-border pb-4 space-y-1">
+            <h3 className="text-2xl font-black text-foreground">Top Features</h3>
           </div>
 
-          {/* INSIGHTS OF SKILL METRICS */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center pt-8">
-            <div className="lg:col-span-5 rounded-xl border border-border/80 shadow-2xl overflow-hidden bg-card">
-              <img
-                src="/emp.jpg"
-                alt="Insights of Skill Metrics"
-                className="w-full h-auto object-cover"
-              />
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
+              <CardHeader className="space-y-2">
+                <div className="h-10 w-10 rounded-lg bg-brand-red/10 text-brand-red flex items-center justify-center font-bold">
+                  <Clock className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-base font-bold">Training Scheduling</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  Schedule internal upskilling sessions, assign trainees, and track progress effortlessly.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
+              <CardHeader className="space-y-2">
+                <div className="h-10 w-10 rounded-lg bg-brand-yellow/10 text-slate-900 dark:text-brand-yellow flex items-center justify-center font-bold">
+                  <Cpu className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-base font-bold">Assessment</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  Automated &amp; proctored skill testing for employees across departments and skill levels.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
+              <CardHeader className="space-y-2">
+                <div className="h-10 w-10 rounded-lg bg-emerald-500/10 text-emerald-600 flex items-center justify-center font-bold">
+                  <Layers className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-base font-bold">Competency Mapping</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  Map individual proficiency ratings against target role benchmarks in real-time.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
+              <CardHeader className="space-y-2">
+                <div className="h-10 w-10 rounded-lg bg-blue-500/10 text-blue-600 flex items-center justify-center font-bold">
+                  <Users className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-base font-bold">Accurate Manpower Distribution</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  Ensure qualified operators and staff are assigned to the right workstations at all times.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
+              <CardHeader className="space-y-2">
+                <div className="h-10 w-10 rounded-lg bg-purple-500/10 text-purple-600 flex items-center justify-center font-bold">
+                  <FileCheck2 className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-base font-bold">Cut Down in Spreadsheets</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  Eliminate manual Excel calculations, versioning errors, and missing certificate data.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs hover:border-brand-red/40 transition-colors">
+              <CardHeader className="space-y-2">
+                <div className="h-10 w-10 rounded-lg bg-slate-500/10 text-slate-800 dark:text-slate-200 flex items-center justify-center font-bold">
+                  <Server className="h-5 w-5" />
+                </div>
+                <CardTitle className="text-base font-bold">Centralized System</CardTitle>
+                <CardDescription className="text-xs leading-relaxed">
+                  One single source of truth for plant managers, HR leads, and compliance auditors.
+                </CardDescription>
+              </CardHeader>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 4: INSIGHTS OF SKILL MATRIX (Gray Background) */}
+      <section className="py-16 sm:py-20 bg-slate-50 dark:bg-slate-900/40 border-b border-border/60">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Left Column: Image with floating stat elements */}
+            <div className="lg:col-span-5 relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-brand-red to-brand-yellow rounded-2xl blur-lg opacity-25 group-hover:opacity-40 transition duration-300" />
+              <div className="relative rounded-xl border border-border/80 shadow-2xl overflow-hidden bg-card">
+                <img
+                  src="/emp.jpg"
+                  alt="Insights of Skill Metrics"
+                  className="w-full h-auto object-cover"
+                />
+                
+                {/* Floating overlay stats card */}
+                <div className="absolute bottom-4 left-4 right-4 bg-background/90 dark:bg-slate-900/90 backdrop-blur-md border border-border/60 rounded-lg p-4 shadow-xl flex items-center gap-3.5">
+                  <div className="h-10 w-10 rounded-full bg-brand-red/10 flex items-center justify-center font-bold text-brand-red">
+                    <Sparkles className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="text-xs text-muted-foreground font-semibold">Audit Velocity Boost</div>
+                    <div className="text-sm font-extrabold text-foreground">Up to 5x Faster Audits</div>
+                  </div>
+                </div>
+              </div>
             </div>
 
+            {/* Right Column: Premium Insight Cards */}
             <div className="lg:col-span-7 space-y-6">
-              <div className="border-b border-border pb-3 space-y-1">
-                <Badge variant="outline" className="text-xs uppercase font-extrabold text-brand-yellow">Key Insights</Badge>
-                <h2 className="text-3xl font-extrabold text-foreground tracking-tight">Insights of Skill Metrics</h2>
+              <div className="space-y-2">
+                <h2 className="text-3xl sm:text-4xl font-black text-foreground tracking-tight leading-tight">
+                  Insights of Skill Metrics
+                </h2>
+                <p className="text-muted-foreground text-sm max-w-xl">
+                  Strategic observations on modern workforce competency mapping, resource agility, and structural growth.
+                </p>
               </div>
 
               <div className="space-y-4">
-                <div className="bg-card p-5 rounded-xl border border-border/70 space-y-2">
-                  <h3 className="text-base font-bold text-foreground flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-brand-yellow" /> Why is Skill Assessment Important?
-                  </h3>
+                {/* Insight Card 1 */}
+                <div className="bg-card p-6 rounded-xl border border-border hover:border-brand-red/30 border-l-4 border-l-brand-red hover:shadow-md transition-all duration-300 space-y-2.5">
+                  <div className="flex items-center gap-2.5 text-foreground">
+                    <div className="h-8 w-8 rounded-lg bg-brand-red/10 flex items-center justify-center text-brand-red">
+                      <Sparkles className="h-4.5 w-4.5" />
+                    </div>
+                    <h3 className="text-base font-extrabold tracking-tight">
+                      Why is Skill Assessment Important?
+                    </h3>
+                  </div>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Understanding the need of work &amp; working to the need is the pre-eminent part of skill assessment. Right person at right time at the right work definitely results in perfect management of workload &amp; finally takes the organization to the ultimate goal: <strong>GROWTH</strong>.
+                    Understanding the need of work &amp; working to the need is the pre-eminent part of skill assessment. Right person at right time at the right work definitely results in perfect management of workload &amp; finally takes the organization to the ultimate goal: <strong className="text-foreground font-semibold">GROWTH</strong>.
                   </p>
                 </div>
 
-                <div className="bg-card p-5 rounded-xl border border-border/70 space-y-2">
-                  <h3 className="text-base font-bold text-foreground flex items-center gap-2">
-                    <Smartphone className="h-4 w-4 text-brand-red" /> Skill Assessment &amp; The People
-                  </h3>
+                {/* Insight Card 2 */}
+                <div className="bg-card p-6 rounded-xl border border-border hover:border-brand-yellow/30 border-l-4 border-l-brand-yellow hover:shadow-md transition-all duration-300 space-y-2.5">
+                  <div className="flex items-center gap-2.5 text-foreground">
+                    <div className="h-8 w-8 rounded-lg bg-brand-yellow/10 flex items-center justify-center text-slate-800 dark:text-brand-yellow">
+                      <Smartphone className="h-4.5 w-4.5" />
+                    </div>
+                    <h3 className="text-base font-extrabold tracking-tight">
+                      Skill Assessment &amp; The People
+                    </h3>
+                  </div>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Linear growth in digitization technologies has made smartphones &amp; tabs an integral part of our livelihood. SkillMetrics provides a solution that is easily accessible &amp; verified right at your <strong>FINGERTIPS</strong>.
+                    Linear growth in digitization technologies has made smartphones &amp; tabs an integral part of our livelihood. SkillMetrics provides a solution that is easily accessible &amp; verified right at your <strong className="text-foreground font-semibold">FINGERTIPS</strong>.
                   </p>
                 </div>
 
-                <div className="bg-card p-5 rounded-xl border border-border/70 space-y-2">
-                  <h3 className="text-base font-bold text-foreground flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-emerald-600" /> You &amp; Skill Metrics
-                  </h3>
+                {/* Insight Card 3 */}
+                <div className="bg-card p-6 rounded-xl border border-border hover:border-emerald-600/30 border-l-4 border-l-emerald-600 hover:shadow-md transition-all duration-300 space-y-2.5">
+                  <div className="flex items-center gap-2.5 text-foreground">
+                    <div className="h-8 w-8 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                      <ShieldCheck className="h-4.5 w-4.5" />
+                    </div>
+                    <h3 className="text-base font-extrabold tracking-tight">
+                      You &amp; Skill Metrics
+                    </h3>
+                  </div>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
                     Admin panel with all the masters pre-stored and easily editable. Assign admin roles, limit or extend user roles with 24x7 technical support included.
                   </p>
@@ -291,87 +301,53 @@ export default function SkillMatrixPage() {
               </div>
             </div>
           </div>
-
-          {/* WHY SKILL METRICS? (3 PILLARS: SECURITY, CROSS-PLATFORM, BEST PERFORMANCE) */}
-          <div className="space-y-8 pt-8">
-            <div className="text-center max-w-2xl mx-auto space-y-2">
-              <Badge className="bg-brand-red/20 text-brand-red border border-brand-red/30 text-xs font-bold uppercase">Why Skill Metrics?</Badge>
-              <h2 className="text-3xl font-extrabold text-foreground">Built for Security, Uptime &amp; High Performance</h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card className="border border-border bg-card shadow-xs text-center p-6 space-y-4">
-                <div className="h-12 w-12 rounded-full bg-brand-red/10 text-brand-red mx-auto flex items-center justify-center font-bold">
-                  <Lock className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground">Security</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Skill Metrics provides 100% Security Assurance. Protect your valuable data from threats and attacks. Ensure your data is safe as per your company norms.
-                </p>
-                <Link href="/features">
-                  <Button variant="ghost" size="sm" className="text-brand-red text-xs font-bold gap-1">
-                    Learn More <ChevronRight className="h-3 w-3" />
-                  </Button>
-                </Link>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs text-center p-6 space-y-4">
-                <div className="h-12 w-12 rounded-full bg-brand-yellow/10 text-slate-900 dark:text-brand-yellow mx-auto flex items-center justify-center font-bold">
-                  <Smartphone className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground">Cross-Platform</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Compatible with multiple platforms such as desktop, laptop, tablet, and mobile. Clean user interface supporting all modern versions of Android and iOS.
-                </p>
-                <Link href="/features">
-                  <Button variant="ghost" size="sm" className="text-brand-red text-xs font-bold gap-1">
-                    Learn More <ChevronRight className="h-3 w-3" />
-                  </Button>
-                </Link>
-              </Card>
-
-              <Card className="border border-border bg-card shadow-xs text-center p-6 space-y-4">
-                <div className="h-12 w-12 rounded-full bg-emerald-500/10 text-emerald-600 mx-auto flex items-center justify-center font-bold">
-                  <Zap className="h-6 w-6" />
-                </div>
-                <h3 className="text-lg font-bold text-foreground">Best Performance</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">
-                  Enhance your performance culture through an easy-to-use platform. Skill metrics, training records, reporting, dashboards, and radars make your work easy.
-                </p>
-                <Link href="/features">
-                  <Button variant="ghost" size="sm" className="text-brand-red text-xs font-bold gap-1">
-                    Learn More <ChevronRight className="h-3 w-3" />
-                  </Button>
-                </Link>
-              </Card>
-            </div>
-          </div>
-
-          {/* BOOK DEMO CTA BANNER */}
-          <div className="bg-brand-dark text-white rounded-2xl p-8 sm:p-12 text-center space-y-5 border border-border/20 shadow-2xl relative overflow-hidden">
-            <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-red/20 rounded-full blur-3xl pointer-events-none" />
-            <h2 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
-              Book a Demo for <span className="text-brand-yellow">Skill Management Software</span>
-            </h2>
-            <p className="text-sm sm:text-base text-slate-300 max-w-xl mx-auto">
-              Schedule your live walkthrough to see how SkillMetrics simplifies skill matrices, audits, and training schedules.
-            </p>
-            <div className="pt-2">
-              <Button
-                size="lg"
-                className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold px-8 shadow-brand-red"
-                onClick={() => setDemoOpen(true)}
-              >
-                Request Demo <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-          </div>
-
         </div>
-      </main>
+      </section>
 
+      {/* SECTION 5: WHY SKILL METRICS? (White Background) */}
+      <section className="py-16 sm:py-20 bg-white dark:bg-background border-b border-border/60">
+        <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-8">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <h2 className="text-3xl font-extrabold text-foreground">Built for Security, Uptime &amp; High Performance</h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card className="border border-border bg-card shadow-xs text-center p-6 space-y-4">
+              <div className="h-12 w-12 rounded-full bg-brand-red/10 text-brand-red mx-auto flex items-center justify-center font-bold">
+                <Lock className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground">Security</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                SkillMetrics secures your data and transactions through advanced encryption standards, secure APIs, and role-based access.
+              </p>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs text-center p-6 space-y-4">
+              <div className="h-12 w-12 rounded-full bg-brand-yellow/10 text-slate-900 dark:text-brand-yellow mx-auto flex items-center justify-center font-bold">
+                <Smartphone className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground">Cross-Platform Support</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Access your skill matrices, evaluate capabilities, and check compliance from desktop, tablet, or smartphone devices.
+              </p>
+            </Card>
+
+            <Card className="border border-border bg-card shadow-xs text-center p-6 space-y-4">
+              <div className="h-12 w-12 rounded-full bg-emerald-500/10 text-emerald-600 mx-auto flex items-center justify-center font-bold">
+                <Server className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground">Best Performance</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Enjoy lightning-fast page transitions, instant reporting, and highly optimized database querying.
+              </p>
+            </Card>
+          </div>
+        </div>
+      </section>
+
+
+      <SubscribeSection />
       <Footer />
-      <BookDemoModal open={demoOpen} onOpenChange={setDemoOpen} />
     </div>
   );
 }

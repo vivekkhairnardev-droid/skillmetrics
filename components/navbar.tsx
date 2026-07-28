@@ -40,21 +40,11 @@ import {
 } from "@/components/ui/dialog";
 
 import { useSiteSettings } from "@/components/site-settings-context";
+import { BookDemoModal } from "@/components/book-demo-modal";
 
 export function Navbar() {
   const { settings } = useSiteSettings();
-  const [bookDemoOpen, setBookDemoOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [demoSubmitted, setDemoSubmitted] = useState(false);
-
-  const handleBookDemoSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setDemoSubmitted(true);
-    setTimeout(() => {
-      setDemoSubmitted(false);
-      setBookDemoOpen(false);
-    }, 2000);
-  };
 
   const isDarkHeader = settings.navbarVariant === "modern_glass" || settings.navbarVariant === "centered_brand";
 
@@ -129,7 +119,7 @@ export function Navbar() {
                       <span>Skill Evaluation</span>
                     </div>
                     <div className="space-y-2">
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/skill-matrix" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <Layers className="h-4 w-4" />
                         </div>
@@ -139,7 +129,7 @@ export function Navbar() {
                         </div>
                       </Link>
 
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/employee-metrics" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <Users className="h-4 w-4" />
                         </div>
@@ -149,7 +139,7 @@ export function Navbar() {
                         </div>
                       </Link>
 
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/ai-assessments" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <Bot className="h-4 w-4" />
                         </div>
@@ -168,7 +158,7 @@ export function Navbar() {
                       <span>Workforce &amp; Skilling</span>
                     </div>
                     <div className="space-y-2">
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/multi-skilling" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <Zap className="h-4 w-4" />
                         </div>
@@ -178,7 +168,7 @@ export function Navbar() {
                         </div>
                       </Link>
 
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/competency-mapping" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <Target className="h-4 w-4" />
                         </div>
@@ -188,7 +178,7 @@ export function Navbar() {
                         </div>
                       </Link>
 
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/up-reskilling" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <TrendingUp className="h-4 w-4" />
                         </div>
@@ -207,7 +197,7 @@ export function Navbar() {
                       <span>Analytics &amp; Security</span>
                     </div>
                     <div className="space-y-2">
-                      <Link href="/#features" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/powerful-dashboards" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <LayoutDashboard className="h-4 w-4" />
                         </div>
@@ -217,7 +207,7 @@ export function Navbar() {
                         </div>
                       </Link>
 
-                      <Link href="/integrations" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
+                      <Link href="/features/anticheat-suite" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
                         <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
                           <ShieldCheck className="h-4 w-4" />
                         </div>
@@ -244,13 +234,14 @@ export function Navbar() {
                     </p>
                   </div>
 
-                  <Button
-                    size="sm"
-                    onClick={() => setBookDemoOpen(true)}
-                    className="w-full cursor-pointer font-medium"
-                  >
-                    Book a Demo
-                  </Button>
+                  <Link href="/book-demo" className="w-full">
+                    <Button
+                      size="sm"
+                      className="w-full cursor-pointer font-medium"
+                    >
+                      Book a Demo
+                    </Button>
+                  </Link>
                 </div>
 
               </div>
@@ -277,89 +268,19 @@ export function Navbar() {
 
         {/* Actions: Book Demo & Free Trial Buttons */}
         <div className="hidden md:flex items-center gap-3">
-          <Button variant="outline" onClick={() => setBookDemoOpen(true)}>
-            Book Demo
-          </Button>
+          <Link href="/book-demo">
+            <Button variant="outline" className="cursor-pointer font-medium">
+              Book Demo
+            </Button>
+          </Link>
 
-          <Dialog open={bookDemoOpen} onOpenChange={setBookDemoOpen}>
-            <DialogTrigger
-              render={
-                <Button>
-                  Free Trial
-                </Button>
-              }
-            />
-            <DialogContent className="sm:max-w-lg">
-              <DialogHeader>
-                <DialogTitle className="flex items-center gap-2 text-foreground text-xl">
-                  <Calendar className="h-5 w-5 text-muted-foreground" />
-                  Schedule a Live SkillMetrics Demo
-                </DialogTitle>
-                <DialogDescription>
-                  See how SkillMetrics automates technical evaluations and skill scorecards for your engineering team.
-                </DialogDescription>
-              </DialogHeader>
-
-              {demoSubmitted ? (
-                <div className="py-8 flex flex-col items-center justify-center text-center space-y-3">
-                  <div className="h-12 w-12 rounded-full bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
-                    <CheckCircle2 className="h-6 w-6" />
-                  </div>
-                  <h3 className="font-bold text-lg">Demo Request Confirmed!</h3>
-                  <p className="text-sm text-muted-foreground">Our technical specialist will email your calendar invite shortly.</p>
-                </div>
-              ) : (
-                <form onSubmit={handleBookDemoSubmit} className="space-y-4 py-2">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="demo-name">Full Name</Label>
-                      <Input id="demo-name" placeholder="John Doe" required />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="demo-email">Work Email</Label>
-                      <Input id="demo-email" type="email" placeholder="john@company.com" required />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="demo-company-size">Company Size</Label>
-                      <Select defaultValue="10-50">
-                        <SelectTrigger id="demo-company-size">
-                          <SelectValue placeholder="Select size" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="1-10">1 - 10 Engineers</SelectItem>
-                          <SelectItem value="10-50">10 - 50 Engineers</SelectItem>
-                          <SelectItem value="50-200">50 - 200 Engineers</SelectItem>
-                          <SelectItem value="200+">200+ Engineers</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="demo-preferred-time">Preferred Time</Label>
-                      <Select defaultValue="morning">
-                        <SelectTrigger id="demo-preferred-time">
-                          <SelectValue placeholder="Select time" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="morning">Morning (9 AM - 12 PM)</SelectItem>
-                          <SelectItem value="afternoon">Afternoon (12 PM - 4 PM)</SelectItem>
-                          <SelectItem value="evening">Evening (4 PM - 7 PM)</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  <DialogFooter className="pt-4">
-                    <Button type="submit" className="w-full">
-                      Confirm Demo Request
-                    </Button>
-                  </DialogFooter>
-                </form>
-              )}
-            </DialogContent>
-          </Dialog>
+          <Link href="/book-demo">
+            <Button
+              className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold cursor-pointer shadow-brand-red"
+            >
+              Free Trial
+            </Button>
+          </Link>
         </div>
 
         {/* Mobile Menu Button */}
@@ -397,19 +318,21 @@ export function Navbar() {
               ))}
           </nav>
           <div className="pt-2 border-t border-border flex flex-col gap-2">
-            <Button
-              variant="outline"
-              onClick={() => { setMobileMenuOpen(false); setBookDemoOpen(true); }}
-              className="w-full font-medium"
-            >
-              Book Demo
-            </Button>
-            <Button
-              onClick={() => { setMobileMenuOpen(false); setBookDemoOpen(true); }}
-              className="w-full bg-brand-red hover:bg-brand-red/90 text-white shadow-brand-red font-medium"
-            >
-              Free Trial
-            </Button>
+            <Link href="/book-demo" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                variant="outline"
+                className="w-full font-medium"
+              >
+                Book Demo
+              </Button>
+            </Link>
+            <Link href="/book-demo" onClick={() => setMobileMenuOpen(false)}>
+              <Button
+                className="w-full bg-brand-red hover:bg-brand-red/90 text-white shadow-brand-red font-medium"
+              >
+                Free Trial
+              </Button>
+            </Link>
           </div>
         </div>
       )}
