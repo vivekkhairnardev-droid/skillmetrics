@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   BookOpen,
@@ -19,7 +19,13 @@ import {
   TrendingUp,
   Bookmark,
   ChevronRight,
-  Filter
+  Filter,
+  Loader2,
+  PenSquare,
+  Calendar,
+  User,
+  BarChart3,
+  Newspaper
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -27,83 +33,119 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Input } from "@/components/ui/input";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import {
+  getBlogPosts,
+  getCaseStudies,
+  getResources,
+  BlogPost,
+  CaseStudy,
+  ResourceItem
+} from "@/lib/sanity/client";
 
-const resourceCategories = [
-  { name: "All Resources", count: 6 },
-  { name: "Skill Frameworks", count: 2 },
-  { name: "Case Studies", count: 1 },
-  { name: "Whitepapers", count: 1 },
-  { name: "Playbooks & Guides", count: 2 },
-];
-
-const resourcesList = [
-  {
-    id: "engineering-matrix-2026",
-    title: "The 2026 Enterprise Engineering Skill Matrix Playbook",
-    category: "Skill Frameworks",
-    readTime: "12 min read",
-    description: "Standardized skill taxonomy matrices for Frontend, Backend, DevOps, and AI/ML Engineering roles across L1 to L6 levels.",
-    badge: "Featured Matrix",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=600&auto=format&fit=crop&q=80",
-    author: "Engineering Practice Group"
-  },
-  {
-    id: "fortune-500-case-study",
-    title: "How Global Tech Manufacturing Scaled Skill Assessment Across 5,000 Engineers",
-    category: "Case Studies",
-    readTime: "8 min read",
-    description: "Learn how an enterprise reduced bad technical hires by 90% and eliminated manual spreadsheets with SkillMetrics radars.",
-    badge: "Case Study",
-    image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=600&auto=format&fit=crop&q=80",
-    author: "Enterprise Case Studies"
-  },
-  {
-    id: "ai-screening-whitepaper",
-    title: "AI-Powered Technical Proctoring & Plagiarism Defense Benchmark Report",
-    category: "Whitepapers",
-    readTime: "15 min read",
-    description: "An empirical security study on code hashing, screen monitor proctoring, and LLM plagiarism detection accuracy.",
-    badge: "Security Report",
-    image: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=600&auto=format&fit=crop&q=80",
-    author: "SkillMetrics Security Research"
-  },
-  {
-    id: "multiskilling-guide",
-    title: "Runtime Workforce Allocation & Multi-Skilling Playbook",
-    category: "Playbooks & Guides",
-    readTime: "10 min read",
-    description: "Step-by-step framework to transition engineering teams to multi-skilled squads during critical project shifts.",
-    badge: "Playbook",
-    image: "https://images.unsplash.com/photo-1531403009284-440f080d1e12?w=600&auto=format&fit=crop&q=80",
-    author: "Workforce Strategy Team"
-  },
-  {
-    id: "devops-matrix-template",
-    title: "DevOps & Cloud Infrastructure Competency Mapping Template",
-    category: "Skill Frameworks",
-    readTime: "Download Template",
-    description: "Ready-to-use rubrics covering Kubernetes, Terraform, AWS architecture, and Incident Management capability scales.",
-    badge: "Template",
-    image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=600&auto=format&fit=crop&q=80",
-    author: "Cloud Infrastructure Group"
-  },
-  {
-    id: "spreadsheet-migration-guide",
-    title: "Migrating from Excel Skill Spreadsheets to Automated Dashboards",
-    category: "Playbooks & Guides",
-    readTime: "6 min read",
-    description: "Best practices to import legacy spreadsheets without data loss and establish automated real-time score tracking.",
-    badge: "Migration Guide",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&auto=format&fit=crop&q=80",
-    author: "Operations & Integration"
-  },
-];
+interface UnifiedResource {
+  id: string;
+  title: string;
+  category: string;
+  readTime: string;
+  description: string;
+  badge: string;
+  image: string;
+  author: string;
+  href: string;
+  type: "resource" | "blog" | "case-study";
+  publishedAt?: string;
+}
 
 export default function ResourcesPage() {
   const [selectedCategory, setSelectedCategory] = useState("All Resources");
   const [searchQuery, setSearchQuery] = useState("");
+  const [allResources, setAllResources] = useState<UnifiedResource[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filteredResources = resourcesList.filter((item) => {
+  useEffect(() => {
+    async function loadAll() {
+      try {
+        const [blogs, caseStudies, customResources] = await Promise.all([
+          getBlogPosts(),
+          getCaseStudies(),
+          getResources(),
+        ]);
+
+        // Convert blogs to unified format
+        const blogItems: UnifiedResource[] = blogs.map((p) => ({
+          id: `blog-${p._id}`,
+          title: p.title,
+          category: "Blog Posts",
+          readTime: p.readingTime || "5 min read",
+          description: p.excerpt,
+          badge: p.category || "Blog",
+          image: p.mainImage || "/skillmetrics.png",
+          author: p.author.name,
+          href: `/blog/${p.slug}`,
+          type: "blog" as const,
+          publishedAt: p.publishedAt,
+        }));
+
+        // Convert case studies to unified format
+        const caseStudyItems: UnifiedResource[] = caseStudies.map((s) => ({
+          id: `case-${s._id}`,
+          title: s.title,
+          category: "Case Studies",
+          readTime: "Case Study",
+          description: s.excerpt,
+          badge: s.industry || "Case Study",
+          image: s.coverImage || "/skillmetrics.png",
+          author: s.companyName,
+          href: `/case-studies/${s.slug}`,
+          type: "case-study" as const,
+          publishedAt: s.publishedAt,
+        }));
+
+        // Convert custom CMS resources (Skill Frameworks, Whitepapers, Playbooks, Templates)
+        const resourceItems: UnifiedResource[] = customResources.map((r) => ({
+          id: `res-${r._id}`,
+          title: r.title,
+          category: r.category || "Skill Frameworks",
+          readTime: r.readTime || "10 min read",
+          description: r.summary,
+          badge: r.badge || "Featured Resource",
+          image: r.image || "/skillmetrics.png",
+          author: r.author,
+          href: `/resources/${r.slug}`,
+          type: "resource" as const,
+          publishedAt: r.publishedAt,
+        }));
+
+        // Combine all CMS items and sort by publication date (newest first)
+        const combined = [...blogItems, ...caseStudyItems, ...resourceItems].sort((a, b) => {
+          const dateA = a.publishedAt ? new Date(a.publishedAt).getTime() : 0;
+          const dateB = b.publishedAt ? new Date(b.publishedAt).getTime() : 0;
+          return dateB - dateA;
+        });
+
+        setAllResources(combined);
+      } catch (err) {
+        console.error("Error loading resources from CMS:", err);
+        setAllResources([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadAll();
+  }, []);
+
+  // Build dynamic category list from actual CMS data
+  const categoryCounts = allResources.reduce<Record<string, number>>((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + 1;
+    return acc;
+  }, {});
+
+  const resourceCategories = [
+    { name: "All Resources", count: allResources.length },
+    ...Object.entries(categoryCounts).map(([name, count]) => ({ name, count })),
+  ];
+
+  const filteredResources = allResources.filter((item) => {
     const matchesCategory =
       selectedCategory === "All Resources" || item.category === selectedCategory;
     const matchesSearch =
@@ -112,20 +154,51 @@ export default function ResourcesPage() {
     return matchesCategory && matchesSearch;
   });
 
+  function typeColor(type: UnifiedResource["type"]) {
+    switch (type) {
+      case "blog": return "text-brand-red";
+      case "case-study": return "text-brand-yellow";
+      default: return "text-foreground";
+    }
+  }
+
+  function typeBadgeStyle(type: UnifiedResource["type"]) {
+    switch (type) {
+      case "blog": return "bg-brand-red/10 text-brand-red border-brand-red/20";
+      case "case-study": return "bg-brand-yellow/10 text-amber-700 border-brand-yellow/20";
+      default: return "bg-slate-950 text-brand-yellow";
+    }
+  }
+
+  function typeIcon(type: UnifiedResource["type"]) {
+    switch (type) {
+      case "blog": return <Newspaper className="h-3 w-3" />;
+      case "case-study": return <BarChart3 className="h-3 w-3" />;
+      default: return <FileText className="h-3 w-3" />;
+    }
+  }
+
+  function typeLabel(type: UnifiedResource["type"]) {
+    switch (type) {
+      case "blog": return "Blog Post";
+      case "case-study": return "Case Study";
+      default: return "Resource";
+    }
+  }
+
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
-      {/* Centralized Navbar */}
       <Navbar />
 
-      {/* COMPACT HERO SECTION */}
+      {/* HERO SECTION */}
       <section className="bg-brand-dark text-white py-10 sm:py-14 border-b border-border/20">
         <div className="container max-w-4xl mx-auto px-4 sm:px-8 text-center space-y-4">
           <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-white leading-tight">
-            Skill Frameworks, Case Studies &amp; <span className="text-brand-yellow">Resources</span>
+            Blogs, Case Studies &amp; <span className="text-brand-yellow">Resources Hub</span>
           </h1>
 
           <p className="text-sm sm:text-base text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
-            Explore skill matrices, engineering playbooks, whitepapers, and enterprise case studies.
+            Your single portal for all live blog posts, enterprise case studies, skill frameworks, whitepapers, and guides—powered by Sanity CMS.
           </p>
         </div>
       </section>
@@ -142,7 +215,7 @@ export default function ResourcesPage() {
               {/* Search Bar */}
               <div className="bg-card border border-border rounded-sm p-4 shadow-xs space-y-3">
                 <label className="text-xs font-bold text-foreground flex items-center gap-1.5 uppercase tracking-wider">
-                  <Search className="h-3.5 w-3.5 text-brand-red" /> Search Resources
+                  <Search className="h-3.5 w-3.5 text-brand-red" /> Search Hub
                 </label>
                 <div className="relative">
                   <Input
@@ -167,7 +240,7 @@ export default function ResourcesPage() {
               <div className="bg-card border border-border rounded-sm p-4 shadow-xs space-y-2">
                 <div className="flex items-center justify-between pb-2 border-b border-border">
                   <span className="text-xs font-bold text-foreground flex items-center gap-1.5 uppercase tracking-wider">
-                    <Filter className="h-3.5 w-3.5 text-brand-yellow" /> Resource Categories
+                    <Filter className="h-3.5 w-3.5 text-brand-yellow" /> CMS Categories
                   </span>
                 </div>
 
@@ -204,17 +277,17 @@ export default function ResourcesPage() {
                 </nav>
               </div>
 
-              {/* Enterprise Support Banner */}
+              {/* Sanity CMS Admin Link */}
               <div className="bg-slate-900 text-white rounded-sm p-4 border border-slate-800 space-y-2 shadow-sm">
                 <div className="flex items-center gap-2 text-brand-yellow font-bold text-xs">
-                  <ShieldCheck className="h-4 w-4" /> Need Custom Frameworks?
+                  <PenSquare className="h-4 w-4" /> Content Management
                 </div>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  Our engineering team can build customized skill matrices mapped to your org hierarchy.
+                  Publish blogs, case studies, whitepapers, and skill frameworks via Sanity Studio.
                 </p>
-                <Link href="/contact" className="inline-block pt-1">
+                <Link href="/studio" className="inline-block pt-1">
                   <span className="text-xs font-bold text-brand-yellow hover:underline flex items-center gap-1">
-                    Talk to Specialists <ArrowRight className="h-3 w-3" />
+                    Open Sanity Studio <ArrowRight className="h-3 w-3" />
                   </span>
                 </Link>
               </div>
@@ -231,16 +304,23 @@ export default function ResourcesPage() {
                     {selectedCategory}
                   </h2>
                   <p className="text-xs text-muted-foreground">
-                    Showing {filteredResources.length} enterprise resource{filteredResources.length !== 1 ? "s" : ""}
+                    {loading
+                      ? "Loading content from Sanity CMS..."
+                      : `Showing ${filteredResources.length} item${filteredResources.length !== 1 ? "s" : ""}`}
                   </p>
                 </div>
               </div>
 
-              {/* Cards Grid */}
-              {filteredResources.length > 0 ? (
+              {/* Loading State */}
+              {loading ? (
+                <div className="py-20 text-center space-y-3">
+                  <Loader2 className="h-8 w-8 animate-spin text-brand-yellow mx-auto" />
+                  <p className="text-sm font-bold text-muted-foreground">Fetching live content from Sanity CMS...</p>
+                </div>
+              ) : filteredResources.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {filteredResources.map((item) => (
-                    <Link key={item.id} href={`/resources/${item.id}`} className="block group">
+                    <Link key={item.id} href={item.href} className="block group">
                       <Card
                         className="h-full border border-border/80 bg-card hover:border-slate-400 hover:shadow-lg transition-all duration-200 flex flex-col justify-between overflow-hidden rounded-sm cursor-pointer p-0"
                       >
@@ -251,8 +331,15 @@ export default function ResourcesPage() {
                               alt={item.title}
                               className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
                             />
+                            {/* Type badge top-left */}
+                            <div className="absolute top-3 left-3">
+                              <Badge className={`${typeBadgeStyle(item.type)} font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-sm flex items-center gap-1`}>
+                                {typeIcon(item.type)} {typeLabel(item.type)}
+                              </Badge>
+                            </div>
+                            {/* Category badge top-right */}
                             <div className="absolute top-3 right-3">
-                              <Badge className="bg-slate-950 text-brand-yellow font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-sm">
+                              <Badge className="bg-slate-950/90 text-white font-extrabold text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-sm">
                                 {item.badge}
                               </Badge>
                             </div>
@@ -260,7 +347,7 @@ export default function ResourcesPage() {
 
                           <CardHeader className="space-y-2.5 p-5">
                             <div className="flex items-center justify-between text-xs text-muted-foreground font-medium">
-                              <span className="text-brand-red font-bold uppercase tracking-wider text-[11px]">
+                              <span className={`${typeColor(item.type)} font-bold uppercase tracking-wider text-[11px]`}>
                                 {item.category}
                               </span>
                               <span className="flex items-center gap-1 text-[11px]">
@@ -273,7 +360,7 @@ export default function ResourcesPage() {
                               {item.title}
                             </CardTitle>
 
-                            <CardDescription className="text-xs text-muted-foreground leading-relaxed">
+                            <CardDescription className="text-xs text-muted-foreground leading-relaxed line-clamp-3">
                               {item.description}
                             </CardDescription>
                           </CardHeader>
@@ -281,9 +368,11 @@ export default function ResourcesPage() {
 
                         <CardContent className="px-5 pb-5 pt-0">
                           <div className="pt-3 border-t border-border/60 flex items-center justify-between">
-                            <span className="text-[11px] text-muted-foreground font-medium">{item.author}</span>
+                            <span className="text-[11px] text-muted-foreground font-medium flex items-center gap-1.5">
+                              <User className="h-3 w-3" /> {item.author}
+                            </span>
                             <span className="flex items-center gap-1 text-xs font-bold text-foreground group-hover:text-brand-red transition-colors">
-                              <span>Read Resource</span>
+                              <span>Read</span>
                               <ArrowRight className="h-3.5 w-3.5" />
                             </span>
                           </div>
@@ -293,12 +382,20 @@ export default function ResourcesPage() {
                   ))}
                 </div>
               ) : (
-                <div className="py-16 text-center bg-card border border-border rounded-sm space-y-3">
-                  <p className="text-sm font-bold text-foreground">No resources found matching your search.</p>
-                  <p className="text-xs text-muted-foreground">Try clearing your search query or selecting a different category from the left sidebar.</p>
-                  <Button variant="outline" size="sm" onClick={() => { setSearchQuery(""); setSelectedCategory("All Resources"); }}>
-                    Reset Filters
-                  </Button>
+                <div className="py-16 text-center bg-card border border-border rounded-sm space-y-3 p-6">
+                  <PenSquare className="h-8 w-8 text-brand-yellow mx-auto" />
+                  <p className="text-sm font-bold text-foreground">No resources or articles found matching your criteria.</p>
+                  <p className="text-xs text-muted-foreground">Publish blogs, case studies, or resources in Sanity Studio to populate this page.</p>
+                  <div className="pt-2 flex items-center justify-center gap-3">
+                    <Button variant="outline" size="sm" onClick={() => { setSearchQuery(""); setSelectedCategory("All Resources"); }}>
+                      Reset Filters
+                    </Button>
+                    <Link href="/studio">
+                      <Button size="sm" className="bg-brand-yellow text-slate-950 hover:bg-brand-yellow/90 font-bold">
+                        Go to Sanity Studio
+                      </Button>
+                    </Link>
+                  </div>
                 </div>
               )}
 
@@ -309,7 +406,6 @@ export default function ResourcesPage() {
         </div>
       </main>
 
-      {/* FOOTER */}
       <Footer />
     </div>
   );

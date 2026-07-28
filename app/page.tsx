@@ -60,8 +60,10 @@ import {
 import Link from "next/link";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
+import { useSiteSettings } from "@/components/site-settings-context";
 
 export default function Home() {
+  const { settings } = useSiteSettings();
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [bookDemoOpen, setBookDemoOpen] = useState(false);
@@ -140,7 +142,7 @@ export default function Home() {
       {/* Sleek Minimalist Navbar */}
       <Navbar />
 
-      {/* HERO SECTION - MODERN MINIMALIST DARK ENTERPRISE DESIGN WITH SQUARE GRID BG */}
+      {/* HERO SECTION - FIXED ENTERPRISE SIGNATURE DESIGN */}
       <section className="relative w-full bg-brand-dark text-white py-20 sm:py-28 border-b border-border/20 overflow-hidden">
         {/* Ambient Red & Yellow Background Glow Orbs */}
         <div className="absolute -left-24 -top-24 w-[28rem] h-[28rem] bg-brand-red/25 rounded-full blur-[120px] pointer-events-none" />
@@ -151,26 +153,27 @@ export default function Home() {
 
         <div className="relative z-10 container max-w-5xl mx-auto px-4 sm:px-8 text-center space-y-8">
 
-          {/* Top Pill Badge */}
-
-
           {/* Main Display Heading */}
           <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.12] max-w-4xl mx-auto">
-            India&apos;s #1<sup className="text-[0.45em] text-white font-extrabold align-super ml-0.5">st</sup> <span className="text-brand-red">Skill Management Software</span>
+            {settings.heroTitle || "India's #1 Skill Management Software"}
           </h1>
 
           {/* Subtitle */}
           <p className="text-base sm:text-lg lg:text-xl leading-relaxed text-slate-400 max-w-2xl mx-auto font-normal">
-            Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments.
+            {settings.heroSub || "Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments."}
           </p>
 
           {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Button size="lg" onClick={() => setBookDemoOpen(true)}>
-              Book a Demo
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
+            <Button
+              size="lg"
+              className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red border-none hover:scale-[1.02] transition-transform"
+              onClick={() => setBookDemoOpen(true)}
+            >
+              {settings.heroCtaText || "Book a Demo"}
             </Button>
 
-            <Button variant="dark" size="lg" onClick={() => setBookDemoOpen(true)}>
+            <Button variant="dark" size="lg" className="hover:scale-[1.02] transition-transform" onClick={() => setBookDemoOpen(true)}>
               Start Free Trial
             </Button>
           </div>
@@ -214,11 +217,11 @@ export default function Home() {
             <div className="space-y-3 max-w-xl text-left">
 
               <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground text-left">
-                Everything Your Engineering Org Needs to Scale Talent
+                {settings.featuresTitle || "Everything Your Engineering Org Needs to Scale Talent"}
               </h2>
             </div>
             <p className="text-muted-foreground text-base sm:text-lg max-w-md text-left md:text-right leading-relaxed">
-              Scroll to explore how SkillMetrics automates technical evaluations, eliminates skill blind spots, and accelerates workforce capability.
+              {settings.featuresSubtitle || "Scroll to explore how SkillMetrics automates technical evaluations, eliminates skill blind spots, and accelerates workforce capability."}
             </p>
           </div>
 
@@ -241,18 +244,18 @@ export default function Home() {
                     Additionally, Extra features enable you to harmonize your overall organizational activities based on performance, delivery, and core competencies.
                   </p>
                   <div className="pt-3">
-                    <a href="https://skillmetrics.net/skillmatrix/" target="_blank" rel="noopener noreferrer">
-                      <Button>
-                        Read More
+                    <Link href="/features/skill-matrix">
+                      <Button className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red">
+                        Read More <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
                 {/* Visual Image Preview (Right on Desktop) */}
                 <div className="lg:col-span-6 relative overflow-hidden rounded-xl border border-border/90 shadow-md group">
                   <img
-                    src="/skillmetrics.png"
+                    src={settings.card1Image || "/skillmetrics.png"}
                     alt="Skill Matrix"
                     className="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                   />
@@ -268,7 +271,7 @@ export default function Home() {
                 {/* Visual Image Preview (Left on Desktop) */}
                 <div className="lg:col-span-6 relative overflow-hidden rounded-xl border border-border/90 shadow-md group order-2 lg:order-1">
                   <img
-                    src="/emp.jpg"
+                    src={settings.card2Image || "/emp.jpg"}
                     alt="Employee Metrics"
                     className="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                   />
@@ -286,11 +289,11 @@ export default function Home() {
                     Flexible customisations in grid view can yield you the best results in employee matrices. What are those customisations? How organisations have benefitted using these tailor-made solutions?
                   </p>
                   <div className="pt-3">
-                    <a href="https://skillmetrics.net/request-demo/" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline">
-                        Live Sample Demo
+                    <Link href="/features/employee-metrics">
+                      <Button variant="outline" className="font-bold">
+                        Explore Employee Metrics <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
@@ -328,18 +331,18 @@ export default function Home() {
                     </li>
                   </ul>
                   <div className="pt-3">
-                    <a href="https://skillmetrics.net/assessment-2/" target="_blank" rel="noopener noreferrer">
-                      <Button>
-                        Read More
+                    <Link href="/features/ai-assessments">
+                      <Button className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red">
+                        Read More <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
                 {/* Visual Image Preview (Right on Desktop) */}
                 <div className="lg:col-span-6 relative overflow-hidden rounded-xl border border-border/90 shadow-md group">
                   <img
-                    src="/ai_asses.png"
+                    src={settings.card3Image || "/ai_asses.png"}
                     alt="AI Based Assessments"
                     className="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                   />
@@ -355,7 +358,7 @@ export default function Home() {
                 {/* Visual Image Preview (Left on Desktop) */}
                 <div className="lg:col-span-6 relative overflow-hidden rounded-xl border border-border/90 shadow-md group order-2 lg:order-1">
                   <img
-                    src="/multi-skilling.png"
+                    src={settings.card4Image || "/multi-skilling.png"}
                     alt="Multi-skilling"
                     className="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                   />
@@ -392,11 +395,11 @@ export default function Home() {
                     </li>
                   </ul>
                   <div className="pt-3">
-                    <a href="https://skillmetrics.net/multi-skilling/" target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline">
-                        Read More
+                    <Link href="/features/multi-skilling">
+                      <Button variant="outline" className="font-bold">
+                        Explore Multi-Skilling <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                       </Button>
-                    </a>
+                    </Link>
                   </div>
                 </div>
 
@@ -433,16 +436,18 @@ export default function Home() {
                     </li>
                   </ul>
                   <div className="pt-3">
-                    <Button onClick={() => setBookDemoOpen(true)}>
-                      View Competency Engine
-                    </Button>
+                    <Link href="/features/competency-mapping">
+                      <Button className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red">
+                        View Competency Engine <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                      </Button>
+                    </Link>
                   </div>
                 </div>
 
                 {/* Visual Image Preview (Right on Desktop) */}
                 <div className="lg:col-span-6 relative overflow-hidden rounded-xl border border-border/90 shadow-md group">
                   <img
-                    src="/compentancy-mapping.jpg"
+                    src={settings.card5Image || "/compentancy-mapping.jpg"}
                     alt="Competency Mapping"
                     className="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.02]"
                   />
@@ -463,10 +468,10 @@ export default function Home() {
           <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
             <div className="text-center space-y-3 max-w-3xl mx-auto">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                Core Platform Capabilities
+                {settings.capabilitiesTitle || "Core Platform Capabilities"}
               </h2>
               <p className="text-muted-foreground text-base max-w-2xl mx-auto leading-relaxed">
-                Purpose-built tools designed for technical recruiters, hiring managers, and enterprise engineering leads.
+                {settings.capabilitiesSubtitle || "Purpose-built tools designed for technical recruiters, hiring managers, and enterprise engineering leads."}
               </p>
             </div>
 
@@ -615,10 +620,10 @@ export default function Home() {
           <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
             <div className="text-center space-y-3 max-w-3xl mx-auto">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                Legacy Excel Spreadsheets vs. <span className="text-brand-red">SkillMetrics Intelligence</span>
+                {settings.comparisonTitle || "Legacy Excel Spreadsheets vs. SkillMetrics Intelligence"}
               </h2>
               <p className="text-muted-foreground text-base max-w-2xl mx-auto leading-relaxed">
-                Drag the interactive slider below to see how error-prone manual spreadsheets compare to automated, real-time AI skill matrix tracking.
+                {settings.comparisonSubtitle || "Drag the interactive slider below to see how error-prone manual spreadsheets compare to automated, real-time AI skill matrix tracking."}
               </p>
             </div>
 
@@ -1076,10 +1081,10 @@ export default function Home() {
                 <div className="space-y-3">
 
                   <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight leading-snug">
-                    Why Engineering Leaders Choose <span className="text-brand-red">SkillMetrics</span>
+                    {settings.whyUsTitle || "Why Engineering Leaders Choose SkillMetrics"}
                   </h2>
                   <p className="text-muted-foreground text-base leading-relaxed">
-                    Built specifically to eliminate engineering interview friction, reduce bad hires, and maximize developer productivity across your engineering organization.
+                    {settings.whyUsSubtitle || "Built specifically to eliminate engineering interview friction, reduce bad hires, and maximize developer productivity across your engineering organization."}
                   </p>
                 </div>
 
@@ -1127,10 +1132,10 @@ export default function Home() {
               {/* Left Column: Heading, Text & Actions (6 Cols) */}
               <div className="lg:col-span-6 space-y-6 text-center lg:text-left">
                 <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-foreground tracking-tight leading-tight">
-                  Save Up To <span className="text-brand-red">$1M+</span> In Annual Engineering &amp; Hiring Costs
+                  {settings.roiTitle || "Save Up To $1M+ In Annual Engineering & Hiring Costs"}
                 </h2>
                 <p className="text-muted-foreground text-base leading-relaxed max-w-xl mx-auto lg:mx-0">
-                  By automating technical candidate screening, eliminating mis-hires, and reclaiming developer interview hours, SkillMetrics delivers measurable enterprise savings from Month 1.
+                  {settings.roiSubtitle || "By automating technical candidate screening, eliminating mis-hires, and reclaiming developer interview hours, SkillMetrics delivers measurable enterprise savings from Month 1."}
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 justify-center lg:justify-start">
@@ -1147,18 +1152,18 @@ export default function Home() {
               <div className="lg:col-span-6">
                 <div className="grid grid-cols-2 gap-4 bg-muted/40 border border-border/80 rounded-2xl p-6 sm:p-8 text-center shadow-xs">
                   <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
-                    <div className="text-3xl sm:text-4xl font-black text-brand-yellow">1 Lakh+</div>
-                    <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">Skilled Up</div>
+                    <div className="text-3xl sm:text-4xl font-black text-brand-yellow">{settings.stat1Value || "1 Lakh+"}</div>
+                    <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">{settings.stat1Label || "Skilled Up"}</div>
                   </div>
 
                   <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
-                    <div className="text-3xl sm:text-4xl font-black text-foreground">50+</div>
-                    <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">Organizations</div>
+                    <div className="text-3xl sm:text-4xl font-black text-foreground">{settings.stat2Value || "50+"}</div>
+                    <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">{settings.stat2Label || "Organizations"}</div>
                   </div>
 
                   <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
-                    <div className="text-3xl sm:text-4xl font-black text-brand-red">50,000+</div>
-                    <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">Reskilled</div>
+                    <div className="text-3xl sm:text-4xl font-black text-brand-red">{settings.stat3Value || "50,000+"}</div>
+                    <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">{settings.stat3Label || "Reskilled"}</div>
                   </div>
 
                   <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
@@ -1177,10 +1182,10 @@ export default function Home() {
           <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
             <div className="text-center space-y-3 max-w-3xl mx-auto px-4">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                What Our Clients Say
+                {settings.testimonialsTitle || "What Our Clients Say"}
               </h2>
               <p className="text-muted-foreground text-base max-w-2xl mx-auto leading-relaxed">
-                Trusted by CTOs, VPs of Engineering, and HR Leaders at leading tech enterprises.
+                {settings.testimonialsSubtitle || "Trusted by CTOs, VPs of Engineering, and HR Leaders at leading tech enterprises."}
               </p>
             </div>
 

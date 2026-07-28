@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { SiteSettingsProvider } from "@/components/site-settings-context";
+import { getSiteSettings } from "@/lib/sanity/client";
+
+// Always fetch fresh settings from Sanity (no caching)
+export const dynamic = "force-dynamic";
 
 const inter = Inter({subsets:['latin'],variable:'--font-sans'});
 
@@ -34,17 +39,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch site settings from Sanity CMS (server-side)
+  const sanitySettings = await getSiteSettings();
+
   return (
     <html
       lang="en"
       className={cn("h-full", "antialiased", inter.variable, geistSans.variable, geistMono.variable, "font-sans")}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        <SiteSettingsProvider initialSanityData={sanitySettings as any}>
+          {children}
+        </SiteSettingsProvider>
+      </body>
     </html>
   );
 }

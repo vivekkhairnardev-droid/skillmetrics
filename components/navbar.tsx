@@ -39,7 +39,10 @@ import {
   DialogFooter
 } from "@/components/ui/dialog";
 
+import { useSiteSettings } from "@/components/site-settings-context";
+
 export function Navbar() {
+  const { settings } = useSiteSettings();
   const [bookDemoOpen, setBookDemoOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [demoSubmitted, setDemoSubmitted] = useState(false);
@@ -53,27 +56,61 @@ export function Navbar() {
     }, 2000);
   };
 
-  return (
-    <header className="sticky top-0 z-[100] w-full border-b border-border bg-white dark:bg-card shadow-xs">
-      <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
+  const isDarkHeader = settings.navbarVariant === "modern_glass" || settings.navbarVariant === "centered_brand";
 
-        {/* Logo */}
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 group transition-all duration-200">
-            <img
-              src="/logo-3.png"
-              alt="SkillMetrics Logo"
-              className="h-11 sm:h-12 w-auto object-contain max-w-[200px] sm:max-w-[240px] [image-rendering:-webkit-optimize-contrast]"
-            />
-          </Link>
+  const getHeaderVariantClasses = () => {
+    switch (settings.navbarVariant as string) {
+      case "modern_glass":
+      case "glassmorphism":
+        return "bg-slate-950/90 text-white backdrop-blur-md border-b border-slate-800 shadow-xl";
+      case "minimal_enterprise":
+      case "minimalist":
+        return "bg-slate-50 border-b border-slate-200 text-slate-900 shadow-2xs";
+      case "centered_brand":
+      case "banner_top":
+        return "bg-slate-900 text-white border-b border-slate-800 shadow-md";
+      case "live_component":
+      default:
+        return "bg-white dark:bg-card border-b border-border shadow-xs";
+    }
+  };
+
+  return (
+    <div className="sticky top-0 z-[100] w-full">
+      {/* Dynamic Announcement Banner */}
+      {settings.bannerEnabled && settings.bannerText && (
+        <div className="bg-brand-red text-white py-2 px-4 text-xs font-extrabold flex items-center justify-center gap-2 text-center shadow-xs">
+          <span>{settings.bannerText}</span>
+          {settings.bannerLink && (
+            <Link href={settings.bannerLink} className="underline font-mono bg-white/20 hover:bg-white/30 px-2 py-0.5 rounded transition-all">
+              Learn More →
+            </Link>
+          )}
         </div>
+      )}
+
+      <header className={`w-full transition-all duration-300 ${getHeaderVariantClasses()}`}>
+        <div className="container max-w-7xl mx-auto flex h-16 items-center justify-between px-4 sm:px-8">
+
+          {/* Logo */}
+          <div className="flex items-center gap-3">
+            <Link href="/" className="flex items-center gap-2.5 group transition-all duration-200">
+              <img
+                src={settings.logoUrl || "/logo-3.png"}
+                alt={settings.siteName || "SkillMetrics Logo"}
+                className={`h-11 sm:h-12 w-auto object-contain max-w-[200px] sm:max-w-[240px] [image-rendering:-webkit-optimize-contrast] ${
+                  isDarkHeader ? "brightness-125 contrast-125" : ""
+                }`}
+              />
+            </Link>
+          </div>
 
         {/* Desktop Nav Links with FULL WIDTH MegaMenu */}
         <nav className="hidden md:flex items-center gap-8 font-medium text-sm">
 
           {/* Features FULL WIDTH MegaMenu */}
           <div className="group py-5">
-            <Link href="/#features" className="flex items-center gap-1.5 text-muted-foreground group-hover:text-foreground transition-colors cursor-pointer py-1">
+            <Link href="/#features" className={`flex items-center gap-1.5 transition-colors cursor-pointer py-1 ${isDarkHeader ? "text-slate-300 hover:text-white" : "text-muted-foreground hover:text-foreground"}`}>
               <span>Features</span>
               <ChevronDown className="h-3.5 w-3.5 group-hover:rotate-180 transition-transform duration-200" />
             </Link>
@@ -220,21 +257,22 @@ export function Navbar() {
             </div>
           </div>
 
-          <Link href="/integrations" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-            Integrations
-          </Link>
-
-          <Link href="/resources" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-            Resources
-          </Link>
-
-          <Link href="/docs" className="text-brand-red font-bold hover:underline transition-colors flex items-center gap-1">
-            Docs
-          </Link>
-
-          <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors font-medium">
-            Contact Us
-          </Link>
+          {/* Custom Dynamic Nav Links (excluding Features as it is the fixed MegaMenu) */}
+          {(settings.navLinks || [])
+            .filter((link) => link.label.toLowerCase() !== "features")
+            .map((link) => (
+              <Link
+                key={link.id || link.url}
+                href={link.url}
+                className={`transition-colors font-medium ${
+                  isDarkHeader
+                    ? "text-slate-300 hover:text-white"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {link.label}
+              </Link>
+            ))}
         </nav>
 
         {/* Actions: Book Demo & Free Trial Buttons */}
@@ -341,11 +379,22 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="md:hidden border-b border-border bg-background px-6 py-4 space-y-4">
           <nav className="flex flex-col space-y-3 font-medium text-sm">
-            <Link href="/#features" onClick={() => setMobileMenuOpen(false)} className="py-1 text-muted-foreground hover:text-foreground">Features</Link>
-            <Link href="/integrations" onClick={() => setMobileMenuOpen(false)} className="py-1 text-muted-foreground hover:text-foreground">Integrations</Link>
-            <Link href="/resources" onClick={() => setMobileMenuOpen(false)} className="py-1 text-muted-foreground hover:text-foreground">Resources</Link>
-            <Link href="/docs" onClick={() => setMobileMenuOpen(false)} className="py-1 text-brand-red font-bold">Docs Directory</Link>
-            <Link href="/contact" onClick={() => setMobileMenuOpen(false)} className="py-1 text-muted-foreground hover:text-foreground">Contact Us</Link>
+            <Link href="/#features" onClick={() => setMobileMenuOpen(false)} className="py-1 text-foreground font-semibold flex items-center justify-between">
+              <span>Features</span>
+              <span className="text-[10px] bg-brand-red/10 text-brand-red px-1.5 py-0.5 rounded font-mono font-bold">MegaMenu</span>
+            </Link>
+            {(settings.navLinks || [])
+              .filter((link) => link.label.toLowerCase() !== "features")
+              .map((link) => (
+                <Link
+                  key={`mobile-${link.id || link.url}`}
+                  href={link.url}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={`py-1 ${link.url === "/docs" ? "text-brand-red font-bold" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  {link.label}
+                </Link>
+              ))}
           </nav>
           <div className="pt-2 border-t border-border flex flex-col gap-2">
             <Button
@@ -365,5 +414,6 @@ export function Navbar() {
         </div>
       )}
     </header>
+    </div>
   );
 }
