@@ -206,16 +206,6 @@ export function Navbar() {
                           <div className="text-xs text-muted-foreground mt-0.5 leading-snug">1-click reports &amp; real-time analytics</div>
                         </div>
                       </Link>
-
-                      <Link href="/features/anticheat-suite" className="group/item flex items-start gap-3 p-2 rounded-md hover:bg-muted/60 transition-all">
-                        <div className="p-2 rounded-md bg-muted text-foreground border border-border/50 shrink-0">
-                          <ShieldCheck className="h-4 w-4" />
-                        </div>
-                        <div>
-                          <div className="text-sm font-semibold text-foreground group-hover/item:text-foreground">Anti-Cheat Suite</div>
-                          <div className="text-xs text-muted-foreground mt-0.5 leading-snug">Plagiarism hashes &amp; environment monitoring</div>
-                        </div>
-                      </Link>
                     </div>
                   </div>
 

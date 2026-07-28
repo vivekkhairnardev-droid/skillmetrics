@@ -119,20 +119,6 @@ const features = [
       "ISO compliance audit exports",
       "Upskilling velocity analytics"
     ]
-  },
-  {
-    slug: "anticheat-suite",
-    title: "Anti-Cheat Suite",
-    category: "Enterprise Security",
-    description: "Enforce maximum integrity during developer assessments and plant certifications with smart proctoring, session locks, and plagiarism verification.",
-    icon: ShieldCheck,
-    href: "/features/anticheat-suite",
-    image: "/ai_asses.png",
-    highlights: [
-      "Webcam, tab-switch and copy-paste logging",
-      "Geofencing and biometric lock features",
-      "Automatic plagiarism code similarity hashes"
-    ]
   }
 ];
 
