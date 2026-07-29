@@ -25,6 +25,8 @@ export function BookDemoModal({ open, onOpenChange, calendlyUrl }: BookDemoModal
   const [activeTab, setActiveTab] = useState<"calendly" | "form">("calendly");
   const [submitted, setSubmitted] = useState(false);
   const [iframeLoading, setIframeLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   // Resolution order for Calendly URL:
   // 1. prop passed directly
@@ -42,13 +44,38 @@ export function BookDemoModal({ open, onOpenChange, calendlyUrl }: BookDemoModal
     ? `${targetCalendlyUrl}&embed_type=Inline&hide_gdpr_banner=1`
     : `${targetCalendlyUrl}?embed_type=Inline&hide_gdpr_banner=1`;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
-    setTimeout(() => {
-      setSubmitted(false);
-      onOpenChange(false);
-    }, 2500);
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      company: formData.get("company") as string,
+      requirement: formData.get("requirement") as string,
+    };
+
+    try {
+      const response = await fetch("/api/demo-request", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || "Failed to submit request. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to submit demo request. Please check your network connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -140,33 +167,40 @@ export function BookDemoModal({ open, onOpenChange, calendlyUrl }: BookDemoModal
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4 max-w-lg mx-auto">
+                  {error && (
+                    <div className="p-2.5 text-[11px] font-semibold text-brand-red bg-brand-red/10 border border-brand-red/20 rounded-lg">
+                      {error}
+                    </div>
+                  )}
+
                   <div className="space-y-1.5">
                     <Label className="text-xs font-bold">Full Name *</Label>
-                    <Input placeholder="e.g. Sarah Jenkins" required className="text-xs py-2" />
+                    <Input name="name" placeholder="e.g. Sarah Jenkins" required className="text-xs py-2" disabled={loading} />
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1.5">
                       <Label className="text-xs font-bold">Work Email *</Label>
-                      <Input type="email" placeholder="sarah@company.com" required className="text-xs py-2" />
+                      <Input name="email" type="email" placeholder="sarah@company.com" required className="text-xs py-2" disabled={loading} />
                     </div>
                     <div className="space-y-1.5">
                       <Label className="text-xs font-bold">Company / Organization *</Label>
-                      <Input placeholder="Acme Inc." required className="text-xs py-2" />
+                      <Input name="company" placeholder="Acme Inc." required className="text-xs py-2" disabled={loading} />
                     </div>
                   </div>
 
                   <div className="space-y-1.5">
                     <Label className="text-xs font-bold">Primary Goal / Requirement</Label>
-                    <Input placeholder="e.g. Automate Skill Matrix, ISO Audit Compliance" className="text-xs py-2" />
+                    <Input name="requirement" placeholder="e.g. Automate Skill Matrix, ISO Audit Compliance" className="text-xs py-2" disabled={loading} />
                   </div>
 
                   <div className="pt-4">
                     <Button
                       type="submit"
-                      className="w-full bg-brand-red hover:bg-brand-red/90 text-white font-extrabold text-xs py-3 shadow-brand-red"
+                      disabled={loading}
+                      className="w-full bg-brand-red hover:bg-brand-red/90 text-white font-extrabold text-xs py-3 shadow-brand-red cursor-pointer"
                     >
-                      Submit Demo Request <ArrowRight className="ml-1.5 h-4 w-4" />
+                      {loading ? "Submitting..." : "Submit Demo Request"} <ArrowRight className="ml-1.5 h-4 w-4" />
                     </Button>
                   </div>
                 </form>

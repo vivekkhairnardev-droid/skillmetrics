@@ -62,10 +62,42 @@ function v(sanityVal: string | undefined, fallback: string): string {
 
 export function ContactPageClient({ settings }: { settings: ContactPageData }) {
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setSubmitted(true);
+    setLoading(true);
+    setError(null);
+
+    const formData = new FormData(e.currentTarget);
+    const payload = {
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      company: formData.get("company") as string,
+      message: formData.get("message") as string,
+    };
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+      if (response.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || "Failed to submit message. Please try again.");
+      }
+    } catch (err) {
+      console.error(err);
+      setError("Failed to submit inquiry. Please check your internet connection.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -237,25 +269,31 @@ export function ContactPageClient({ settings }: { settings: ContactPageData }) {
                     </p>
                   </div>
 
+                  {error && (
+                    <div className="p-3 text-xs font-semibold text-brand-red bg-brand-red/10 border border-brand-red/20 rounded-sm animate-shake">
+                      {error}
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="contact-name">Full Name *</Label>
-                      <Input id="contact-name" placeholder="John Doe" required className="h-11 rounded-sm" />
+                      <Input id="contact-name" name="name" placeholder="John Doe" required className="h-11 rounded-sm" disabled={loading} />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="contact-email">Work Email *</Label>
-                      <Input id="contact-email" type="email" placeholder="john@company.com" required className="h-11 rounded-sm" />
+                      <Input id="contact-email" name="email" type="email" placeholder="john@company.com" required className="h-11 rounded-sm" disabled={loading} />
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="contact-phone">Phone Number *</Label>
-                      <Input id="contact-phone" type="tel" placeholder="+91 98765 43210" required className="h-11 rounded-sm" />
+                      <Input id="contact-phone" name="phone" type="tel" placeholder="+91 98765 43210" required className="h-11 rounded-sm" disabled={loading} />
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="contact-company">Company Name</Label>
-                      <Input id="contact-company" placeholder="Acme Engineering" className="h-11 rounded-sm" />
+                      <Input id="contact-company" name="company" placeholder="Acme Engineering" className="h-11 rounded-sm" disabled={loading} />
                     </div>
                   </div>
 
@@ -263,15 +301,17 @@ export function ContactPageClient({ settings }: { settings: ContactPageData }) {
                     <Label htmlFor="contact-message">How can we help? *</Label>
                     <Textarea
                       id="contact-message"
+                      name="message"
                       placeholder="Tell us about your skill matrix needs, team goals, or biometric / HR system integration..."
                       rows={5}
                       required
                       className="resize-none rounded-sm"
+                      disabled={loading}
                     />
                   </div>
 
-                  <Button type="submit" size="lg" className="w-full font-bold rounded-sm cursor-pointer">
-                    Submit Inquiry <Send className="ml-2 h-4 w-4" />
+                  <Button type="submit" size="lg" className="w-full font-bold rounded-sm cursor-pointer" disabled={loading}>
+                    {loading ? "Submitting Inquiry..." : "Submit Inquiry"} <Send className="ml-2 h-4 w-4" />
                   </Button>
                 </form>
               )}

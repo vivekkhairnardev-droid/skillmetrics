@@ -1,10 +1,24 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { projectId, dataset } from "./lib/sanity/config";
-import { siteSettings, post, caseStudy, contactPage, resource } from "./sanity/schemas";
+import {
+  siteSettings,
+  post,
+  caseStudy,
+  contactPage,
+  resource,
+  contactSubmission,
+  newsletterSubscription,
+  demoRequest,
+} from "./sanity/schemas";
 
 // Custom desk structure: singletons appear as direct document links, not lists
 const singletonTypes = new Set(["siteSettings", "contactPage"]);
+const submissionTypes = new Set([
+  "contactSubmission",
+  "newsletterSubscription",
+  "demoRequest",
+]);
 
 const deskStructure = (S: any) =>
   S.list()
@@ -44,6 +58,13 @@ const deskStructure = (S: any) =>
             .documentId("contactPage")
             .title("Contact Page Settings")
         ),
+
+      S.divider(),
+
+      // Submissions section
+      S.documentTypeListItem("contactSubmission").title("Contact Submissions"),
+      S.documentTypeListItem("newsletterSubscription").title("Newsletter Subscriptions"),
+      S.documentTypeListItem("demoRequest").title("Demo Requests"),
     ]);
 
 export default defineConfig({
@@ -64,17 +85,33 @@ export default defineConfig({
   ],
 
   schema: {
-    types: [siteSettings, post, caseStudy, contactPage, resource],
-    // Prevent singletons from appearing in the "Create new document" menu
+    types: [
+      siteSettings,
+      post,
+      caseStudy,
+      contactPage,
+      resource,
+      contactSubmission,
+      newsletterSubscription,
+      demoRequest,
+    ],
+    // Prevent singletons and submissions from appearing in the "Create new document" menu
     templates: (templates) =>
       templates.filter(
-        ({ schemaType }) => !singletonTypes.has(schemaType)
+        ({ schemaType }) =>
+          !singletonTypes.has(schemaType) && !submissionTypes.has(schemaType)
       ),
   },
 
   document: {
-    // Prevent singletons from being created via the "new document" button
+    // Customize actions for singletons and submissions
     actions: (input, context) => {
+      if (submissionTypes.has(context.schemaType)) {
+        // Submissions are read-only logs from forms; only allow viewing or deleting
+        return input.filter(
+          ({ action }) => action && ["delete", "discardChanges"].includes(action)
+        );
+      }
       if (singletonTypes.has(context.schemaType)) {
         return input.filter(
           ({ action }) =>
@@ -85,3 +122,4 @@ export default defineConfig({
     },
   },
 });
+
