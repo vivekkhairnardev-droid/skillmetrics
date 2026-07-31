@@ -44,6 +44,7 @@ async function setup() {
         author_avatar TEXT,
         seo_title TEXT,
         seo_description TEXT,
+        seo_keywords TEXT,
         content TEXT
       );
     `;
@@ -69,7 +70,8 @@ async function setup() {
         content TEXT,
         published_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
         seo_title TEXT,
-        seo_description TEXT
+        seo_description TEXT,
+        seo_keywords TEXT
       );
     `;
     console.log("✓ 'case_studies' table created or exists");
@@ -91,7 +93,8 @@ async function setup() {
         key_takeaways JSONB DEFAULT '[]'::jsonb,
         content TEXT,
         seo_title TEXT,
-        seo_description TEXT
+        seo_description TEXT,
+        seo_keywords TEXT
       );
     `;
     console.log("✓ 'resources' table created or exists");

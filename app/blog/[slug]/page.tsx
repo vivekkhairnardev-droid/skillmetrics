@@ -2,6 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { marked } from "marked";
 
 // Force dynamic rendering so published posts always show fresh data
 export const dynamic = "force-dynamic";
@@ -180,13 +181,13 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
           )}
 
           {/* Article Text Content */}
-          <article className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm sm:text-base leading-relaxed bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
+          <article className="prose max-w-none bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
             {typeof post.content === "string" ? (
-              <div className="space-y-6 whitespace-pre-line text-foreground font-normal">
-                {post.content}
-              </div>
+              <div 
+                dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }}
+              />
             ) : Array.isArray(post.content) ? (
-              <div className="space-y-4 text-foreground font-normal">
+              <div className="space-y-4">
                 {post.content.map((block: any, idx: number) => {
                   if (block._type === "block" && block.children) {
                     return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;

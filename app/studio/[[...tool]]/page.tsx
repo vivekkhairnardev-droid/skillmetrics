@@ -19,7 +19,8 @@ import {
   AlertCircle,
   LogOut,
   Menu,
-  X
+  X,
+  Upload
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -78,6 +79,7 @@ export default function AdminDashboardPage() {
     authorAvatar: "",
     seoTitle: "",
     seoDescription: "",
+    seoKeywords: "",
     content: ""
   });
   const [caseForm, setCaseForm] = useState({
@@ -97,7 +99,8 @@ export default function AdminDashboardPage() {
     testimonialRole: "",
     content: "",
     seoTitle: "",
-    seoDescription: ""
+    seoDescription: "",
+    seoKeywords: ""
   });
   const [resourceForm, setResourceForm] = useState({
     id: "",
@@ -113,8 +116,50 @@ export default function AdminDashboardPage() {
     keyTakeaways: [] as string[],
     content: "",
     seoTitle: "",
-    seoDescription: ""
+    seoDescription: "",
+    seoKeywords: ""
   });
+
+  const [uploadingField, setUploadingField] = useState<string | null>(null);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: "blog" | "case" | "resource") => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploadingField(fieldName);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error("Upload failed");
+      }
+
+      const data = await res.json();
+      if (data.url) {
+        if (fieldName === "blog") {
+          setBlogForm(prev => ({ ...prev, mainImage: data.url }));
+        } else if (fieldName === "case") {
+          setCaseForm(prev => ({ ...prev, coverImage: data.url }));
+        } else if (fieldName === "resource") {
+          setResourceForm(prev => ({ ...prev, image: data.url }));
+        }
+        showNotification("success", "Image uploaded successfully!");
+      }
+    } catch (err: any) {
+      console.error(err);
+      showNotification("error", "Failed to upload image. Please try again.");
+    } finally {
+      setUploadingField(null);
+      // Reset input element value so same file can be uploaded again
+      e.target.value = "";
+    }
+  };
 
   // Fetch Data
   const fetchData = async () => {
@@ -378,6 +423,7 @@ export default function AdminDashboardPage() {
         authorAvatar: blog.author_avatar || "",
         seoTitle: blog.seo_title || "",
         seoDescription: blog.seo_description || "",
+        seoKeywords: blog.seo_keywords || "",
         content: blog.content || ""
       });
     } else {
@@ -394,6 +440,7 @@ export default function AdminDashboardPage() {
         authorAvatar: "",
         seoTitle: "",
         seoDescription: "",
+        seoKeywords: "",
         content: ""
       });
     }
@@ -420,7 +467,8 @@ export default function AdminDashboardPage() {
         testimonialRole: cs.testimonial_role || "",
         content: cs.content || "",
         seoTitle: cs.seo_title || "",
-        seoDescription: cs.seo_description || ""
+        seoDescription: cs.seo_description || "",
+        seoKeywords: cs.seo_keywords || ""
       });
     } else {
       setCaseForm({
@@ -440,7 +488,8 @@ export default function AdminDashboardPage() {
         testimonialRole: "",
         content: "",
         seoTitle: "",
-        seoDescription: ""
+        seoDescription: "",
+        seoKeywords: ""
       });
     }
     setEditType("case");
@@ -463,7 +512,8 @@ export default function AdminDashboardPage() {
         keyTakeaways: Array.isArray(r.key_takeaways) ? r.key_takeaways : [],
         content: r.content || "",
         seoTitle: r.seo_title || "",
-        seoDescription: r.seo_description || ""
+        seoDescription: r.seo_description || "",
+        seoKeywords: r.seo_keywords || ""
       });
     } else {
       setResourceForm({
@@ -480,7 +530,8 @@ export default function AdminDashboardPage() {
         keyTakeaways: [],
         content: "",
         seoTitle: "",
-        seoDescription: ""
+        seoDescription: "",
+        seoKeywords: ""
       });
     }
     setEditType("resource");
@@ -953,14 +1004,44 @@ export default function AdminDashboardPage() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="mainImage" className="text-xs text-slate-700 font-bold">Image URL</Label>
-                      <Input
-                        id="mainImage"
-                        value={blogForm.mainImage}
-                        onChange={(e) => setBlogForm({ ...blogForm, mainImage: e.target.value })}
-                        placeholder="e.g. /skillmetrics.png"
-                        className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
-                      />
+                      <Label htmlFor="mainImage" className="text-xs text-slate-700 font-bold">Blog Image</Label>
+                      <div className="flex gap-3 items-center">
+                        {blogForm.mainImage && (
+                          <div className="h-12 w-12 rounded-sm border border-slate-200 overflow-hidden bg-slate-50 flex-shrink-0 flex items-center justify-center">
+                            <img src={blogForm.mainImage} alt="Preview" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                          </div>
+                        )}
+                        <div className="flex-1 flex gap-2">
+                          <Input
+                            id="mainImage"
+                            value={blogForm.mainImage}
+                            onChange={(e) => setBlogForm({ ...blogForm, mainImage: e.target.value })}
+                            placeholder="e.g. /skillmetrics.png or paste URL"
+                            className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red flex-1"
+                          />
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="blog-image-upload"
+                              className="hidden"
+                              onChange={(e) => handleFileUpload(e, "blog")}
+                              disabled={uploadingField === "blog"}
+                            />
+                            <Label
+                              htmlFor="blog-image-upload"
+                              className={`flex items-center gap-1.5 px-3 h-9 rounded-sm border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 cursor-pointer transition-all ${uploadingField === "blog" ? "opacity-60 pointer-events-none" : ""}`}
+                            >
+                              {uploadingField === "blog" ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
+                                <Upload className="h-3.5 w-3.5" />
+                              )}
+                              <span>Upload</span>
+                            </Label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1008,24 +1089,100 @@ export default function AdminDashboardPage() {
                   </div>
 
                   <div className="border-t border-slate-200 pt-4 space-y-4">
-                    <h3 className="text-xs uppercase font-extrabold text-slate-500 tracking-wider">SEO Overrides</h3>
+                    <h3 className="text-xs uppercase font-extrabold text-slate-500 tracking-wider">SEO (Search Engine Optimization)</h3>
+                    
+                    {/* Google Search Preview */}
+                    <div className="border border-slate-100 rounded-sm p-4 bg-slate-50 space-y-2">
+                      <span className="text-[10px] uppercase font-bold text-slate-400">Search Engine Snippet Preview</span>
+                      <div className="space-y-1">
+                        <div className="text-[#1a0dab] hover:underline font-medium text-lg leading-tight truncate">
+                          {blogForm.seoTitle || blogForm.title || "Untitled Blog Post"}
+                        </div>
+                        <div className="text-[#006621] text-xs leading-normal truncate flex items-center gap-1">
+                          <span>skillmetrics.io</span>
+                          <span>›</span>
+                          <span>blog</span>
+                          <span>›</span>
+                          <span>{blogForm.slug || "post-slug"}</span>
+                        </div>
+                        <div className="text-[#545454] text-xs leading-snug break-words line-clamp-2">
+                          {blogForm.seoDescription || blogForm.excerpt || "No description set. Add a meta description override below to specify what search engines will display."}
+                        </div>
+                      </div>
+                    </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="seoTitle" className="text-xs text-slate-700 font-bold">Meta Title Override</Label>
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="seoTitle" className="text-xs text-slate-700 font-bold">Meta Title Override</Label>
+                          <span className={`text-[10px] font-medium ${(blogForm.seoTitle || "").length > 60 ? "text-amber-600" : "text-slate-400"}`}>
+                            {(blogForm.seoTitle || "").length}/60 chars
+                          </span>
+                        </div>
                         <Input
                           id="seoTitle"
                           value={blogForm.seoTitle}
                           onChange={(e) => setBlogForm({ ...blogForm, seoTitle: e.target.value })}
+                          placeholder="Override search engine title"
                           className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
                         />
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="seoDescription" className="text-xs text-slate-700 font-bold">Meta Description Override</Label>
-                        <Input
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="seoKeywords" className="text-xs text-slate-700 font-bold">Meta Keywords</Label>
+                          <span className="text-[10px] text-slate-400">Press Enter or Comma to add</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 min-h-[38px] p-1.5 border border-slate-200 bg-white rounded-sm focus-within:ring-1 focus-within:ring-brand-red focus-within:border-brand-red transition-all">
+                          {(blogForm.seoKeywords ? blogForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : []).map((kw, i) => (
+                            <Badge key={i} className="bg-slate-100 hover:bg-slate-200 text-slate-800 text-[10px] py-0.5 px-2 flex items-center gap-1 font-medium border-0 rounded-sm">
+                              <span>{kw}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const currentList = blogForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean);
+                                  const newList = currentList.filter((_, idx) => idx !== i);
+                                  setBlogForm({ ...blogForm, seoKeywords: newList.join(", ") });
+                                }}
+                                className="text-slate-400 hover:text-slate-650 focus:outline-none font-bold text-xs"
+                              >
+                                &times;
+                              </button>
+                            </Badge>
+                          ))}
+                          <input
+                            type="text"
+                            placeholder={(blogForm.seoKeywords ? blogForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : []).length === 0 ? "Add keywords..." : ""}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === ",") {
+                                e.preventDefault();
+                                const val = (e.target as HTMLInputElement).value.trim();
+                                if (val) {
+                                  const currentList = blogForm.seoKeywords ? blogForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : [];
+                                  if (!currentList.includes(val)) {
+                                    const newList = [...currentList, val];
+                                    setBlogForm({ ...blogForm, seoKeywords: newList.join(", ") });
+                                  }
+                                  (e.target as HTMLInputElement).value = "";
+                                }
+                              }
+                            }}
+                            className="flex-1 bg-transparent border-0 outline-none text-xs text-slate-900 p-0 h-6 min-w-[100px] focus:ring-0"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="seoDescription" className="text-xs text-slate-700 font-bold">Meta Description Override</Label>
+                          <span className={`text-[10px] font-medium ${(blogForm.seoDescription || "").length > 160 ? "text-amber-600" : "text-slate-400"}`}>
+                            {(blogForm.seoDescription || "").length}/160 chars
+                          </span>
+                        </div>
+                        <Textarea
                           id="seoDescription"
                           value={blogForm.seoDescription}
                           onChange={(e) => setBlogForm({ ...blogForm, seoDescription: e.target.value })}
-                          className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
+                          placeholder="Provide a search snippet summarizing this post..."
+                          className="bg-white border-slate-200 text-slate-900 text-xs min-h-[60px] focus-visible:ring-brand-red"
                         />
                       </div>
                     </div>
@@ -1091,12 +1248,43 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="coverImage" className="text-xs text-slate-700 font-bold">Cover Image</Label>
-                      <Input
-                        id="coverImage"
-                        value={caseForm.coverImage}
-                        onChange={(e) => setCaseForm({ ...caseForm, coverImage: e.target.value })}
-                        className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
-                      />
+                      <div className="flex gap-3 items-center">
+                        {caseForm.coverImage && (
+                          <div className="h-12 w-12 rounded-sm border border-slate-200 overflow-hidden bg-slate-50 flex-shrink-0 flex items-center justify-center">
+                            <img src={caseForm.coverImage} alt="Preview" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                          </div>
+                        )}
+                        <div className="flex-1 flex gap-2">
+                          <Input
+                            id="coverImage"
+                            value={caseForm.coverImage}
+                            onChange={(e) => setCaseForm({ ...caseForm, coverImage: e.target.value })}
+                            placeholder="Paste cover image URL or upload"
+                            className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red flex-1"
+                          />
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="case-image-upload"
+                              className="hidden"
+                              onChange={(e) => handleFileUpload(e, "case")}
+                              disabled={uploadingField === "case"}
+                            />
+                            <Label
+                              htmlFor="case-image-upload"
+                              className={`flex items-center gap-1.5 px-3 h-9 rounded-sm border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 cursor-pointer transition-all ${uploadingField === "case" ? "opacity-60 pointer-events-none" : ""}`}
+                            >
+                              {uploadingField === "case" ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
+                                <Upload className="h-3.5 w-3.5" />
+                              )}
+                              <span>Upload</span>
+                            </Label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1224,14 +1412,104 @@ export default function AdminDashboardPage() {
                     </div>
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="caseContent" className="text-xs text-slate-700 font-bold">Markdown Case Content</Label>
-                    <Textarea
-                      id="caseContent"
-                      value={caseForm.content}
-                      onChange={(e) => setCaseForm({ ...caseForm, content: e.target.value })}
-                      className="bg-white border-slate-200 text-slate-900 text-xs min-h-[150px] focus-visible:ring-brand-red"
-                    />
+                  <div className="border-t border-slate-200 pt-4 space-y-4">
+                    <h3 className="text-xs uppercase font-extrabold text-slate-500 tracking-wider">SEO (Search Engine Optimization)</h3>
+                    
+                    {/* Google Search Preview */}
+                    <div className="border border-slate-100 rounded-sm p-4 bg-slate-50 space-y-2">
+                      <span className="text-[10px] uppercase font-bold text-slate-400">Search Engine Snippet Preview</span>
+                      <div className="space-y-1">
+                        <div className="text-[#1a0dab] hover:underline font-medium text-lg leading-tight truncate">
+                          {caseForm.seoTitle || caseForm.title || "Untitled Case Study"}
+                        </div>
+                        <div className="text-[#006621] text-xs leading-normal truncate flex items-center gap-1">
+                          <span>skillmetrics.io</span>
+                          <span>›</span>
+                          <span>case-studies</span>
+                          <span>›</span>
+                          <span>{caseForm.slug || "case-slug"}</span>
+                        </div>
+                        <div className="text-[#545454] text-xs leading-snug break-words line-clamp-2">
+                          {caseForm.seoDescription || caseForm.excerpt || "No description set. Add a meta description override below to specify what search engines will display."}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="caseSeoTitle" className="text-xs text-slate-700 font-bold">Meta Title Override</Label>
+                          <span className={`text-[10px] font-medium ${(caseForm.seoTitle || "").length > 60 ? "text-amber-600" : "text-slate-400"}`}>
+                            {(caseForm.seoTitle || "").length}/60 chars
+                          </span>
+                        </div>
+                        <Input
+                          id="caseSeoTitle"
+                          value={caseForm.seoTitle}
+                          onChange={(e) => setCaseForm({ ...caseForm, seoTitle: e.target.value })}
+                          placeholder="Override search engine title"
+                          className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="caseSeoKeywords" className="text-xs text-slate-700 font-bold">Meta Keywords</Label>
+                          <span className="text-[10px] text-slate-400">Press Enter or Comma to add</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 min-h-[38px] p-1.5 border border-slate-200 bg-white rounded-sm focus-within:ring-1 focus-within:ring-brand-red focus-within:border-brand-red transition-all">
+                          {(caseForm.seoKeywords ? caseForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : []).map((kw, i) => (
+                            <Badge key={i} className="bg-slate-100 hover:bg-slate-200 text-slate-800 text-[10px] py-0.5 px-2 flex items-center gap-1 font-medium border-0 rounded-sm">
+                              <span>{kw}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const currentList = caseForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean);
+                                  const newList = currentList.filter((_, idx) => idx !== i);
+                                  setCaseForm({ ...caseForm, seoKeywords: newList.join(", ") });
+                                }}
+                                className="text-slate-400 hover:text-slate-650 focus:outline-none font-bold text-xs"
+                              >
+                                &times;
+                              </button>
+                            </Badge>
+                          ))}
+                          <input
+                            type="text"
+                            placeholder={(caseForm.seoKeywords ? caseForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : []).length === 0 ? "Add keywords..." : ""}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === ",") {
+                                e.preventDefault();
+                                const val = (e.target as HTMLInputElement).value.trim();
+                                if (val) {
+                                  const currentList = caseForm.seoKeywords ? caseForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : [];
+                                  if (!currentList.includes(val)) {
+                                    const newList = [...currentList, val];
+                                    setCaseForm({ ...caseForm, seoKeywords: newList.join(", ") });
+                                  }
+                                  (e.target as HTMLInputElement).value = "";
+                                }
+                              }
+                            }}
+                            className="flex-1 bg-transparent border-0 outline-none text-xs text-slate-900 p-0 h-6 min-w-[100px] focus:ring-0"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="caseSeoDescription" className="text-xs text-slate-700 font-bold">Meta Description Override</Label>
+                          <span className={`text-[10px] font-medium ${(caseForm.seoDescription || "").length > 160 ? "text-amber-600" : "text-slate-400"}`}>
+                            {(caseForm.seoDescription || "").length}/160 chars
+                          </span>
+                        </div>
+                        <Textarea
+                          id="caseSeoDescription"
+                          value={caseForm.seoDescription}
+                          onChange={(e) => setCaseForm({ ...caseForm, seoDescription: e.target.value })}
+                          placeholder="Provide a search snippet summarizing this case study..."
+                          className="bg-white border-slate-200 text-slate-900 text-xs min-h-[60px] focus-visible:ring-brand-red"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">
@@ -1324,12 +1602,43 @@ export default function AdminDashboardPage() {
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="resImage" className="text-xs text-slate-700 font-bold">Image URL</Label>
-                      <Input
-                        id="resImage"
-                        value={resourceForm.image}
-                        onChange={(e) => setResourceForm({ ...resourceForm, image: e.target.value })}
-                        className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
-                      />
+                      <div className="flex gap-3 items-center">
+                        {resourceForm.image && (
+                          <div className="h-12 w-12 rounded-sm border border-slate-200 overflow-hidden bg-slate-50 flex-shrink-0 flex items-center justify-center">
+                            <img src={resourceForm.image} alt="Preview" className="h-full w-full object-cover" onError={(e) => { (e.target as HTMLElement).style.display = 'none'; }} />
+                          </div>
+                        )}
+                        <div className="flex-1 flex gap-2">
+                          <Input
+                            id="resImage"
+                            value={resourceForm.image}
+                            onChange={(e) => setResourceForm({ ...resourceForm, image: e.target.value })}
+                            placeholder="Paste resource image URL or upload"
+                            className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red flex-1"
+                          />
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept="image/*"
+                              id="resource-image-upload"
+                              className="hidden"
+                              onChange={(e) => handleFileUpload(e, "resource")}
+                              disabled={uploadingField === "resource"}
+                            />
+                            <Label
+                              htmlFor="resource-image-upload"
+                              className={`flex items-center gap-1.5 px-3 h-9 rounded-sm border border-slate-200 bg-slate-50 hover:bg-slate-100 text-xs font-bold text-slate-700 cursor-pointer transition-all ${uploadingField === "resource" ? "opacity-60 pointer-events-none" : ""}`}
+                            >
+                              {uploadingField === "resource" ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
+                                <Upload className="h-3.5 w-3.5" />
+                              )}
+                              <span>Upload</span>
+                            </Label>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -1353,14 +1662,104 @@ export default function AdminDashboardPage() {
                     />
                   </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="resContent" className="text-xs text-slate-700 font-bold">Markdown Content</Label>
-                    <Textarea
-                      id="resContent"
-                      value={resourceForm.content}
-                      onChange={(e) => setResourceForm({ ...resourceForm, content: e.target.value })}
-                      className="bg-white border-slate-200 text-slate-900 text-xs min-h-[150px] focus-visible:ring-brand-red"
-                    />
+                  <div className="border-t border-slate-200 pt-4 space-y-4">
+                    <h3 className="text-xs uppercase font-extrabold text-slate-500 tracking-wider">SEO (Search Engine Optimization)</h3>
+                    
+                    {/* Google Search Preview */}
+                    <div className="border border-slate-100 rounded-sm p-4 bg-slate-50 space-y-2">
+                      <span className="text-[10px] uppercase font-bold text-slate-400">Search Engine Snippet Preview</span>
+                      <div className="space-y-1">
+                        <div className="text-[#1a0dab] hover:underline font-medium text-lg leading-tight truncate">
+                          {resourceForm.seoTitle || resourceForm.title || "Untitled Resource"}
+                        </div>
+                        <div className="text-[#006621] text-xs leading-normal truncate flex items-center gap-1">
+                          <span>skillmetrics.io</span>
+                          <span>›</span>
+                          <span>resources</span>
+                          <span>›</span>
+                          <span>{resourceForm.slug || "resource-slug"}</span>
+                        </div>
+                        <div className="text-[#545454] text-xs leading-snug break-words line-clamp-2">
+                          {resourceForm.seoDescription || resourceForm.summary || "No description set. Add a meta description override below to specify what search engines will display."}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="resSeoTitle" className="text-xs text-slate-700 font-bold">Meta Title Override</Label>
+                          <span className={`text-[10px] font-medium ${(resourceForm.seoTitle || "").length > 60 ? "text-amber-600" : "text-slate-400"}`}>
+                            {(resourceForm.seoTitle || "").length}/60 chars
+                          </span>
+                        </div>
+                        <Input
+                          id="resSeoTitle"
+                          value={resourceForm.seoTitle}
+                          onChange={(e) => setResourceForm({ ...resourceForm, seoTitle: e.target.value })}
+                          placeholder="Override search engine title"
+                          className="bg-white border-slate-200 text-slate-900 text-xs h-9 focus-visible:ring-brand-red"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="resSeoKeywords" className="text-xs text-slate-700 font-bold">Meta Keywords</Label>
+                          <span className="text-[10px] text-slate-400">Press Enter or Comma to add</span>
+                        </div>
+                        <div className="flex flex-wrap gap-1.5 min-h-[38px] p-1.5 border border-slate-200 bg-white rounded-sm focus-within:ring-1 focus-within:ring-brand-red focus-within:border-brand-red transition-all">
+                          {(resourceForm.seoKeywords ? resourceForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : []).map((kw, i) => (
+                            <Badge key={i} className="bg-slate-100 hover:bg-slate-200 text-slate-800 text-[10px] py-0.5 px-2 flex items-center gap-1 font-medium border-0 rounded-sm">
+                              <span>{kw}</span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const currentList = resourceForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean);
+                                  const newList = currentList.filter((_, idx) => idx !== i);
+                                  setResourceForm({ ...resourceForm, seoKeywords: newList.join(", ") });
+                                }}
+                                className="text-slate-400 hover:text-slate-650 focus:outline-none font-bold text-xs"
+                              >
+                                &times;
+                              </button>
+                            </Badge>
+                          ))}
+                          <input
+                            type="text"
+                            placeholder={(resourceForm.seoKeywords ? resourceForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : []).length === 0 ? "Add keywords..." : ""}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === ",") {
+                                e.preventDefault();
+                                const val = (e.target as HTMLInputElement).value.trim();
+                                if (val) {
+                                  const currentList = resourceForm.seoKeywords ? resourceForm.seoKeywords.split(",").map(k => k.trim()).filter(Boolean) : [];
+                                  if (!currentList.includes(val)) {
+                                    const newList = [...currentList, val];
+                                    setResourceForm({ ...resourceForm, seoKeywords: newList.join(", ") });
+                                  }
+                                  (e.target as HTMLInputElement).value = "";
+                                }
+                              }
+                            }}
+                            className="flex-1 bg-transparent border-0 outline-none text-xs text-slate-900 p-0 h-6 min-w-[100px] focus:ring-0"
+                          />
+                        </div>
+                      </div>
+                      <div className="space-y-2 sm:col-span-2">
+                        <div className="flex justify-between items-center">
+                          <Label htmlFor="resSeoDescription" className="text-xs text-slate-700 font-bold">Meta Description Override</Label>
+                          <span className={`text-[10px] font-medium ${(resourceForm.seoDescription || "").length > 160 ? "text-amber-600" : "text-slate-400"}`}>
+                            {(resourceForm.seoDescription || "").length}/160 chars
+                          </span>
+                        </div>
+                        <Textarea
+                          id="resSeoDescription"
+                          value={resourceForm.seoDescription}
+                          onChange={(e) => setResourceForm({ ...resourceForm, seoDescription: e.target.value })}
+                          placeholder="Provide a search snippet summarizing this resource..."
+                          className="bg-white border-slate-200 text-slate-900 text-xs min-h-[60px] focus-visible:ring-brand-red"
+                        />
+                      </div>
+                    </div>
                   </div>
 
                   <div className="flex gap-3 justify-end pt-4 border-t border-slate-200">

@@ -40,6 +40,7 @@ export interface CaseStudy {
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
+    keywords?: string[];
   };
 }
 
@@ -60,6 +61,7 @@ export interface ResourceItem {
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
+    keywords?: string[];
   };
 }
 

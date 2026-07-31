@@ -45,6 +45,7 @@ export async function POST(request: Request) {
       authorAvatar,
       seoTitle,
       seoDescription,
+      seoKeywords,
       content,
     } = body;
 
@@ -71,6 +72,7 @@ export async function POST(request: Request) {
           author_avatar = ${authorAvatar || null},
           seo_title = ${seoTitle || title},
           seo_description = ${seoDescription || excerpt || ""},
+          seo_keywords = ${seoKeywords || ""},
           content = ${content || ""}
         WHERE id = ${id};
       `;
@@ -80,12 +82,12 @@ export async function POST(request: Request) {
       await sql`
         INSERT INTO posts (
           title, slug, excerpt, main_image, reading_time, category, 
-          author_name, author_role, author_avatar, seo_title, seo_description, content
+          author_name, author_role, author_avatar, seo_title, seo_description, seo_keywords, content
         ) VALUES (
           ${title}, ${slug}, ${excerpt || ""}, ${mainImage || "/skillmetrics.png"}, 
           ${readingTime || "5 min read"}, ${category || "Product Updates"}, 
           ${authorName || "SkillMetrics Team"}, ${authorRole || "Product Editorial"}, 
-          ${authorAvatar || null}, ${seoTitle || title}, ${seoDescription || excerpt || ""}, ${content || ""}
+          ${authorAvatar || null}, ${seoTitle || title}, ${seoDescription || excerpt || ""}, ${seoKeywords || ""}, ${content || ""}
         );
       `;
       return NextResponse.json({ success: true, message: "Post created successfully" });

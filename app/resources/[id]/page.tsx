@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { marked } from "marked";
 import {
   ArrowLeft,
   Clock,
@@ -37,6 +38,7 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: resource.seo?.metaTitle || `${resource.title} | SkillMetrics Resources`,
     description: resource.seo?.metaDescription || resource.summary,
+    keywords: resource.seo?.keywords || ["skill matrix", "competency mapping", "SkillMetrics", "resource"],
     openGraph: {
       title: resource.title,
       description: resource.summary,
@@ -181,13 +183,13 @@ export default async function ResourceDetailPage({ params }: PageProps) {
           )}
 
           {/* Main Content Body */}
-          <div className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm sm:text-base leading-relaxed bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
+          <div className="prose max-w-none bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
             {typeof resource.content === "string" ? (
-              <div className="space-y-6 whitespace-pre-line text-foreground font-normal">
-                {resource.content}
-              </div>
+              <div 
+                dangerouslySetInnerHTML={{ __html: marked.parse(resource.content) }}
+              />
             ) : Array.isArray(resource.content) ? (
-              <div className="space-y-4 text-foreground font-normal">
+              <div className="space-y-4">
                 {resource.content.map((block: any, idx: number) => {
                   if (block._type === "block" && block.children) {
                     return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;

@@ -50,6 +50,7 @@ export async function POST(request: Request) {
       content,
       seoTitle,
       seoDescription,
+      seoKeywords,
     } = body;
 
     if (!title || !slug) {
@@ -81,7 +82,8 @@ export async function POST(request: Request) {
           testimonial_role = ${testimonialRole || ""},
           content = ${content || ""},
           seo_title = ${seoTitle || title},
-          seo_description = ${seoDescription || excerpt || ""}
+          seo_description = ${seoDescription || excerpt || ""},
+          seo_keywords = ${seoKeywords || ""}
         WHERE id = ${id};
       `;
       return NextResponse.json({ success: true, message: "Case study updated successfully" });
@@ -91,12 +93,12 @@ export async function POST(request: Request) {
         INSERT INTO case_studies (
           title, slug, company_name, company_logo, industry, excerpt, cover_image,
           challenge, solution, results, testimonial_quote, testimonial_author, testimonial_role,
-          content, seo_title, seo_description
+          content, seo_title, seo_description, seo_keywords
         ) VALUES (
           ${title}, ${slug}, ${companyName || ""}, ${companyLogo || null}, ${industry || "Other"}, 
           ${excerpt || ""}, ${coverImage || "/skillmetrics.png"}, ${challenge || ""}, ${solution || ""}, 
           ${resultsJson}::jsonb, ${testimonialQuote || ""}, ${testimonialAuthor || ""}, ${testimonialRole || ""}, 
-          ${content || ""}, ${seoTitle || title}, ${seoDescription || excerpt || ""}
+          ${content || ""}, ${seoTitle || title}, ${seoDescription || excerpt || ""}, ${seoKeywords || ""}
         );
       `;
       return NextResponse.json({ success: true, message: "Case study created successfully" });

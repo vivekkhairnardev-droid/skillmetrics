@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { marked } from "marked";
 import {
   Calendar,
   ArrowLeft,
@@ -33,6 +34,7 @@ export async function generateMetadata({ params }: PageProps) {
   return {
     title: study.seo?.metaTitle || `${study.title} | SkillMetrics Case Study`,
     description: study.seo?.metaDescription || study.excerpt,
+    keywords: study.seo?.keywords || ["skill matrix", "competency mapping", "SkillMetrics", "case study"],
     openGraph: {
       title: study.title,
       description: study.excerpt,
@@ -191,13 +193,13 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
           )}
 
           {/* Rich Text Content */}
-          <article className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm sm:text-base leading-relaxed bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
+          <article className="prose max-w-none bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
             {typeof study.content === "string" ? (
-              <div className="space-y-6 whitespace-pre-line text-foreground font-normal">
-                {study.content}
-              </div>
+              <div 
+                dangerouslySetInnerHTML={{ __html: marked.parse(study.content) }}
+              />
             ) : Array.isArray(study.content) ? (
-              <div className="space-y-4 text-foreground font-normal">
+              <div className="space-y-4">
                 {study.content.map((block: any, idx: number) => {
                   if (block._type === "block" && block.children) {
                     return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;

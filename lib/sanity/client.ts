@@ -40,6 +40,7 @@ export async function getBlogPosts(): Promise<BlogPost[]> {
       seo: {
         metaTitle: p.seo_title || p.title,
         metaDescription: p.seo_description || p.excerpt,
+        keywords: p.seo_keywords ? p.seo_keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : [],
       },
       content: p.content || p.excerpt,
     }));
@@ -86,6 +87,7 @@ export async function getCaseStudies(): Promise<CaseStudy[]> {
       seo: {
         metaTitle: s.seo_title || s.title,
         metaDescription: s.seo_description || s.excerpt,
+        keywords: s.seo_keywords ? s.seo_keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : [],
       },
     }));
   } catch (error) {
@@ -128,6 +130,7 @@ export async function getResources(): Promise<ResourceItem[]> {
       seo: {
         metaTitle: r.seo_title || r.title,
         metaDescription: r.seo_description || r.summary,
+        keywords: r.seo_keywords ? r.seo_keywords.split(",").map((k: string) => k.trim()).filter(Boolean) : [],
       },
     }));
   } catch (error) {

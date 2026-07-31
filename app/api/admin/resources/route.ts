@@ -47,6 +47,7 @@ export async function POST(request: Request) {
       content,
       seoTitle,
       seoDescription,
+      seoKeywords,
     } = body;
 
     if (!title || !slug) {
@@ -75,7 +76,8 @@ export async function POST(request: Request) {
           key_takeaways = ${takeawaysJson}::jsonb,
           content = ${content || ""},
           seo_title = ${seoTitle || title},
-          seo_description = ${seoDescription || summary || ""}
+          seo_description = ${seoDescription || summary || ""},
+          seo_keywords = ${seoKeywords || ""}
         WHERE id = ${id};
       `;
       return NextResponse.json({ success: true, message: "Resource updated successfully" });
@@ -84,12 +86,12 @@ export async function POST(request: Request) {
       await sql`
         INSERT INTO resources (
           title, slug, category, badge, read_time, summary, image,
-          author, author_role, key_takeaways, content, seo_title, seo_description
+          author, author_role, key_takeaways, content, seo_title, seo_description, seo_keywords
         ) VALUES (
           ${title}, ${slug}, ${category || "Skill Frameworks"}, ${badge || ""}, 
           ${readTime || "10 min read"}, ${summary || ""}, ${image || "/skillmetrics.png"}, 
           ${author || "SkillMetrics Practice Group"}, ${authorRole || "Talent Architecture & Research"}, 
-          ${takeawaysJson}::jsonb, ${content || ""}, ${seoTitle || title}, ${seoDescription || summary || ""}
+          ${takeawaysJson}::jsonb, ${content || ""}, ${seoTitle || title}, ${seoDescription || summary || ""}, ${seoKeywords || ""}
         );
       `;
       return NextResponse.json({ success: true, message: "Resource created successfully" });
