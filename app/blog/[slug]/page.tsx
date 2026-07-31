@@ -5,7 +5,6 @@ import { notFound } from "next/navigation";
 
 // Force dynamic rendering so published posts always show fresh data
 export const dynamic = "force-dynamic";
-import { PortableText } from "@portabletext/react";
 import {
   Calendar,
   Clock,
@@ -22,7 +21,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { getBlogPostBySlug, getBlogPosts, BlogPost } from "@/lib/sanity/client";
+import { getBlogPostBySlug, getBlogPosts } from "@/lib/sanity/client";
+import type { BlogPost } from "@/lib/sanity/types";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -181,14 +181,21 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
           {/* Article Text Content */}
           <article className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm sm:text-base leading-relaxed bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
-            {Array.isArray(post.content) ? (
-              <PortableText value={post.content} />
-            ) : typeof post.content === "string" ? (
+            {typeof post.content === "string" ? (
               <div className="space-y-6 whitespace-pre-line text-foreground font-normal">
                 {post.content}
               </div>
+            ) : Array.isArray(post.content) ? (
+              <div className="space-y-4 text-foreground font-normal">
+                {post.content.map((block: any, idx: number) => {
+                  if (block._type === "block" && block.children) {
+                    return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;
+                  }
+                  return null;
+                })}
+              </div>
             ) : (
-              <p className="text-muted-foreground italic">Full post content is synced from Sanity CMS.</p>
+              <p className="text-muted-foreground italic">No content available.</p>
             )}
 
             {/* SEO Keywords tags */}

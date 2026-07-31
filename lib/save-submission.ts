@@ -1,49 +1,50 @@
-import fs from "fs";
-import path from "path";
-import { writeClient } from "./sanity/write-client";
+import { sql } from "./db";
 
 export async function saveSubmission(type: string, data: any) {
-  const timestamp = new Date().toISOString();
-  
-  // Build document according to schema definitions
-  const document: any = {
-    _type: type,
-    ...data,
-  };
-
-  if (type === "newsletterSubscription") {
-    document.subscribedAt = timestamp;
-  } else {
-    document.submittedAt = timestamp;
-  }
-
-  if (writeClient) {
-    try {
-      const result = await writeClient.create(document);
-      return { success: true, savedTo: "sanity", id: result._id };
-    } catch (error) {
-      console.error(`[Submission Error] Failed to write to Sanity:`, error);
-      // Fall through to local fallback
-    }
-  }
-
-  // Fallback: Store locally in the project workspace
   try {
-    const dir = path.join(process.cwd(), "data", "submissions");
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
+    if (type === "newsletterSubscription") {
+      const email = data.email?.trim().toLowerCase();
+      if (!email) {
+        throw new Error("Email is required for newsletter subscription");
+      }
+
+      await sql`
+        INSERT INTO newsletter_subscriptions (email)
+        VALUES (${email})
+        ON CONFLICT (email) DO NOTHING;
+      `;
+      return { success: true, savedTo: "postgres", type };
     }
-    
-    // Save as individual JSON file
-    const safeEmail = (data.email || "anon").replace(/[^a-zA-Z0-9]/g, "_");
-    const fileName = `${type}-${safeEmail}-${Date.now()}.json`;
-    const filePath = path.join(dir, fileName);
-    
-    fs.writeFileSync(filePath, JSON.stringify(document, null, 2), "utf-8");
-    console.log(`[Submission Fallback] Saved locally to ${filePath} (Set SANITY_WRITE_TOKEN to save to CMS)`);
-    return { success: true, savedTo: "local", file: fileName };
-  } catch (err) {
-    console.error(`[Submission Error] Local write fallback failed:`, err);
-    return { success: false, error: String(err) };
+
+    if (type === "contactSubmission") {
+      const { name, email, phone, company, message } = data;
+      if (!name || !email || !phone || !message) {
+        throw new Error("Missing required fields for contact submission");
+      }
+
+      await sql`
+        INSERT INTO contact_submissions (name, email, phone, company, message)
+        VALUES (${name.trim()}, ${email.trim().toLowerCase()}, ${phone.trim()}, ${company?.trim() || ""}, ${message.trim()});
+      `;
+      return { success: true, savedTo: "postgres", type };
+    }
+
+    if (type === "demoRequest") {
+      const { name, email, company, requirement } = data;
+      if (!name || !email || !company) {
+        throw new Error("Missing required fields for demo request");
+      }
+
+      await sql`
+        INSERT INTO demo_requests (name, email, company, requirement)
+        VALUES (${name.trim()}, ${email.trim().toLowerCase()}, ${company.trim()}, ${requirement?.trim() || ""});
+      `;
+      return { success: true, savedTo: "postgres", type };
+    }
+
+    throw new Error(`Unknown submission type: ${type}`);
+  } catch (error) {
+    console.error(`[Submission Error] Failed to write to Postgres:`, error);
+    return { success: false, error: String(error) };
   }
 }

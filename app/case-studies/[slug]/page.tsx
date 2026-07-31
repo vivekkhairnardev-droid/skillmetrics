@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PortableText } from "@portabletext/react";
 import {
   Calendar,
   ArrowLeft,
@@ -16,7 +15,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { getCaseStudyBySlug, getCaseStudies, CaseStudy } from "@/lib/sanity/client";
+import { getCaseStudyBySlug, getCaseStudies } from "@/lib/sanity/client";
+import type { CaseStudy } from "@/lib/sanity/types";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -192,14 +192,21 @@ export default async function CaseStudyDetailPage({ params }: PageProps) {
 
           {/* Rich Text Content */}
           <article className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm sm:text-base leading-relaxed bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
-            {Array.isArray(study.content) ? (
-              <PortableText value={study.content} />
-            ) : typeof study.content === "string" ? (
+            {typeof study.content === "string" ? (
               <div className="space-y-6 whitespace-pre-line text-foreground font-normal">
                 {study.content}
               </div>
+            ) : Array.isArray(study.content) ? (
+              <div className="space-y-4 text-foreground font-normal">
+                {study.content.map((block: any, idx: number) => {
+                  if (block._type === "block" && block.children) {
+                    return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;
+                  }
+                  return null;
+                })}
+              </div>
             ) : (
-              <p className="text-muted-foreground italic">Full case study content is synced from Sanity CMS.</p>
+              <p className="text-muted-foreground italic">No content available.</p>
             )}
           </article>
 

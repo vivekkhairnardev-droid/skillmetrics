@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PortableText } from "@portabletext/react";
 import {
   ArrowLeft,
   Clock,
@@ -20,7 +19,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { getResourceBySlug, getResources, ResourceItem } from "@/lib/sanity/client";
+import { getResourceBySlug, getResources } from "@/lib/sanity/client";
+import type { ResourceItem } from "@/lib/sanity/types";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -182,14 +182,21 @@ export default async function ResourceDetailPage({ params }: PageProps) {
 
           {/* Main Content Body */}
           <div className="prose prose-slate dark:prose-invert max-w-none space-y-6 text-sm sm:text-base leading-relaxed bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
-            {Array.isArray(resource.content) ? (
-              <PortableText value={resource.content} />
-            ) : typeof resource.content === "string" ? (
+            {typeof resource.content === "string" ? (
               <div className="space-y-6 whitespace-pre-line text-foreground font-normal">
                 {resource.content}
               </div>
+            ) : Array.isArray(resource.content) ? (
+              <div className="space-y-4 text-foreground font-normal">
+                {resource.content.map((block: any, idx: number) => {
+                  if (block._type === "block" && block.children) {
+                    return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;
+                  }
+                  return null;
+                })}
+              </div>
             ) : (
-              <p className="text-muted-foreground italic">Resource details synced directly from Sanity CMS.</p>
+              <p className="text-muted-foreground italic">No content available.</p>
             )}
           </div>
 

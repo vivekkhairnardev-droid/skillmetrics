@@ -24,7 +24,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { ContactPageData } from "@/lib/sanity/client";
+import type { ContactPageData } from "@/lib/sanity/types";
 
 // Default values (fallback if Sanity data is empty)
 const defaults = {
