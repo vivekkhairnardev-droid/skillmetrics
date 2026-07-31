@@ -1,14 +1,14 @@
 import { neon, neonConfig } from "@neondatabase/serverless";
 import dns from "node:dns";
 
-// Tell Node.js to resolve IPv4 addresses before IPv6 globally.
-// This resolves the connection ETIMEDOUT (fetch failed) errors on systems with misconfigured local network IPv6 routing.
+// Tell Node.js to resolve IPv6/IPv4 addresses natively using the system default (verbatim).
+// On this system, forcing ipv4first causes database connection timeouts.
 if (typeof dns.setDefaultResultOrder === "function") {
-  dns.setDefaultResultOrder("ipv4first");
+  dns.setDefaultResultOrder("verbatim");
 }
 
 // Force the driver to use HTTP fetch instead of WebSockets/TCP in serverless environment
-neonConfig.poolQueryViaFetch = true;
+neonConfig.poolQueryViaFetch = false;
 
 const dbUrl = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
 

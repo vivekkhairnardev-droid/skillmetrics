@@ -186,11 +186,24 @@ export default function AdminDashboardPage() {
       if (resData.success) setResources(resData.data);
 
       // 5. Fetch Settings
-      const setRes = await fetch("/api/admin/settings");
-      const setData = await setRes.json();
-      if (setData.success) {
-        setSiteSettings(setData.data.site);
-        setContactSettings(setData.data.contact);
+      try {
+        const siteRes = await fetch("/api/admin/settings/site");
+        const siteData = await siteRes.json();
+        if (siteData.success) {
+          setSiteSettings(siteData.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch site settings:", err);
+      }
+
+      try {
+        const contactRes = await fetch("/api/admin/settings/contact");
+        const contactData = await contactRes.json();
+        if (contactData.success) {
+          setContactSettings(contactData.data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch contact settings:", err);
       }
     } catch (err) {
       showNotification("error", "Failed to load database content");
@@ -388,10 +401,11 @@ export default function AdminDashboardPage() {
   const handleSaveSettings = async (type: "site" | "contact", settingsData: any) => {
     setSubmitting(true);
     try {
-      const res = await fetch("/api/admin/settings", {
+      const endpoint = type === "site" ? "/api/admin/settings/site" : "/api/admin/settings/contact";
+      const res = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ type, settings: settingsData })
+        body: JSON.stringify({ settings: settingsData })
       });
       const data = await res.json();
       if (data.success) {
