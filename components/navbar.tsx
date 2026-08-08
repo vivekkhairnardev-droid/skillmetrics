@@ -273,7 +273,8 @@ export function Navbar() {
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
-                {/* Solutions MegaMenu Item */}
+                {/* Solutions MegaMenu Item (Commented Out) */}
+                {/* 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent hover:bg-muted/30 data-[state=open]:bg-muted/30 text-foreground/80 hover:text-foreground font-medium px-3.5 py-2 rounded-sm cursor-pointer transition-colors">
                     Solutions
@@ -281,11 +282,7 @@ export function Navbar() {
                   <NavigationMenuContent className="w-[90vw] lg:w-[1216px] max-w-7xl bg-white dark:bg-black shadow-2xl rounded-sm overflow-hidden">
                     <div className="p-6">
                       <div className="grid grid-cols-12 gap-6 text-left">
-
-                        {/* Solutions Grid (9 Cols) */}
                         <div className="col-span-9 grid grid-cols-3 gap-5">
-
-                          {/* Column 1: DISCRETE MANUFACTURING */}
                           <div className="space-y-3">
                             <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
                               <div className="h-1 w-4 rounded-full bg-brand-red" />
@@ -301,7 +298,6 @@ export function Navbar() {
                                   <div className="text-[11px] text-muted-foreground leading-snug">Assembly &amp; parts production tracking</div>
                                 </div>
                               </NavigationMenuLink>
-
                               <NavigationMenuLink render={<Link href="/solutions/electronics" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
                                 <div className="p-2 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/15 shrink-0 group-hover/item:bg-brand-red group-hover/item:text-white transition-all duration-300">
                                   <Cpu className="h-4 w-4" />
@@ -313,8 +309,6 @@ export function Navbar() {
                               </NavigationMenuLink>
                             </div>
                           </div>
-
-                          {/* Column 2: PROCESS & COMPLIANCE */}
                           <div className="space-y-3">
                             <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
                               <div className="h-1 w-4 rounded-full bg-amber-500" />
@@ -330,7 +324,6 @@ export function Navbar() {
                                   <div className="text-[11px] text-muted-foreground leading-snug">Quality &amp; safety standard training</div>
                                 </div>
                               </NavigationMenuLink>
-
                               <NavigationMenuLink render={<Link href="/solutions/pharmaceuticals" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
                                 <div className="p-2 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/15 shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-300">
                                   <FlaskConical className="h-4 w-4" />
@@ -342,8 +335,6 @@ export function Navbar() {
                               </NavigationMenuLink>
                             </div>
                           </div>
-
-                          {/* Column 3: HEAVY INDUSTRIES */}
                           <div className="space-y-3">
                             <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
                               <div className="h-1 w-4 rounded-full bg-blue-500" />
@@ -359,7 +350,6 @@ export function Navbar() {
                                   <div className="text-[11px] text-muted-foreground leading-snug">Safety-critical compliance systems</div>
                                 </div>
                               </NavigationMenuLink>
-
                               <NavigationMenuLink render={<Link href="/solutions/heavy-manufacturing" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
                                 <div className="p-2 rounded-sm bg-blue-500/8 text-blue-600 border border-blue-500/15 shrink-0 group-hover/item:bg-blue-500 group-hover/item:text-white transition-all duration-300">
                                   <Factory className="h-4 w-4" />
@@ -371,10 +361,7 @@ export function Navbar() {
                               </NavigationMenuLink>
                             </div>
                           </div>
-
                         </div>
-
-                        {/* Right Spotlight Sidebar (3 Cols) */}
                         <div className="col-span-3 rounded-sm border border-border/60 bg-gradient-to-b from-amber-500/5 to-transparent p-5 flex flex-col justify-between">
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
@@ -391,18 +378,14 @@ export function Navbar() {
                               </p>
                             </div>
                           </div>
-
                           <NavigationMenuLink render={<Link href="/book-demo" className="w-full mt-4" />}>
                             <Button size="sm" className="w-full cursor-pointer font-medium text-xs bg-brand-red hover:bg-brand-red/90 text-white border border-brand-red rounded-sm shadow-none [box-shadow:none]">
                               Request Industry Demo <ArrowUpRight className="h-3 w-3 ml-1" />
                             </Button>
                           </NavigationMenuLink>
                         </div>
-
                       </div>
                     </div>
-
-                    {/* Bottom Solutions Strip */}
                     <div className="border-t border-border/60 bg-muted/20 px-6 py-2.5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-[11px] text-muted-foreground">
                         <span><span className="font-bold text-foreground">6</span> Industries</span>
@@ -417,17 +400,17 @@ export function Navbar() {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                */}
 
-                {/* Customers MegaMenu Item */}
+                {/* Customers MegaMenu Item (Commented Out) */}
+                {/* 
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent hover:bg-muted/30 data-[state=open]:bg-muted/30 text-foreground/80 hover:text-foreground font-medium px-3.5 py-2 rounded-sm cursor-pointer transition-colors">
                     Customers
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="w-[90vw] lg:w-[640px] bg-white dark:bg-black shadow-2xl rounded-sm overflow-hidden">
-                    {/* Top: Cards Grid */}
                     <div className="relative">
                       <div className="p-5 space-y-4">
-                        {/* Featured Hero Card — Case Studies */}
                         <NavigationMenuLink render={<Link href="/case-studies" className="group/hero block relative overflow-hidden rounded-sm border border-border/60 bg-gradient-to-br from-brand-red/5 via-transparent to-brand-yellow/5 hover:from-brand-red/10 hover:to-brand-yellow/10 transition-all duration-300 cursor-pointer" />}>
                           <div className="p-5 flex items-center justify-between gap-4">
                             <div className="flex items-center gap-4">
@@ -445,10 +428,7 @@ export function Navbar() {
                             <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover/hero:text-brand-red transition-colors shrink-0" />
                           </div>
                         </NavigationMenuLink>
-
-                        {/* Two Secondary Cards */}
                         <div className="grid grid-cols-2 gap-3">
-                          {/* Success Stories */}
                           <NavigationMenuLink render={<Link href="/success-stories" className="group/card block p-4 rounded-sm border border-border/60 hover:border-brand-red/30 bg-muted/5 hover:bg-muted/20 transition-all duration-300 cursor-pointer" />}>
                             <div className="flex items-start gap-3">
                               <div className="p-2 rounded-sm bg-amber-500/10 text-amber-600 border border-amber-500/20 shrink-0 group-hover/card:bg-amber-500 group-hover/card:text-white transition-all duration-300">
@@ -463,8 +443,6 @@ export function Navbar() {
                               View Outcomes <ArrowUpRight className="h-3 w-3" />
                             </div>
                           </NavigationMenuLink>
-
-                          {/* Testimonials */}
                           <NavigationMenuLink render={<Link href="/testimonials" className="group/card block p-4 rounded-sm border border-border/60 hover:border-brand-red/30 bg-muted/5 hover:bg-muted/20 transition-all duration-300 cursor-pointer" />}>
                             <div className="flex items-start gap-3">
                               <div className="p-2 rounded-sm bg-blue-500/10 text-blue-600 border border-blue-500/20 shrink-0 group-hover/card:bg-blue-500 group-hover/card:text-white transition-all duration-300">
@@ -481,12 +459,11 @@ export function Navbar() {
                           </NavigationMenuLink>
                         </div>
                       </div>
-
-                      {/* Bottom blur fade overlay */}
                       <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white/60 via-white/20 to-transparent dark:from-black/60 dark:via-black/20 dark:to-transparent pointer-events-none rounded-b-sm" />
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
+                */}
 
                 {/* Custom Nav Links */}
                 {(settings.navLinks || [])
@@ -598,7 +575,8 @@ export function Navbar() {
                 )}
               </div>
 
-              {/* Solutions Accordion */}
+              {/* Solutions Accordion (Commented Out) */}
+              {/* 
               <div className="border-b border-border/50">
                 <button
                   onClick={() => setMobileExpanded(mobileExpanded === "solutions" ? null : "solutions")}
@@ -657,8 +635,10 @@ export function Navbar() {
                   </div>
                 )}
               </div>
+              */}
 
-              {/* Customers Accordion */}
+              {/* Customers Accordion (Commented Out) */}
+              {/* 
               <div className="border-b border-border/50">
                 <button
                   onClick={() => setMobileExpanded(mobileExpanded === "customers" ? null : "customers")}
@@ -696,6 +676,7 @@ export function Navbar() {
                   </div>
                 )}
               </div>
+              */}
 
               {/* Other Nav Links */}
               {(settings.navLinks || [])
