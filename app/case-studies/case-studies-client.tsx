@@ -18,7 +18,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import type { CaseStudy } from "@/lib/sanity/types";
+import type { CaseStudy } from "@/lib/types";
 
 interface CaseStudiesClientPageProps {
   studies: CaseStudy[];
@@ -28,13 +28,14 @@ export function CaseStudiesClientPage({ studies }: CaseStudiesClientPageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedIndustry, setSelectedIndustry] = useState("All");
 
-  const industries = ["All", ...Array.from(new Set(studies.map((s) => s.industry)))];
+  const industries = ["All", ...Array.from(new Set(studies.map((s) => s.industry).filter((i): i is string => Boolean(i))))];
 
   const filteredStudies = studies.filter((study) => {
+    const compName = study.companyName || study.company_name || "";
     const matchesSearch =
-      study.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      study.companyName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      study.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+      (study.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      compName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (study.excerpt || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesIndustry = selectedIndustry === "All" || study.industry === selectedIndustry;
     return matchesSearch && matchesIndustry;
   });
@@ -105,11 +106,11 @@ export function CaseStudiesClientPage({ studies }: CaseStudiesClientPageProps) {
               </div>
               <h2 className="text-xl font-bold text-foreground">No Case Studies Published Yet</h2>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Create and publish your first case study inside Studio to populate this page.
+                Create and publish your first case study inside Admin Portal to populate this page.
               </p>
-              <Link href="/studio">
+              <Link href="/admin">
                 <Button className="bg-brand-yellow hover:bg-brand-yellow/90 text-black font-extrabold text-xs">
-                  Go to Studio <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                  Go to Admin <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>

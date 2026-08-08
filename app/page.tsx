@@ -122,52 +122,128 @@ export default function Home() {
       {/* Sleek Minimalist Navbar */}
       <Navbar />
 
-      {/* HERO SECTION - FIXED ENTERPRISE SIGNATURE DESIGN */}
-      <section className="relative w-full bg-brand-dark text-white py-20 sm:py-28 border-b border-border/20 overflow-hidden">
-        {/* Ambient Red & Yellow Background Glow Orbs */}
-        <div className="absolute -left-24 -top-24 w-[28rem] h-[28rem] bg-brand-red/25 rounded-full blur-[120px] pointer-events-none" />
-        <div className="absolute -right-24 -bottom-24 w-[28rem] h-[28rem] bg-brand-yellow/25 rounded-full blur-[120px] pointer-events-none" />
+      {/* HERO SECTION - CLEAN PAPER BG SPLIT LAYOUT WITH LEFT IMAGE & RIGHT CONTENT */}
+      <section className="relative w-full lg:min-h-[80vh] flex items-center bg-paper text-slate-900 dark:text-white py-12 lg:py-0 overflow-hidden">
+        {/* Subtle Warm Glow Orb */}
+        <div className="absolute -right-20 -bottom-20 w-[32rem] h-[32rem] bg-brand-yellow/4 rounded-full blur-[140px] pointer-events-none" />
 
-        {/* Square Grid Pattern Overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0f_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0f_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_70%_70%_at_50%_50%,#000_60%,transparent_100%)] pointer-events-none" />
+        <div className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-8 w-full">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14 w-full">
 
-        <div className="relative z-10 container max-w-5xl mx-auto px-4 sm:px-8 text-center space-y-8">
+            {/* Left Side: Content Column (Focused ~44% Width on Desktop) */}
+            <div className="w-full lg:w-[44%] shrink-0 space-y-6 text-left order-1">
 
-          {/* Main Display Heading */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.12] max-w-4xl mx-auto">
-            India&apos;s 1<sup className="text-[0.45em] text-white font-extrabold align-super ml-0.5">st</sup> <span className="text-brand-red">Skill Management Software</span>
-          </h1>
+              {/* Main Display Heading */}
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
+                {settings.heroTitle || (
+                  <>
+                    India&apos;s 1<sup className="text-[0.45em] text-slate-900 dark:text-white font-extrabold align-super ml-0.5">st</sup> <span className="text-gradient-orange">Skill Management Software</span>
+                  </>
+                )}
+              </h1>
 
-          {/* Subtitle */}
-          <p className="text-base sm:text-lg lg:text-xl leading-relaxed text-slate-400 max-w-2xl mx-auto font-normal font-sans">
-            Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments.
-          </p>
+              {/* Subtitle */}
+              <p className="text-base sm:text-lg leading-relaxed text-slate-600 dark:text-slate-300 font-normal font-sans max-w-xl">
+                {settings.heroSub || "Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments."}
+              </p>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 pt-2">
-            <Link href="/book-demo">
-              <Button
-                size="lg"
-                className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold shadow-brand-red border-none hover:scale-[1.02] transition-transform"
-              >
-                {settings.heroCtaText || "Book a Demo"}
-              </Button>
-            </Link>
+              {/* Action CTAs */}
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 pt-1">
+                {(() => {
+                  const url = settings.heroCtaLink || "/book-demo";
+                  const isExternal = url.startsWith("http://") || url.startsWith("https://");
+                  return isExternal ? (
+                    <a href={url} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        size="lg"
+                        className="bg-brand-red hover:bg-brand-red/90 text-white font-medium rounded-sm border border-brand-red shadow-none [box-shadow:none] transition-all duration-200 h-11 px-7 text-sm cursor-pointer"
+                      >
+                        {settings.heroCtaText || "Book a Demo"} <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </a>
+                  ) : (
+                    <Link href={url}>
+                      <Button
+                        size="lg"
+                        className="bg-brand-red hover:bg-brand-red/90 text-white font-medium rounded-sm border border-brand-red shadow-none [box-shadow:none] transition-all duration-200 h-11 px-7 text-sm cursor-pointer"
+                      >
+                        {settings.heroCtaText || "Book a Demo"} <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  );
+                })()}
 
-            <Link href="/book-demo">
-              <Button variant="dark" size="lg" className="hover:scale-[1.02] transition-transform">
-                Start Free Trial
-              </Button>
-            </Link>
+                {(() => {
+                  const url = settings.heroCta2Link || "/book-demo";
+                  const isExternal = url.startsWith("http://") || url.startsWith("https://");
+                  return isExternal ? (
+                    <a href={url} target="_blank" rel="noopener noreferrer" className="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red transition-colors flex items-center gap-1.5 py-2">
+                      <span>Prefer a walkthrough? {settings.heroCta2Text || "Book a 30-min demo"}</span> →
+                    </a>
+                  ) : (
+                    <Link href={url} className="text-sm font-semibold text-slate-700 dark:text-slate-300 hover:text-brand-red transition-colors flex items-center gap-1.5 py-2">
+                      <span>Prefer a walkthrough? {settings.heroCta2Text || "Book a 30-min demo"}</span> →
+                    </Link>
+                  );
+                })()}
+              </div>
+
+              {/* Trust Badges */}
+              <div className="pt-4 border-t border-slate-200/80 dark:border-slate-800 flex items-center gap-4 flex-wrap text-xs text-slate-600 dark:text-slate-400 font-semibold">
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  <span>Real-time Skill Matrices</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  <span>Automated Gap Reports</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-500" />
+                  <span>ISO 27001 Certified</span>
+                </div>
+              </div>
+
+            </div>
+
+            {/* Right Side: Prominent Image Showcase (~56% Width) */}
+            <div className="w-full lg:w-[56%] relative order-2 flex justify-center lg:justify-end">
+
+              {/* Dot Grid — Bottom Right */}
+              <svg className="absolute -bottom-7 -right-7 w-32 h-32 sm:w-40 sm:h-40 z-0 pointer-events-none" aria-hidden="true">
+                <pattern id="hero-dots-br" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+                  <circle cx="3" cy="3" r="1.8" fill="#ED2B1F" opacity="0.25" />
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#hero-dots-br)" />
+              </svg>
+
+              {/* Ambient Glow Effect Behind Image */}
+              <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+                <div className="w-[95%] h-[85%] rounded-full bg-brand-red/14 blur-[90px]" />
+              </div>
+              <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center translate-x-10 translate-y-6">
+                <div className="w-[75%] h-[65%] rounded-full bg-brand-yellow/12 blur-[70px]" />
+              </div>
+
+              {/* Clean Image Showcase */}
+              <div className="relative z-10 w-full overflow-hidden rounded-sm shadow-lg bg-white dark:bg-slate-900">
+                <img
+                  src={settings.heroImage || "/hero.png"}
+                  alt="SkillMetrics Platform Interface"
+                  className="w-full h-auto max-h-[620px] lg:max-h-[78vh] object-contain rounded-sm"
+                />
+              </div>
+
+            </div>
+
           </div>
-
         </div>
       </section>
 
-      {/* TRUSTED PARTNERS LOGO BAR - INFINITE MARQUEE WITH ENLARGED LOGOS */}
-      <section className="w-full bg-muted/30 py-12 sm:py-14 border-b border-border overflow-hidden">
+      {/* TRUSTED PARTNERS LOGO BAR - INFINITE MARQUEE WITH ENLARGED LOGOS (SEAMLESS WARM PAPER CONTINUATION) */}
+      <section className="w-full bg-white py-12 sm:py-14 border-t border-b border-brand-red/10 dark:border-slate-800/80 overflow-hidden">
         <div className="container max-w-7xl mx-auto px-4 sm:px-8 text-center space-y-8">
-          <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          <p className="text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">
             Trusted by Engineering Leaders in Industry-Leading Manufacturing Enterprises
           </p>
 
@@ -191,19 +267,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* FEATURE SECTION: STACKED STICKY OVERLAPPING CARDS SCROLL FEATURE */}
-      <section id="features" className="w-full bg-background py-20 border-b border-border scroll-mt-24">
+      {/* FEATURE SECTION: STACKED STICKY OVERLAPPING CARDS SCROLL FEATURE (WARM BRAND-RED PAPER NEUTRAL) */}
+      <section id="features" className="w-full bg-[#FAF8F5] dark:bg-slate-900/60 py-20 sm:py-28 border-b border-brand-red/10 dark:border-slate-800 scroll-mt-24">
         <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-12">
 
           {/* Section Header: Heading Left, Paragraph Right */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-border/60">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-stone-200/80 dark:border-slate-800">
             <div className="space-y-3 max-w-xl text-left">
 
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-foreground text-left">
+              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white text-left">
                 {settings.featuresTitle || "Everything Your Engineering Org Needs to Scale Talent"}
               </h2>
             </div>
-            <p className="text-muted-foreground text-base sm:text-lg max-w-md text-left md:text-right leading-relaxed">
+            <p className="text-slate-600 dark:text-slate-300 text-base sm:text-lg max-w-md text-left md:text-right leading-relaxed">
               {settings.featuresSubtitle || "Scroll to explore how SkillMetrics automates technical evaluations, eliminates skill blind spots, and accelerates workforce capability."}
             </p>
           </div>
@@ -212,19 +288,19 @@ export default function Home() {
           <div className="relative space-y-10 pb-16">
 
             {/* Card 1: Sticky top-20 */}
-            <div className="sticky top-20 z-10 rounded-xl border border-border/80 bg-card/95 backdrop-blur-sm shadow-xl p-6 sm:p-10 transition-all duration-300 hover:border-brand-red/40">
+            <div className="sticky top-20 z-10 rounded-2xl border border-stone-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl shadow-brand-red/5 dark:shadow-none p-6 sm:p-10 transition-all duration-300 hover:border-brand-red/40">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
                 {/* Text Content (Left on Desktop) */}
                 <div className="lg:col-span-6 space-y-5">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-snug">
-                    Skill Matrix
+                    {settings.card1Title || "Skill Matrix"}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    A virtually &lsquo;unbreakable&rsquo; tool that basically works in real-time to showcase essential skills or competencies of your staff members, particularly, need to perform a certain task.
+                    {settings.card1Desc || "A virtually 'unbreakable' tool that basically works in real-time to showcase essential skills or competencies of your staff members, particularly, need to perform a certain task."}
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Additionally, Extra features enable you to harmonize your overall organizational activities based on performance, delivery, and core competencies.
+                    {settings.card1Desc2 || "Additionally, Extra features enable you to harmonize your overall organizational activities based on performance, delivery, and core competencies."}
                   </p>
                   <div className="pt-3">
                     <Link href="/features/skill-matrix">
@@ -248,7 +324,7 @@ export default function Home() {
             </div>
 
             {/* Card 2: Sticky top-24 */}
-            <div className="sticky top-24 z-15 rounded-xl border border-border/80 bg-card backdrop-blur-sm shadow-2xl p-6 sm:p-10 transition-all duration-300 hover:border-brand-yellow/50">
+            <div className="sticky top-24 z-15 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl shadow-slate-200/40 dark:shadow-none p-6 sm:p-10 transition-all duration-300 hover:border-brand-yellow/50">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
                 {/* Visual Image Preview (Left on Desktop) */}
@@ -263,13 +339,13 @@ export default function Home() {
                 {/* Text Content (Right on Desktop) */}
                 <div className="lg:col-span-6 space-y-5 order-1 lg:order-2">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-snug">
-                    Employee Metrics
+                    {settings.card2Title || "Employee Metrics"}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Employee competency matrix visually tracks employee skills with a super dynamic matrix grid view. Discover missing competencies, and find the right candidates for the right tasks at the right time.
+                    {settings.card2Desc || "Employee competency matrix visually tracks employee skills with a super dynamic matrix grid view. Discover missing competencies, and find the right candidates for the right tasks at the right time."}
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Flexible customisations in grid view can yield you the best results in employee matrices. What are those customisations? How organisations have benefitted using these tailor-made solutions?
+                    {settings.card2Desc2 || "Flexible customisations in grid view can yield you the best results in employee matrices. What are those customisations? How organisations have benefitted using these tailor-made solutions?"}
                   </p>
                   <div className="pt-3">
                     <Link href="/features/employee-metrics">
@@ -284,16 +360,16 @@ export default function Home() {
             </div>
 
             {/* Card 3: Sticky top-28 */}
-            <div className="sticky top-28 z-20 rounded-xl border border-border/80 bg-card backdrop-blur-sm shadow-2xl p-6 sm:p-10 transition-all duration-300 hover:border-brand-red/50">
+            <div className="sticky top-28 z-20 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl shadow-slate-200/40 dark:shadow-none p-6 sm:p-10 transition-all duration-300 hover:border-brand-red/50">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
                 {/* Text Content (Left on Desktop) */}
                 <div className="lg:col-span-6 space-y-5">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-snug">
-                    AI-Based Assessments
+                    {settings.card3Title || "AI-Based Assessments"}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Interactive AI bots to create super easy assessments. Self integrated, system enabled with flexible adaptability to controlling environment makes your observation tasks hassle free and step ahead.
+                    {settings.card3Desc || "Interactive AI bots to create super easy assessments. Self integrated, system enabled with flexible adaptability to controlling environment makes your observation tasks hassle free and step ahead."}
                   </p>
                   <ul className="space-y-2.5 text-sm text-foreground font-medium pt-1">
                     <li className="flex items-center gap-2.5">
@@ -335,7 +411,7 @@ export default function Home() {
             </div>
 
             {/* Card 4: Sticky top-32 (Multi-Skilling) */}
-            <div className="sticky top-32 z-25 rounded-xl border border-border/80 bg-card backdrop-blur-sm shadow-2xl p-6 sm:p-10 transition-all duration-300 hover:border-brand-yellow/50">
+            <div className="sticky top-32 z-25 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl shadow-slate-200/40 dark:shadow-none p-6 sm:p-10 transition-all duration-300 hover:border-brand-yellow/50">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
                 {/* Visual Image Preview (Left on Desktop) */}
@@ -350,10 +426,10 @@ export default function Home() {
                 {/* Text Content (Right on Desktop) */}
                 <div className="lg:col-span-6 space-y-5 order-1 lg:order-2">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-snug">
-                    Multi-Skilling
+                    {settings.card4Title || "Multi-Skilling"}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Multiskilling mechanisms that make your ManPower flexible and more powerful in problem-solving &amp; task executing WorkPower.
+                    {settings.card4Desc || "Multiskilling mechanisms that make your ManPower flexible and more powerful in problem-solving & task executing WorkPower."}
                   </p>
                   <ul className="space-y-2.5 text-sm text-foreground font-medium pt-1">
                     <li className="flex items-center gap-2.5">
@@ -390,19 +466,19 @@ export default function Home() {
             </div>
 
             {/* Card 5: Sticky top-36 (Competency Mapping) */}
-            <div className="sticky top-36 z-30 rounded-xl border border-border/80 bg-card backdrop-blur-sm shadow-2xl p-6 sm:p-10 transition-all duration-300 hover:border-brand-red/50">
+            <div className="sticky top-36 z-30 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-xl shadow-slate-200/40 dark:shadow-none p-6 sm:p-10 transition-all duration-300 hover:border-brand-red/50">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
 
                 {/* Text Content (Left on Desktop) */}
                 <div className="lg:col-span-6 space-y-5">
                   <h3 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight leading-snug">
-                    Competency Mapping
+                    {settings.card5Title || "Competency Mapping"}
                   </h3>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Functional radars, capability graphs, and training feedback loops designed to benchmark employee proficiency across technical stacks and operational workflows.
+                    {settings.card5Desc || "Functional radars, capability graphs, and training feedback loops designed to benchmark employee proficiency across technical stacks and operational workflows."}
                   </p>
                   <p className="text-muted-foreground leading-relaxed text-sm sm:text-base">
-                    Imprint workforce capabilities into central radar frameworks, track growth over time, and eliminate manual spreadsheet errors with automated capability scorecards.
+                    {settings.card5Desc2 || "Imprint workforce capabilities into central radar frameworks, track growth over time, and eliminate manual spreadsheet errors with automated capability scorecards."}
                   </p>
                   <ul className="space-y-2.5 text-sm text-foreground font-medium pt-1">
                     <li className="flex items-center gap-2.5">
@@ -446,8 +522,8 @@ export default function Home() {
       {/* Main Container */}
       <main className="w-full">
 
-        {/* SECTION 1: CORE PLATFORM CAPABILITIES */}
-        <section id="grid-features" className="w-full bg-muted/40 py-20 border-b border-border scroll-mt-24">
+        {/* SECTION 1: CORE PLATFORM CAPABILITIES (WARM PAPER BACKGROUND) */}
+        <section id="grid-features" className="w-full bg-white py-20 sm:py-28 border-b border-slate-200/80 dark:border-slate-800 scroll-mt-24">
           <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
             <div className="text-center space-y-3 max-w-3xl mx-auto">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
@@ -460,137 +536,135 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {/* Card 1 */}
-              <Card className="border-l-4 border-l-brand-red border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-xl">
+              <Card className="border-l-4 border-l-brand-red border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
                 <CardHeader className="space-y-3 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="h-11 w-11 rounded-md bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                       <Layers className="h-5 w-5" />
                     </div>
-
+                    {settings.cap1Badge && (
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-brand-red">
+                        {settings.cap1Badge}
+                      </span>
+                    )}
                   </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">Skill Matrix</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Real-time competency tracking and automated skill visualization grid.
-                  </CardDescription>
+                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
+                    {settings.cap1Title || "Skill Matrix"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Discover missing competencies, assign right candidates to right tasks, and eliminate spreadsheet errors.
+                    {settings.cap1Desc || "Real-time competency tracking and automated skill visualization grid. Discover missing competencies, assign right candidates to right tasks, and eliminate spreadsheet errors."}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Card 2 */}
-              <Card className="border-l-4 border-l-brand-yellow border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-xl">
+              <Card className="border-l-4 border-l-brand-yellow border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
                 <CardHeader className="space-y-3 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-xl bg-brand-yellow/20 text-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="h-11 w-11 rounded-md bg-brand-yellow/20 text-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                       <Users className="h-5 w-5 text-amber-700 dark:text-brand-yellow" />
                     </div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-brand-yellow">
-                      TALENT ANALYTICS
+                      {settings.cap2Badge || "TALENT ANALYTICS"}
                     </span>
                   </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">Employee Metrics</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Dynamic grid view with custom tailoring & performance tracking.
-                  </CardDescription>
+                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
+                    {settings.cap2Title || "Employee Metrics"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Track employee growth over time with customizable matrix views and automated capability reports.
+                    {settings.cap2Desc || "Dynamic grid view with custom tailoring & performance tracking. Track employee growth over time with customizable matrix views and automated capability reports."}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Card 3 */}
-              <Card className="border-l-4 border-l-foreground border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-xl">
+              <Card className="border-l-4 border-l-foreground border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
                 <CardHeader className="space-y-3 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-xl bg-muted text-foreground flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="h-11 w-11 rounded-md bg-muted text-foreground flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                       <Bot className="h-5 w-5" />
                     </div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                      AUTOMATED EVALUATION
+                      {settings.cap3Badge || "AUTOMATED EVALUATION"}
                     </span>
                   </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">AI-Based Assessments</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Interactive AI engine for rapid, highly accurate candidate evaluation.
-                  </CardDescription>
+                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
+                    {settings.cap3Title || "AI-Based Assessments"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Minimizes manual work, boosts employee engagement, and delivers precise skill scores automatically.
+                    {settings.cap3Desc || "Interactive AI engine for rapid, highly accurate candidate evaluation. Minimizes manual work, boosts employee engagement, and delivers precise skill scores automatically."}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Card 4 */}
-              <Card className="border-l-4 border-l-brand-yellow border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-xl">
+              <Card className="border-l-4 border-l-brand-yellow border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
                 <CardHeader className="space-y-3 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-xl bg-brand-yellow/20 text-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="h-11 w-11 rounded-md bg-brand-yellow/20 text-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                       <Zap className="h-5 w-5 text-amber-700 dark:text-brand-yellow" />
                     </div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-brand-yellow">
-                      MANPOWER ALLOCATION
+                      {settings.cap4Badge || "MANPOWER ALLOCATION"}
                     </span>
                   </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">Multi-Skilling</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Flexible workforce allocation & runtime problem-solving.
-                  </CardDescription>
+                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
+                    {settings.cap4Title || "Multi-Skilling"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Equip employees with multiple skills, adjust manpower on the fly, and manage shifts with one click.
+                    {settings.cap4Desc || "Flexible workforce allocation & runtime problem-solving. Equip employees with multiple skills, adjust manpower on the fly, and manage shifts with one click."}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Card 5 */}
-              <Card className="border-l-4 border-l-brand-red border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-xl">
+              <Card className="border-l-4 border-l-brand-red border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
                 <CardHeader className="space-y-3 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-xl bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="h-11 w-11 rounded-md bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                       <Target className="h-5 w-5" />
                     </div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-brand-red">
-                      GAP ANALYSIS
+                      {settings.cap5Badge || "GAP ANALYSIS"}
                     </span>
                   </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">Competency Mapping</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Functional radars, capability graphs, and training feedback.
-                  </CardDescription>
+                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
+                    {settings.cap5Title || "Competency Mapping"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Imprint employee capabilities through radar charts, functional graphs, and flexible assessment reports.
+                    {settings.cap5Desc || "Functional radars, capability graphs, and training feedback loops designed to benchmark employee proficiency across technical stacks and operational workflows."}
                   </p>
                 </CardContent>
               </Card>
 
               {/* Card 6 */}
-              <Card className="border-l-4 border-l-foreground border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-xl">
+              <Card className="border-l-4 border-l-foreground border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
                 <CardHeader className="space-y-3 pb-3">
                   <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-xl bg-muted text-foreground flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
+                    <div className="h-11 w-11 rounded-md bg-muted text-foreground flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
                       <TrendingUp className="h-5 w-5" />
                     </div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                      CONTINUOUS LEARNING
+                      {settings.cap6Badge || "CONTINUOUS LEARNING"}
                     </span>
                   </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">Up-Skilling & Re-Skilling</CardTitle>
-                  <CardDescription className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Continuous workforce learning pathways aligned to tech trends.
-                  </CardDescription>
+                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
+                    {settings.cap6Title || "Up-Skilling & Re-Skilling"}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    Expand employee skillsets to keep pace with changing market demands, tech stacks, and industry shifts.
+                    {settings.cap6Desc || "Continuous workforce learning pathways aligned to tech trends. Expand employee skillsets to keep pace with changing market demands, tech stacks, and industry shifts."}
                   </p>
                 </CardContent>
               </Card>
@@ -599,7 +673,7 @@ export default function Home() {
         </section>
 
         {/* SECTION 2: SKILLMETRICS VS EXCEL INTERACTIVE COMPARISON SLIDER */}
-        <section id="excel-vs-skillmetrics" className="w-full bg-white dark:bg-background py-20 border-b border-border/60 scroll-mt-24">
+        <section id="excel-vs-skillmetrics" className="w-full bg-[#FAF8F5] dark:bg-background py-20 border-b border-border/60 scroll-mt-24">
           <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
             <div className="text-center space-y-3 max-w-3xl mx-auto">
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
@@ -1045,17 +1119,17 @@ export default function Home() {
           </div>
         </section>
 
-        {/* SECTION 3: WHY SKILLMETRICS */}
-        <section id="why-us" className="w-full bg-slate-50/70 dark:bg-slate-900/40 py-20 border-b border-border/60 scroll-mt-24">
+        {/* SECTION 3: WHY SKILLMETRICS (WARM PAPER THEME) */}
+        <section id="why-us" className="w-full bg-white py-20 sm:py-28 border-b border-brand-red/10 dark:border-slate-800 scroll-mt-24">
           <div className="container max-w-7xl mx-auto px-4 sm:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
 
               {/* Left Side: Product Image */}
-              <div className="lg:col-span-6 relative overflow-hidden rounded-xl border border-border/90 shadow-xl group">
+              <div className="lg:col-span-6 relative overflow-hidden rounded-sm border border-border/90 shadow-xl group">
                 <img
-                  src="/skillmetrics.png"
+                  src={settings.whyUsImage || "/skillmetrics.png"}
                   alt="Why Engineering Leaders Choose SkillMetrics"
-                  className="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.01]"
+                  className="w-full h-auto object-cover rounded-sm transition-transform duration-300 group-hover:scale-[1.01]"
                 />
               </div>
 
@@ -1072,34 +1146,20 @@ export default function Home() {
                 </div>
 
                 <ul className="space-y-3.5 pt-2 text-sm sm:text-base text-foreground font-medium">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>Get rid of cumbersome manual spreadsheet, broken excel formulas.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>Identify key staff members.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>Minimise/Maximise trainings as circumstances demand.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>Build &amp; assign exact trainings aligned to skills.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>One click Reports.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>Collaborative view dashboards.</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
-                    <span>Better employee insights with highly interactive radars.</span>
-                  </li>
+                  {[
+                    settings.whyUsBullet1 || "Get rid of cumbersome manual spreadsheet, broken excel formulas.",
+                    settings.whyUsBullet2 || "Identify key staff members.",
+                    settings.whyUsBullet3 || "Minimise/Maximise trainings as circumstances demand.",
+                    settings.whyUsBullet4 || "Build & assign exact trainings aligned to skills.",
+                    settings.whyUsBullet5 || "One click Reports.",
+                    settings.whyUsBullet6 || "Collaborative view dashboards.",
+                    settings.whyUsBullet7 || "Better employee insights with highly interactive radars."
+                  ].filter(Boolean).map((bullet, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <CheckCircle2 className="h-5 w-5 text-brand-yellow shrink-0 mt-0.5" />
+                      <span>{bullet}</span>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
@@ -1108,7 +1168,7 @@ export default function Home() {
         </section>
 
         {/* ROI / COST SAVINGS HIGHLIGHT SECTION */}
-        <section className="w-full bg-white dark:bg-background py-20 border-b border-border/60">
+        <section className="w-full bg-[#FAF8F5] dark:bg-background py-20 border-b border-border/60">
           <div className="container max-w-7xl mx-auto px-4 sm:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
 
@@ -1137,23 +1197,23 @@ export default function Home() {
 
               {/* Right Column: 2x2 Impact Metrics Card Grid (6 Cols) */}
               <div className="lg:col-span-6">
-                <div className="grid grid-cols-2 gap-4 bg-muted/40 border border-border/80 rounded-2xl p-6 sm:p-8 text-center shadow-xs">
-                  <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
+                <div className="grid grid-cols-2 gap-4 bg-muted/40 border border-border/80 rounded-sm p-6 sm:p-8 text-center shadow-xs">
+                  <div className="bg-card border border-border/60 rounded-sm p-5 shadow-2xs space-y-1">
                     <div className="text-3xl sm:text-4xl font-black text-brand-yellow">{settings.stat1Value || "1 Lakh+"}</div>
                     <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">{settings.stat1Label || "Skilled Up"}</div>
                   </div>
 
-                  <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
+                  <div className="bg-card border border-border/60 rounded-sm p-5 shadow-2xs space-y-1">
                     <div className="text-3xl sm:text-4xl font-black text-foreground">{settings.stat2Value || "50+"}</div>
                     <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">{settings.stat2Label || "Organizations"}</div>
                   </div>
 
-                  <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
+                  <div className="bg-card border border-border/60 rounded-sm p-5 shadow-2xs space-y-1">
                     <div className="text-3xl sm:text-4xl font-black text-brand-red">{settings.stat3Value || "50,000+"}</div>
                     <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">{settings.stat3Label || "Reskilled"}</div>
                   </div>
 
-                  <div className="bg-card border border-border/60 rounded-xl p-5 shadow-2xs space-y-1">
+                  <div className="bg-card border border-border/60 rounded-sm p-5 shadow-2xs space-y-1">
                     <div className="text-3xl sm:text-4xl font-black text-foreground">30,000+</div>
                     <div className="text-xs text-muted-foreground font-extrabold uppercase tracking-wider">Multiskilled</div>
                   </div>

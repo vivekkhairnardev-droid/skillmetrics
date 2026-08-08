@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { getBlogPosts } from "@/lib/sanity/client";
+import { sql } from "@/lib/db";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://skillmetrics.net";
@@ -15,6 +15,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/integrations",
     "/blog",
     "/contact",
+    "/resources",
+    "/case-studies",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -22,13 +24,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: route === "" ? 1.0 : 0.8,
   }));
 
-  const posts = await getBlogPosts();
-  const blogRoutes = posts.map((post) => ({
-    url: `${baseUrl}/blog/${post.slug}`,
-    lastModified: new Date(post.publishedAt),
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  let blogRoutes: MetadataRoute.Sitemap = [];
+  try {
+    const posts = await sql`SELECT slug, updated_at, created_at FROM posts WHERE published = true ORDER BY created_at DESC;`;
+    if (posts && Array.isArray(posts)) {
+      blogRoutes = posts.map((post: any) => ({
+        url: `${baseUrl}/blog/${post.slug}`,
+        lastModified: post.updated_at ? new Date(post.updated_at) : new Date(post.created_at || Date.now()),
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      }));
+    }
+  } catch (e) {
+    console.error("Failed to fetch blog routes for sitemap:", e);
+  }
 
   return [...staticRoutes, ...blogRoutes];
 }

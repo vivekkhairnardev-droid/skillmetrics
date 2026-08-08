@@ -19,7 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import type { BlogPost } from "@/lib/sanity/types";
+import type { BlogPost } from "@/lib/types";
 
 interface BlogClientPageProps {
   posts: BlogPost[];
@@ -29,12 +29,12 @@ export function BlogClientPage({ posts }: BlogClientPageProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
-  const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category)))];
+  const categories = ["All", ...Array.from(new Set(posts.map((p) => p.category).filter((c): c is string => Boolean(c))))];
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
-      post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.excerpt.toLowerCase().includes(searchTerm.toLowerCase());
+      (post.title || "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (post.excerpt || "").toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === "All" || post.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -105,11 +105,11 @@ export function BlogClientPage({ posts }: BlogClientPageProps) {
               </div>
               <h2 className="text-xl font-bold text-foreground">No Published Articles Yet</h2>
               <p className="text-xs text-muted-foreground leading-relaxed">
-                Create and publish your first article inside Studio to populate this page.
+                Create and publish your first article inside Admin Portal to populate this page.
               </p>
-              <Link href="/studio">
+              <Link href="/admin">
                 <Button className="bg-brand-red hover:bg-brand-red/90 text-white font-extrabold text-xs">
-                  Go to Studio <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                  Go to Admin <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>
@@ -163,8 +163,8 @@ export function BlogClientPage({ posts }: BlogClientPageProps) {
                             <User className="h-4 w-4" />
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-foreground">{featuredPost.author.name}</p>
-                            <p className="text-[10px] text-muted-foreground">{featuredPost.author.role}</p>
+                            <p className="text-xs font-bold text-foreground">{featuredPost.author_name || featuredPost.author?.name || "SkillMetrics Team"}</p>
+                            <p className="text-[10px] text-muted-foreground">{featuredPost.author_role || featuredPost.author?.role || "Engineering Team"}</p>
                           </div>
                         </div>
 
@@ -181,33 +181,33 @@ export function BlogClientPage({ posts }: BlogClientPageProps) {
 
               {/* ALL ARTICLES GRID */}
               <div className="space-y-6">
-                <div className="flex items-center justify-between border-b border-border pb-3">
-                  <h3 className="text-xl font-extrabold text-foreground flex items-center gap-2">
-                    <BookOpen className="h-5 w-5 text-brand-red" /> Articles ({filteredPosts.length})
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-extrabold tracking-tight text-foreground">
+                    All Articles ({filteredPosts.length})
                   </h3>
                 </div>
 
                 {filteredPosts.length === 0 ? (
-                  <div className="text-center py-12 bg-card rounded-xl border border-dashed border-border space-y-3">
-                    <p className="text-sm font-bold text-foreground">No matching articles found.</p>
+                  <div className="p-12 text-center bg-card rounded-2xl border border-border space-y-3">
+                    <p className="text-sm font-bold text-muted-foreground">No articles match your filter criteria.</p>
                     <Button variant="outline" size="sm" onClick={() => { setSearchTerm(""); setSelectedCategory("All"); }}>
-                      Reset Search
+                      Reset Filters
                     </Button>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {filteredPosts.map((post) => (
-                      <Card key={post._id} className="border border-border bg-card shadow-xs hover:shadow-lg hover:border-brand-red/30 transition-all flex flex-col justify-between group overflow-hidden">
+                      <Card key={post.id || post._id || post.slug} className="border border-border bg-card shadow-xs hover:shadow-lg hover:border-brand-red/30 transition-all flex flex-col justify-between group overflow-hidden">
                         <div>
                           <div className="h-44 overflow-hidden bg-slate-900 relative">
                             <img
-                              src={post.mainImage || "/skillmetrics.png"}
+                              src={post.main_image || post.mainImage || "/skillmetrics.png"}
                               alt={post.title}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                             />
                             <div className="absolute top-3 left-3">
                               <Badge className="bg-slate-900/90 text-white border-none font-bold text-[10px]">
-                                {post.category}
+                                {post.category || "Insight"}
                               </Badge>
                             </div>
                           </div>
@@ -215,11 +215,11 @@ export function BlogClientPage({ posts }: BlogClientPageProps) {
                           <CardHeader className="p-5 space-y-2">
                             <div className="flex items-center gap-3 text-[11px] text-muted-foreground font-mono">
                               <span className="flex items-center gap-1">
-                                <Calendar className="h-3 w-3" /> {post.publishedAt}
+                                <Calendar className="h-3 w-3" /> {post.published_at || post.publishedAt || "Recent"}
                               </span>
                               <span>•</span>
                               <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" /> {post.readingTime}
+                                <Clock className="h-3 w-3" /> {post.reading_time || post.readingTime || "5 min read"}
                               </span>
                             </div>
 
@@ -238,7 +238,7 @@ export function BlogClientPage({ posts }: BlogClientPageProps) {
                         <CardFooter className="p-5 pt-0 flex items-center justify-between border-t border-border/40 mt-4">
                           <div className="flex items-center gap-2 pt-2">
                             <User className="h-3.5 w-3.5 text-muted-foreground" />
-                            <span className="text-[11px] font-bold text-foreground">{post.author.name}</span>
+                            <span className="text-[11px] font-bold text-foreground">{post.author_name || post.author?.name || "SkillMetrics Team"}</span>
                           </div>
 
                           <Link href={`/blog/${post.slug}`}>

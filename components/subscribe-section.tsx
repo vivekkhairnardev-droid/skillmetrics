@@ -43,7 +43,7 @@ export function SubscribeSection() {
   };
 
   return (
-    <section id="newsletter" className="w-full bg-slate-50 dark:bg-slate-900/40 py-20 border-b border-border/60">
+    <section id="newsletter" className="w-full bg-[#FAF8F5] dark:bg-slate-900/40 py-20 border-b border-border/60">
       <div className="container max-w-7xl mx-auto px-4 sm:px-8">
         <div className="w-full bg-slate-900 text-white rounded-2xl p-8 sm:p-12 text-center space-y-6 border border-slate-800 shadow-xl relative overflow-hidden animate-fade-in">
           <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-brand-red/10 rounded-full blur-3xl pointer-events-none" />

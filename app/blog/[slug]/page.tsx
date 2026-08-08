@@ -3,9 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { marked } from "marked";
-
-// Force dynamic rendering so published posts always show fresh data
-export const dynamic = "force-dynamic";
+import { sql } from "@/lib/db";
 import {
   Calendar,
   Clock,
@@ -22,14 +20,24 @@ import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import { getBlogPostBySlug, getBlogPosts } from "@/lib/sanity/client";
-import type { BlogPost } from "@/lib/sanity/types";
+
+export const dynamic = "force-dynamic";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
-export async function generateMetadata({ params }: PageProps) {
+async function getBlogPostBySlug(slug: string) {
+  try {
+    const res = await sql`SELECT * FROM posts WHERE slug = ${slug} LIMIT 1;`;
+    if (res && res[0]) return res[0];
+  } catch (e) {
+    console.error("Error fetching blog post by slug:", e);
+  }
+  return null;
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
 
@@ -40,18 +48,18 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: post.seo?.metaTitle || `${post.title} | SkillMetrics Insights`,
-    description: post.seo?.metaDescription || post.excerpt,
-    keywords: post.seo?.keywords || ["skill matrix", "competency mapping", "SkillMetrics"],
+    title: post.seo_title || `${post.title} | SkillMetrics Insights`,
+    description: post.seo_description || post.excerpt,
+    keywords: ["skill matrix", "competency mapping", "SkillMetrics"],
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
-      publishedTime: post.publishedAt,
-      authors: [post.author.name],
+      publishedTime: post.published_at || post.created_at,
+      authors: [post.author_name || "SkillMetrics Team"],
       images: [
         {
-          url: post.mainImage || "https://skillmetrics.net/skillmetrics.png",
+          url: post.main_image || "https://skillmetrics.net/skillmetrics.png",
           width: 1200,
           height: 630,
           alt: post.title,
@@ -62,7 +70,7 @@ export async function generateMetadata({ params }: PageProps) {
       card: "summary_large_image",
       title: post.title,
       description: post.excerpt,
-      images: [post.mainImage || "https://skillmetrics.net/skillmetrics.png"],
+      images: [post.main_image || "https://skillmetrics.net/skillmetrics.png"],
     },
   };
 }
@@ -75,35 +83,38 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const allPosts = await getBlogPosts();
-  const relatedPosts = allPosts.filter((p) => p.slug !== post.slug && p._id !== post._id).slice(0, 2);
+  let relatedPosts: any[] = [];
+  try {
+    const dbRelated = await sql`SELECT * FROM posts WHERE slug != ${slug} AND published = true ORDER BY created_at DESC LIMIT 2;`;
+    if (dbRelated && Array.isArray(dbRelated)) relatedPosts = dbRelated;
+  } catch (e) {
+    console.error("Error fetching related posts:", e);
+  }
 
-  // Structured Data (JSON-LD) for Schema.org BlogPosting
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
     "headline": post.title,
     "description": post.excerpt,
-    "image": post.mainImage || "https://skillmetrics.net/skillmetrics.png",
-    "datePublished": post.publishedAt,
+    "image": post.main_image || "https://skillmetrics.net/skillmetrics.png",
+    "datePublished": post.published_at || post.created_at,
     "author": {
       "@type": "Person",
-      "name": post.author.name,
-      "jobTitle": post.author.role
+      "name": post.author_name || "SkillMetrics Team",
+      "jobTitle": post.author_role || "Engineering Team"
     },
     "publisher": {
       "@type": "Organization",
       "name": "SkillMetrics",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://skillmetrics.net/logo.png"
+        "url": "https://skillmetrics.net/skillmetrics.png"
       }
     }
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground font-sans antialiased flex flex-col">
-      {/* Inject JSON-LD Schema for Google Rich Snippets */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -111,7 +122,6 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
       <Navbar />
 
-      {/* ARTICLE HEADER HERO */}
       <section className="bg-brand-dark text-white py-12 sm:py-16 border-b border-border/20 relative overflow-hidden">
         <div className="container max-w-4xl mx-auto px-4 sm:px-8 space-y-6 relative z-10">
           <Link href="/blog" className="inline-flex items-center text-xs font-bold text-slate-300 hover:text-brand-yellow transition-colors gap-1.5">
@@ -121,14 +131,14 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
           <div className="space-y-4">
             <div className="flex items-center gap-3 text-xs text-slate-300 font-mono flex-wrap">
               <Badge className="bg-brand-red text-white font-extrabold text-[10px] uppercase">
-                {post.category}
+                {post.category || "Insight"}
               </Badge>
               <span className="flex items-center gap-1">
-                <Calendar className="h-3.5 w-3.5" /> {post.publishedAt}
+                <Calendar className="h-3.5 w-3.5" /> {post.published_at ? new Date(post.published_at).toLocaleDateString() : "Recent"}
               </span>
               <span>•</span>
               <span className="flex items-center gap-1">
-                <Clock className="h-3.5 w-3.5" /> {post.readingTime}
+                <Clock className="h-3.5 w-3.5" /> {post.reading_time || "5 min read"}
               </span>
             </div>
 
@@ -140,15 +150,14 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
               {post.excerpt}
             </p>
 
-            {/* Author bar */}
             <div className="flex items-center justify-between pt-4 border-t border-slate-800">
               <div className="flex items-center gap-3">
                 <div className="h-10 w-10 rounded-full bg-brand-red/20 border border-brand-red/30 flex items-center justify-center text-brand-red font-bold text-xs">
                   <User className="h-5 w-5" />
                 </div>
                 <div>
-                  <p className="text-xs font-bold text-white">{post.author.name}</p>
-                  <p className="text-[10px] text-slate-400">{post.author.role}</p>
+                  <p className="text-xs font-bold text-white">{post.author_name || "SkillMetrics Team"}</p>
+                  <p className="text-[10px] text-slate-400">{post.author_role || "Engineering Team"}</p>
                 </div>
               </div>
 
@@ -165,55 +174,26 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* ARTICLE BODY */}
       <main className="flex-1 py-12 bg-slate-50 dark:bg-background">
         <div className="container max-w-4xl mx-auto px-4 sm:px-8 space-y-12">
-
-          {/* Featured Image */}
-          {post.mainImage && (
+          {post.main_image && (
             <div className="rounded-2xl overflow-hidden border border-border shadow-xl bg-slate-900">
               <img
-                src={post.mainImage}
+                src={post.main_image}
                 alt={post.title}
                 className="w-full h-auto max-h-[450px] object-cover"
               />
             </div>
           )}
 
-          {/* Article Text Content */}
           <article className="prose max-w-none bg-card p-6 sm:p-10 rounded-2xl border border-border/80 shadow-xs">
-            {typeof post.content === "string" ? (
-              <div 
-                dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }}
-              />
-            ) : Array.isArray(post.content) ? (
-              <div className="space-y-4">
-                {post.content.map((block: any, idx: number) => {
-                  if (block._type === "block" && block.children) {
-                    return <p key={idx}>{block.children.map((c: any) => c.text).join("")}</p>;
-                  }
-                  return null;
-                })}
-              </div>
+            {post.content ? (
+              <div dangerouslySetInnerHTML={{ __html: marked.parse(post.content) }} />
             ) : (
               <p className="text-muted-foreground italic">No content available.</p>
             )}
-
-            {/* SEO Keywords tags */}
-            {post.seo?.keywords && post.seo.keywords.length > 0 && (
-              <div className="pt-6 border-t border-border flex items-center gap-2 flex-wrap">
-                <Tag className="h-4 w-4 text-brand-red" />
-                <span className="text-xs font-bold text-muted-foreground">Topics:</span>
-                {post.seo.keywords.map((kw) => (
-                  <Badge key={kw} variant="secondary" className="text-[10px] bg-slate-100 dark:bg-slate-800 font-medium">
-                    #{kw}
-                  </Badge>
-                ))}
-              </div>
-            )}
           </article>
 
-          {/* RELATED ARTICLES */}
           {relatedPosts.length > 0 && (
             <div className="space-y-6 pt-6">
               <div className="border-b border-border pb-3">
@@ -224,9 +204,9 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {relatedPosts.map((rel) => (
-                  <Card key={rel._id} className="border border-border bg-card p-5 space-y-3 hover:border-brand-red/30 transition-all">
+                  <Card key={rel.id} className="border border-border bg-card p-5 space-y-3 hover:border-brand-red/30 transition-all">
                     <Badge variant="outline" className="text-[10px] font-bold text-brand-red border-brand-red/20">
-                      {rel.category}
+                      {rel.category || "Insight"}
                     </Badge>
                     <h4 className="text-sm font-bold text-foreground hover:text-brand-red transition-colors">
                       <Link href={`/blog/${rel.slug}`}>{rel.title}</Link>
@@ -240,7 +220,6 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
               </div>
             </div>
           )}
-
         </div>
       </main>
 

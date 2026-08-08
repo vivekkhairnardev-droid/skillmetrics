@@ -40,6 +40,7 @@ export async function POST(request: Request) {
       hero_title,
       hero_subtitle,
       hero_cta_text,
+      hero_image,
       features_title,
       features_subtitle,
       card1_image,
@@ -69,6 +70,11 @@ export async function POST(request: Request) {
       calendly_url,
       meta_title,
       meta_description,
+      keywords,
+      allow_indexing,
+      google_site_verification,
+      google_analytics_id,
+      site_url,
     } = settings;
 
     await sql`
@@ -77,6 +83,7 @@ export async function POST(request: Request) {
         hero_title = ${hero_title ?? null},
         hero_subtitle = ${hero_subtitle ?? null},
         hero_cta_text = ${hero_cta_text ?? null},
+        hero_image = ${hero_image ?? null},
         features_title = ${features_title ?? null},
         features_subtitle = ${features_subtitle ?? null},
         card1_image = ${card1_image ?? null},
@@ -105,7 +112,12 @@ export async function POST(request: Request) {
         banner_link = ${banner_link ?? null},
         calendly_url = ${calendly_url ?? null},
         meta_title = ${meta_title ?? null},
-        meta_description = ${meta_description ?? null}
+        meta_description = ${meta_description ?? null},
+        keywords = ${keywords ?? null},
+        allow_indexing = ${allow_indexing ?? true},
+        google_site_verification = ${google_site_verification ?? null},
+        google_analytics_id = ${google_analytics_id ?? null},
+        site_url = ${site_url ?? null}
       WHERE id = 1;
     `;
 

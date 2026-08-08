@@ -2,19 +2,23 @@ import { neon, neonConfig } from "@neondatabase/serverless";
 import fs from "fs";
 import path from "path";
 
-// Force the driver to use HTTP fetch instead of WebSockets/TCP
-neonConfig.poolQueryViaFetch = true;
+import dns from "node:dns";
+
+if (typeof dns.setDefaultResultOrder === "function") {
+  dns.setDefaultResultOrder("verbatim");
+}
+
+neonConfig.poolQueryViaFetch = false;
 
 // Read .env.local manually to get DATABASE_URL
 const envPath = path.resolve(".env.local");
-let databaseUrl = process.env.DATABASE_URL;
+let databaseUrl = process.env.DATABASE_URL_UNPOOLED || process.env.DATABASE_URL;
 
 if (!databaseUrl && fs.existsSync(envPath)) {
   const envFileContent = fs.readFileSync(envPath, "utf-8");
-  const match = envFileContent.match(/DATABASE_URL=["']?([^"'\s]+)["']?/);
-  if (match) {
-    databaseUrl = match[1];
-  }
+  const unpooledMatch = envFileContent.match(/DATABASE_URL_UNPOOLED=["']?([^"'\s]+)["']?/);
+  const pooledMatch = envFileContent.match(/DATABASE_URL=["']?([^"'\s]+)["']?/);
+  databaseUrl = unpooledMatch ? unpooledMatch[1] : (pooledMatch ? pooledMatch[1] : undefined);
 }
 
 if (!databaseUrl) {
@@ -134,10 +138,23 @@ async function setup() {
         banner_link TEXT,
         calendly_url TEXT,
         meta_title TEXT,
-        meta_description TEXT
+        meta_description TEXT,
+        keywords TEXT,
+        allow_indexing BOOLEAN DEFAULT true,
+        google_site_verification TEXT,
+        google_analytics_id TEXT,
+        site_url TEXT
       );
     `;
-    console.log("✓ 'site_settings' table created or exists");
+
+    // Migration alter statements for site_settings columns
+    await sql`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS keywords TEXT;`;
+    await sql`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS allow_indexing BOOLEAN DEFAULT true;`;
+    await sql`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS google_site_verification TEXT;`;
+    await sql`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS google_analytics_id TEXT;`;
+    await sql`ALTER TABLE site_settings ADD COLUMN IF NOT EXISTS site_url TEXT;`;
+
+    console.log("✓ 'site_settings' table created or updated");
 
     // 5. Contact Page Settings Table
     await sql`
@@ -197,6 +214,191 @@ async function setup() {
       );
     `;
     console.log("✓ submission tables created or exists");
+
+    // 7. Page Content Table (for editing page sections from Studio)
+    await sql`
+      CREATE TABLE IF NOT EXISTS page_content (
+        id SERIAL PRIMARY KEY,
+        page_slug TEXT NOT NULL,
+        page_name TEXT NOT NULL,
+        section_id TEXT NOT NULL,
+        section_name TEXT NOT NULL,
+        content_json JSONB NOT NULL DEFAULT '{}'::jsonb,
+        section_order INTEGER DEFAULT 0,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE(page_slug, section_id)
+      );
+    `;
+    console.log("✓ 'page_content' table created or exists");
+
+    // Seeding: Home Page Content
+    const homeContentCount = await sql`SELECT count(*) FROM page_content WHERE page_slug = 'home';`;
+    if (parseInt(homeContentCount[0].count) === 0) {
+      const homeSections = [
+        {
+          section_id: 'hero',
+          section_name: 'Hero Section',
+          section_order: 1,
+          content_json: {
+            title: "India's #1 Skill Management Software",
+            subtitle: "Automate workforce skill matrices, benchmark role competencies, and evaluate developer capabilities 3x faster with objective AI assessments.",
+            ctaText: "Book a Demo",
+            ctaLink: "/book-demo",
+            ctaText2: "Explore Features",
+            ctaLink2: "#features"
+          }
+        },
+        {
+          section_id: 'features',
+          section_name: 'Features Section',
+          section_order: 2,
+          content_json: {
+            title: "Everything Your Engineering Org Needs to Scale Talent",
+            subtitle: "Scroll to explore how SkillMetrics automates technical evaluations, eliminates skill blind spots, and accelerates workforce capability."
+          }
+        },
+        {
+          section_id: 'card1',
+          section_name: 'Feature Card 1 — Skill Matrix',
+          section_order: 3,
+          content_json: {
+            title: "Skill Matrix",
+            description: "A virtually 'unbreakable' tool that basically works in real-time to showcase essential skills or competencies of your staff members, particularly, need to perform a certain task.",
+            description2: "Additionally, Extra features enable you to harmonize your overall organizational activities based on performance, delivery, and core competencies.",
+            image: "/skillmetrics.png"
+          }
+        },
+        {
+          section_id: 'card2',
+          section_name: 'Feature Card 2 — Employee Metrics',
+          section_order: 4,
+          content_json: {
+            title: "Employee Metrics",
+            description: "Employee competency matrix visually tracks employee skills with a super dynamic matrix grid view. Discover missing competencies, and find the right candidates for the right tasks at the right time.",
+            description2: "Flexible customisations in grid view can yield you the best results in employee matrices. What are those customisations? How organisations have benefitted using these tailor-made solutions?",
+            image: "/emp.jpg"
+          }
+        },
+        {
+          section_id: 'card3',
+          section_name: 'Feature Card 3 — AI Assessments',
+          section_order: 5,
+          content_json: {
+            title: "AI-Based Assessments",
+            description: "Interactive AI bots to create super easy assessments. Self integrated, system enabled with flexible adaptability to controlling environment makes your observation tasks hassle free and step ahead.",
+            image: "/ai_asses.png"
+          }
+        },
+        {
+          section_id: 'card4',
+          section_name: 'Feature Card 4 — Multi-Skilling',
+          section_order: 6,
+          content_json: {
+            title: "Multi-Skilling",
+            description: "Multiskilling mechanisms that make your ManPower flexible and more powerful in problem-solving & task executing WorkPower.",
+            image: "/multi-skilling.png"
+          }
+        },
+        {
+          section_id: 'card5',
+          section_name: 'Feature Card 5 — Competency Mapping',
+          section_order: 7,
+          content_json: {
+            title: "Competency Mapping",
+            description: "Functional radars, capability graphs, and training feedback loops designed to benchmark employee proficiency across technical stacks and operational workflows.",
+            description2: "Imprint workforce capabilities into central radar frameworks, track growth over time, and eliminate manual spreadsheet errors with automated capability scorecards.",
+            image: "/compentancy-mapping.jpg"
+          }
+        },
+        {
+          section_id: 'capabilities',
+          section_name: 'Core Platform Capabilities',
+          section_order: 8,
+          content_json: {
+            title: "Core Platform Capabilities",
+            subtitle: "Purpose-built tools designed for technical recruiters, hiring managers, and enterprise engineering leads.",
+            cap1Title: "Skill Matrix",
+            cap1Badge: "REAL-TIME MATRIX",
+            cap1Desc: "Real-time competency tracking and automated skill visualization grid. Discover missing competencies, assign right candidates to right tasks, and eliminate spreadsheet errors.",
+            cap2Title: "Employee Metrics",
+            cap2Badge: "TALENT ANALYTICS",
+            cap2Desc: "Dynamic grid view with custom tailoring & performance tracking. Track employee growth over time with customizable matrix views and automated capability reports.",
+            cap3Title: "AI-Based Assessments",
+            cap3Badge: "AUTOMATED EVALUATION",
+            cap3Desc: "Interactive AI engine for rapid, highly accurate candidate evaluation. Minimizes manual work, boosts employee engagement, and delivers precise skill scores automatically.",
+            cap4Title: "Multi-Skilling",
+            cap4Badge: "MANPOWER ALLOCATION",
+            cap4Desc: "Flexible workforce allocation & runtime problem-solving. Equip employees with multiple skills, adjust manpower on the fly, and manage shifts with one click.",
+            cap5Title: "Competency Mapping",
+            cap5Badge: "GAP ANALYSIS",
+            cap5Desc: "Functional radars, capability graphs, and training feedback loops designed to benchmark employee proficiency across technical stacks and operational workflows.",
+            cap6Title: "Up-Skilling & Re-Skilling",
+            cap6Badge: "CONTINUOUS LEARNING",
+            cap6Desc: "Continuous workforce learning pathways aligned to tech trends. Expand employee skillsets to keep pace with changing market demands, tech stacks, and industry shifts."
+          }
+        },
+        {
+          section_id: 'comparison',
+          section_name: 'Excel vs SkillMetrics',
+          section_order: 9,
+          content_json: {
+            title: "Legacy Excel Spreadsheets vs. SkillMetrics Intelligence",
+            subtitle: "Drag the interactive slider below to see how error-prone manual spreadsheets compare to automated, real-time AI skill matrix tracking."
+          }
+        },
+        {
+          section_id: 'why_us',
+          section_name: 'Why Engineering Leaders Choose Us',
+          section_order: 10,
+          content_json: {
+            title: "Why Engineering Leaders Choose SkillMetrics",
+            subtitle: "Built specifically to eliminate engineering interview friction, reduce bad hires, and maximize developer productivity across your engineering organization.",
+            image: "/skillmetrics.png"
+          }
+        },
+        {
+          section_id: 'roi',
+          section_name: 'Annual Savings & ROI',
+          section_order: 11,
+          content_json: {
+            title: "Save Up To $1M+ In Annual Engineering & Hiring Costs",
+            subtitle: "By automating technical candidate screening, eliminating mis-hires, and reclaiming developer interview hours, SkillMetrics delivers measurable enterprise savings from Month 1."
+          }
+        },
+        {
+          section_id: 'stats',
+          section_name: 'Key Statistics',
+          section_order: 12,
+          content_json: {
+            stat1Value: "1 Lakh+",
+            stat1Label: "Skilled Up",
+            stat2Value: "50+",
+            stat2Label: "Organizations",
+            stat3Value: "50,000+",
+            stat3Label: "Reskilled"
+          }
+        },
+        {
+          section_id: 'testimonials',
+          section_name: 'Client Testimonials Header',
+          section_order: 13,
+          content_json: {
+            title: "What Our Clients Say",
+            subtitle: "Trusted by CTOs, VPs of Engineering, and HR Leaders at leading tech enterprises."
+          }
+        }
+      ];
+
+      for (const s of homeSections) {
+        await sql`
+          INSERT INTO page_content (page_slug, page_name, section_id, section_name, section_order, content_json)
+          VALUES ('home', 'Home Page', ${s.section_id}, ${s.section_name}, ${s.section_order}, ${JSON.stringify(s.content_json)}::jsonb)
+          ON CONFLICT (page_slug, section_id) DO UPDATE SET content_json = EXCLUDED.content_json;
+        `;
+      }
+      console.log("✓ Seeded default home page_content sections");
+    }
 
     // Seeding: Site Settings
     const settingsCount = await sql`SELECT count(*) FROM site_settings;`;

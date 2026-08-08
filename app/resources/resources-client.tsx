@@ -20,14 +20,14 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { Button } from "@/components/ui/button";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
-import type { BlogPost, CaseStudy, ResourceItem } from "@/lib/sanity/types";
+import type { BlogPost, CaseStudy, ResourceItem } from "@/lib/types";
 
 interface UnifiedResource {
   id: string;
   title: string;
   category: string;
   readTime: string;
-  description: string;
+  description?: string;
   badge: string;
   image: string;
   author: string;
@@ -43,9 +43,9 @@ interface ResourcesClientPageProps {
 }
 
 export function ResourcesClientPage({
-  initialBlogs,
-  initialCaseStudies,
-  initialResources,
+  initialBlogs = [],
+  initialCaseStudies = [],
+  initialResources = [],
 }: ResourcesClientPageProps) {
   const [selectedCategory, setSelectedCategory] = useState("All Resources");
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,47 +54,47 @@ export function ResourcesClientPage({
   useEffect(() => {
     // Convert blogs to unified format
     const blogItems: UnifiedResource[] = initialBlogs.map((p) => ({
-      id: `blog-${p._id}`,
-      title: p.title,
+      id: `blog-${p.id || p._id || p.slug}`,
+      title: p.title || "Untitled Blog",
       category: "Blog Posts",
-      readTime: p.readingTime || "5 min read",
-      description: p.excerpt,
+      readTime: p.reading_time || p.readingTime || "5 min read",
+      description: p.excerpt || "",
       badge: p.category || "Blog",
-      image: p.mainImage || "/skillmetrics.png",
-      author: p.author.name,
+      image: p.main_image || p.mainImage || "/skillmetrics.png",
+      author: p.author_name || p.author?.name || "SkillMetrics Team",
       href: `/blog/${p.slug}`,
       type: "blog" as const,
-      publishedAt: p.publishedAt,
+      publishedAt: p.published_at || p.publishedAt,
     }));
 
     // Convert case studies to unified format
     const caseStudyItems: UnifiedResource[] = initialCaseStudies.map((s) => ({
-      id: `case-${s._id}`,
-      title: s.title,
+      id: `case-${s.id || s._id || s.slug}`,
+      title: s.title || "Untitled Case Study",
       category: "Case Studies",
       readTime: "Case Study",
-      description: s.excerpt,
+      description: s.excerpt || "",
       badge: s.industry || "Case Study",
-      image: s.coverImage || "/skillmetrics.png",
-      author: s.companyName,
+      image: s.cover_image || s.coverImage || "/skillmetrics.png",
+      author: s.company_name || s.companyName || "Enterprise Client",
       href: `/case-studies/${s.slug}`,
       type: "case-study" as const,
-      publishedAt: s.publishedAt,
+      publishedAt: s.published_at || s.publishedAt,
     }));
 
     // Convert custom CMS resources (Skill Frameworks, Whitepapers, Playbooks, Templates)
     const resourceItems: UnifiedResource[] = initialResources.map((r) => ({
-      id: `res-${r._id}`,
-      title: r.title,
+      id: `res-${r.id || r._id || r.slug}`,
+      title: r.title || "Untitled Resource",
       category: r.category || "Skill Frameworks",
-      readTime: r.readTime || "10 min read",
-      description: r.summary,
-      badge: r.badge || "Featured Resource",
+      readTime: r.read_time || r.readTime || "10 min read",
+      description: r.summary || r.description || "",
+      badge: r.badge || r.category || "Guide",
       image: r.image || "/skillmetrics.png",
-      author: r.author,
-      href: `/resources/${r.slug}`,
+      author: r.author_name || r.author || "SkillMetrics Team",
+      href: `/resources/${r.slug || r.id}`,
       type: "resource" as const,
-      publishedAt: r.publishedAt,
+      publishedAt: r.published_at || r.publishedAt,
     }));
 
     // Combine all CMS items and sort by publication date (newest first)
@@ -122,8 +122,8 @@ export function ResourcesClientPage({
     const matchesCategory =
       selectedCategory === "All Resources" || item.category === selectedCategory;
     const matchesSearch =
-      item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase());
+      (item.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (item.description || "").toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -258,9 +258,9 @@ export function ResourcesClientPage({
                 <p className="text-xs text-slate-300 leading-relaxed">
                   Publish blogs, case studies, whitepapers, and skill frameworks.
                 </p>
-                <Link href="/studio" className="inline-block pt-1">
+                <Link href="/admin" className="inline-block pt-1">
                   <span className="text-xs font-bold text-brand-yellow hover:underline flex items-center gap-1">
-                    Open Studio <ArrowRight className="h-3 w-3" />
+                    Open Admin Portal <ArrowRight className="h-3 w-3" />
                   </span>
                 </Link>
               </div>
@@ -354,9 +354,9 @@ export function ResourcesClientPage({
                     <Button variant="outline" size="sm" onClick={() => { setSearchQuery(""); setSelectedCategory("All Resources"); }}>
                       Reset Filters
                     </Button>
-                    <Link href="/studio">
+                    <Link href="/admin">
                       <Button size="sm" className="bg-brand-yellow text-slate-950 hover:bg-brand-yellow/90 font-bold">
-                        Go to Studio
+                        Go to Admin Portal
                       </Button>
                     </Link>
                   </div>

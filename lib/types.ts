@@ -1,13 +1,25 @@
 export interface BlogPost {
-  _id: string;
+  id: number | string;
+  _id?: string;
   title: string;
   slug: string;
-  excerpt: string;
+  excerpt?: string;
+  content?: any;
   mainImage?: string;
-  publishedAt: string;
+  main_image?: string;
+  publishedAt?: string;
+  published_at?: string;
+  created_at?: string;
   readingTime?: string;
-  category: string;
-  author: {
+  reading_time?: string;
+  category?: string;
+  authorName?: string;
+  author_name?: string;
+  authorRole?: string;
+  author_role?: string;
+  authorAvatar?: string;
+  author_avatar?: string;
+  author?: {
     name: string;
     role: string;
     avatar?: string;
@@ -17,87 +29,73 @@ export interface BlogPost {
     metaDescription?: string;
     keywords?: string[];
   };
-  content?: any;
+  seo_title?: string;
+  seo_description?: string;
 }
 
 export interface CaseStudy {
-  _id: string;
+  id: number | string;
+  _id?: string;
   title: string;
   slug: string;
-  companyName: string;
-  companyLogo?: string;
-  industry: string;
-  excerpt: string;
+  companyName?: string;
+  company_name?: string;
+  industry?: string;
+  logo?: string;
   coverImage?: string;
+  cover_image?: string;
+  excerpt?: string;
   challenge?: string;
   solution?: string;
-  results?: { metric: string; label: string }[];
   testimonialQuote?: string;
+  testimonial_quote?: string;
   testimonialAuthor?: string;
+  testimonial_author?: string;
   testimonialRole?: string;
+  testimonial_role?: string;
+  results?: Array<{ metric: string; label: string }>;
+  publishedAt?: string;
+  published_at?: string;
+  created_at?: string;
   content?: any;
-  publishedAt: string;
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
     keywords?: string[];
   };
+  seo_title?: string;
+  seo_description?: string;
 }
 
 export interface ResourceItem {
-  _id: string;
+  id: number | string;
+  _id?: string;
   title: string;
   slug: string;
-  category: string;
+  category?: string;
   badge?: string;
   readTime?: string;
-  summary: string;
+  read_time?: string;
+  summary?: string;
+  description?: string;
   image?: string;
-  author: string;
+  author?: string;
+  authorName?: string;
+  author_name?: string;
   authorRole?: string;
-  publishedAt: string;
+  author_role?: string;
   keyTakeaways?: string[];
   content?: any;
+  publishedAt?: string;
+  published_at?: string;
+  created_at?: string;
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
     keywords?: string[];
   };
-}
-
-export interface SiteSettingsData {
-  heroTitle?: string;
-  heroSubtitle?: string;
-  heroCtaText?: string;
-  featuresTitle?: string;
-  featuresSubtitle?: string;
-  card1Image?: string;
-  card2Image?: string;
-  card3Image?: string;
-  card4Image?: string;
-  card5Image?: string;
-  capabilitiesTitle?: string;
-  capabilitiesSubtitle?: string;
-  comparisonTitle?: string;
-  comparisonSubtitle?: string;
-  whyUsTitle?: string;
-  whyUsSubtitle?: string;
-  roiTitle?: string;
-  roiSubtitle?: string;
-  stat1Value?: string;
-  stat1Label?: string;
-  stat2Value?: string;
-  stat2Label?: string;
-  stat3Value?: string;
-  stat3Label?: string;
-  testimonialsTitle?: string;
-  testimonialsSubtitle?: string;
-  bannerEnabled?: boolean;
-  bannerText?: string;
-  bannerLink?: string;
-  calendlyUrl?: string;
-  metaTitle?: string;
-  metaDescription?: string;
+  seo_title?: string;
+  seo_description?: string;
 }
 
 export interface ContactPageData {
