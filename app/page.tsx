@@ -62,6 +62,7 @@ import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { useSiteSettings } from "@/components/site-settings-context";
 import { SubscribeSection } from "@/components/subscribe-section";
+import { WhyChoose } from "@/components/landing/why-choose";
 
 export default function Home() {
   const { settings } = useSiteSettings();
@@ -125,13 +126,43 @@ export default function Home() {
       {/* HERO SECTION - CLEAN PAPER BG SPLIT LAYOUT WITH LEFT IMAGE & RIGHT CONTENT */}
       <section className="relative w-full lg:min-h-[80vh] flex items-center bg-paper text-slate-900 dark:text-white py-12 lg:py-0 overflow-hidden">
         {/* Subtle Warm Glow Orb */}
-        <div className="absolute -right-20 -bottom-20 w-[32rem] h-[32rem] bg-brand-yellow/4 rounded-full blur-[140px] pointer-events-none" />
+        <div className="absolute -left-20 -bottom-20 w-[32rem] h-[32rem] bg-brand-yellow/4 rounded-full blur-[140px] pointer-events-none" />
 
         <div className="relative z-10 container max-w-7xl mx-auto px-4 sm:px-8 w-full">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-10 lg:gap-14 w-full">
 
-            {/* Left Side: Content Column (Focused ~44% Width on Desktop) */}
-            <div className="w-full lg:w-[44%] shrink-0 space-y-6 text-left order-1">
+            {/* Left Side: Prominent Image Showcase (~56% Width) */}
+            <div className="w-full lg:w-[56%] relative order-1 flex justify-center lg:justify-start">
+
+              {/* Dot Grid — Bottom Left */}
+              <svg className="absolute -bottom-7 -left-7 w-32 h-32 sm:w-40 sm:h-40 z-0 pointer-events-none" aria-hidden="true">
+                <pattern id="hero-dots-bl" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
+                  <circle cx="3" cy="3" r="1.8" fill="#ED2B1F" opacity="0.25" />
+                </pattern>
+                <rect width="100%" height="100%" fill="url(#hero-dots-bl)" />
+              </svg>
+
+              {/* Ambient Glow Effect Behind Image */}
+              <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
+                <div className="w-[95%] h-[85%] rounded-full bg-brand-red/14 blur-[90px]" />
+              </div>
+              <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center -translate-x-10 translate-y-6">
+                <div className="w-[75%] h-[65%] rounded-full bg-brand-yellow/12 blur-[70px]" />
+              </div>
+
+              {/* Clean Image Showcase */}
+              <div className="relative z-10 w-full overflow-hidden rounded-sm shadow-lg bg-white dark:bg-slate-900">
+                <img
+                  src={settings.heroImage || "/hero.png"}
+                  alt="SkillMetrics Platform Interface"
+                  className="w-full h-auto max-h-[620px] lg:max-h-[78vh] object-contain rounded-sm"
+                />
+              </div>
+
+            </div>
+
+            {/* Right Side: Content Column (Focused ~44% Width on Desktop) */}
+            <div className="w-full lg:w-[44%] shrink-0 space-y-6 text-left order-2">
 
               {/* Main Display Heading */}
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-heading font-extrabold tracking-tight text-slate-900 dark:text-white leading-[1.12]">
@@ -202,36 +233,6 @@ export default function Home() {
                   <CheckCircle2 className="h-4 w-4 text-emerald-500" />
                   <span>ISO 27001 Certified</span>
                 </div>
-              </div>
-
-            </div>
-
-            {/* Right Side: Prominent Image Showcase (~56% Width) */}
-            <div className="w-full lg:w-[56%] relative order-2 flex justify-center lg:justify-end">
-
-              {/* Dot Grid — Bottom Right */}
-              <svg className="absolute -bottom-7 -right-7 w-32 h-32 sm:w-40 sm:h-40 z-0 pointer-events-none" aria-hidden="true">
-                <pattern id="hero-dots-br" x="0" y="0" width="15" height="15" patternUnits="userSpaceOnUse">
-                  <circle cx="3" cy="3" r="1.8" fill="#ED2B1F" opacity="0.25" />
-                </pattern>
-                <rect width="100%" height="100%" fill="url(#hero-dots-br)" />
-              </svg>
-
-              {/* Ambient Glow Effect Behind Image */}
-              <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center">
-                <div className="w-[95%] h-[85%] rounded-full bg-brand-red/14 blur-[90px]" />
-              </div>
-              <div className="absolute inset-0 z-0 pointer-events-none flex items-center justify-center translate-x-10 translate-y-6">
-                <div className="w-[75%] h-[65%] rounded-full bg-brand-yellow/12 blur-[70px]" />
-              </div>
-
-              {/* Clean Image Showcase */}
-              <div className="relative z-10 w-full overflow-hidden rounded-sm shadow-lg bg-white dark:bg-slate-900">
-                <img
-                  src={settings.heroImage || "/hero.png"}
-                  alt="SkillMetrics Platform Interface"
-                  className="w-full h-auto max-h-[620px] lg:max-h-[78vh] object-contain rounded-sm"
-                />
               </div>
 
             </div>
@@ -523,154 +524,7 @@ export default function Home() {
       <main className="w-full">
 
         {/* SECTION 1: CORE PLATFORM CAPABILITIES (WARM PAPER BACKGROUND) */}
-        <section id="grid-features" className="w-full bg-white py-20 sm:py-28 border-b border-slate-200/80 dark:border-slate-800 scroll-mt-24">
-          <div className="container max-w-7xl mx-auto px-4 sm:px-8 space-y-10">
-            <div className="text-center space-y-3 max-w-3xl mx-auto">
-              <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
-                {settings.capabilitiesTitle || "Core Platform Capabilities"}
-              </h2>
-              <p className="text-muted-foreground text-base max-w-2xl mx-auto leading-relaxed">
-                {settings.capabilitiesSubtitle || "Purpose-built tools designed for technical recruiters, hiring managers, and enterprise engineering leads."}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* Card 1 */}
-              <Card className="border-l-4 border-l-brand-red border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
-                <CardHeader className="space-y-3 pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-md bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-                      <Layers className="h-5 w-5" />
-                    </div>
-                    {settings.cap1Badge && (
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-brand-red">
-                        {settings.cap1Badge}
-                      </span>
-                    )}
-                  </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
-                    {settings.cap1Title || "Skill Matrix"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {settings.cap1Desc || "Real-time competency tracking and automated skill visualization grid. Discover missing competencies, assign right candidates to right tasks, and eliminate spreadsheet errors."}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card 2 */}
-              <Card className="border-l-4 border-l-brand-yellow border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
-                <CardHeader className="space-y-3 pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-md bg-brand-yellow/20 text-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-                      <Users className="h-5 w-5 text-amber-700 dark:text-brand-yellow" />
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-brand-yellow">
-                      {settings.cap2Badge || "TALENT ANALYTICS"}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
-                    {settings.cap2Title || "Employee Metrics"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {settings.cap2Desc || "Dynamic grid view with custom tailoring & performance tracking. Track employee growth over time with customizable matrix views and automated capability reports."}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card 3 */}
-              <Card className="border-l-4 border-l-foreground border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
-                <CardHeader className="space-y-3 pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-md bg-muted text-foreground flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-                      <Bot className="h-5 w-5" />
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                      {settings.cap3Badge || "AUTOMATED EVALUATION"}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
-                    {settings.cap3Title || "AI-Based Assessments"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {settings.cap3Desc || "Interactive AI engine for rapid, highly accurate candidate evaluation. Minimizes manual work, boosts employee engagement, and delivers precise skill scores automatically."}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card 4 */}
-              <Card className="border-l-4 border-l-brand-yellow border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
-                <CardHeader className="space-y-3 pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-md bg-brand-yellow/20 text-slate-900 flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-                      <Zap className="h-5 w-5 text-amber-700 dark:text-brand-yellow" />
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-amber-600 dark:text-brand-yellow">
-                      {settings.cap4Badge || "MANPOWER ALLOCATION"}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
-                    {settings.cap4Title || "Multi-Skilling"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {settings.cap4Desc || "Flexible workforce allocation & runtime problem-solving. Equip employees with multiple skills, adjust manpower on the fly, and manage shifts with one click."}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card 5 */}
-              <Card className="border-l-4 border-l-brand-red border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
-                <CardHeader className="space-y-3 pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-md bg-brand-red/10 text-brand-red flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-                      <Target className="h-5 w-5" />
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-brand-red">
-                      {settings.cap5Badge || "GAP ANALYSIS"}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
-                    {settings.cap5Title || "Competency Mapping"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {settings.cap5Desc || "Functional radars, capability graphs, and training feedback loops designed to benchmark employee proficiency across technical stacks and operational workflows."}
-                  </p>
-                </CardContent>
-              </Card>
-
-              {/* Card 6 */}
-              <Card className="border-l-4 border-l-foreground border border-border bg-card shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all duration-200 group rounded-sm">
-                <CardHeader className="space-y-3 pb-3">
-                  <div className="flex items-center justify-between">
-                    <div className="h-11 w-11 rounded-md bg-muted text-foreground flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-                      <TrendingUp className="h-5 w-5" />
-                    </div>
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-                      {settings.cap6Badge || "CONTINUOUS LEARNING"}
-                    </span>
-                  </div>
-                  <CardTitle className="text-xl font-extrabold text-foreground tracking-tight">
-                    {settings.cap6Title || "Up-Skilling & Re-Skilling"}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed">
-                    {settings.cap6Desc || "Continuous workforce learning pathways aligned to tech trends. Expand employee skillsets to keep pace with changing market demands, tech stacks, and industry shifts."}
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+        <WhyChoose />
 
         {/* SECTION 2: SKILLMETRICS VS EXCEL INTERACTIVE COMPARISON SLIDER */}
         <section id="excel-vs-skillmetrics" className="w-full bg-[#FAF8F5] dark:bg-background py-20 border-b border-border/60 scroll-mt-24">

@@ -46,5 +46,22 @@ export default async function ContactPage() {
     console.error("Failed to fetch contact settings from database:", e);
   }
 
+  // Also merge content from page_content table (from Pages studio)
+  try {
+    const pageContentRows = await sql`SELECT * FROM page_content WHERE page_slug = 'contact';`;
+    if (pageContentRows && pageContentRows.length > 0) {
+      pageContentRows.forEach((row: any) => {
+        const json = row.content_json || {};
+        Object.keys(json).forEach((key) => {
+          if (json[key] !== undefined && json[key] !== null && json[key] !== "") {
+            (dbMapped as any)[key] = json[key];
+          }
+        });
+      });
+    }
+  } catch (e) {
+    console.error("Failed to fetch page_content for contact page:", e);
+  }
+
   return <ContactPageClient settings={dbMapped as ContactPageData} />;
 }

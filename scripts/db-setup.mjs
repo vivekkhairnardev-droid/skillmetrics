@@ -441,34 +441,59 @@ async function setup() {
     }
 
     // Seeding: Contact Page Settings
-    const contactSettingsCount = await sql`SELECT count(*) FROM contact_page_settings;`;
-    if (parseInt(contactSettingsCount[0].count) === 0) {
-      await sql`
-        INSERT INTO contact_page_settings (
-          id, hero_title, hero_subtitle, email,
-          uk_office_label, uk_office_badge, uk_office_address, uk_office_phone,
-          india_office_label, india_office_badge, india_office_address, india_office_phone1, india_office_phone2,
-          operating_hours, sla_note, security_title, security_description,
-          form_title, form_subtitle, success_message, success_description
-        ) VALUES (
-          1,
-          'Connect with Our Competency Experts',
-          'Have questions about enterprise licensing, ISO audit compliance, custom role mapping, or integrations? We are here to help.',
-          'hello@skillmetrics.io',
-          'UK Headquarters', 'Corporate Licensing', 'SkillMetrics Ltd, 128 City Road, London, EC1V 2NX, United Kingdom', '+44 20 7946 0192',
-          'R&D and Delivery Center', 'India HQ', 'SkillMetrics Tech India, 4th Floor, Sector 62, Noida, UP 201301, India', '+91 120 496 0192', '+91 98765 43210',
-          'Monday – Friday, 9:30 AM – 6:30 PM IST (GMT+5:30)',
-          'Our technical support team typically responds to all enterprise queries within 2 hours during operational windows.',
-          'Enterprise Grade Data Privacy & Security',
-          'SkillMetrics complies with GDPR, SOC2 Type II (in progress), and ISO 27001 standards. All client sandbox environments are fully isolated with AES-256 database encryption at rest.',
-          'Send us a message',
-          'Fill out the form below, and our solutions architects will reach out shortly.',
-          'Submission Successful!',
-          'Thank you for reaching out. A SkillMetrics enterprise specialist will contact you shortly.'
-        );
-      `;
-      console.log("✓ Seeded default contact page settings");
-    }
+    await sql`
+      INSERT INTO contact_page_settings (
+        id, hero_title, hero_subtitle, email,
+        uk_office_label, uk_office_badge, uk_office_address, uk_office_phone,
+        india_office_label, india_office_badge, india_office_address, india_office_phone1, india_office_phone2,
+        operating_hours, sla_note, security_title, security_description,
+        form_title, form_subtitle, success_message, success_description
+      ) VALUES (
+        1,
+        'Enterprise Support, Demo & Contact Us',
+        'Have questions about custom skill matrices, enterprise security, or biometric integrations? Talk to our specialists.',
+        'info@skillmetrics.net',
+        'UK Office',
+        'Global HQ',
+        'Flat-3, Farraline Court Strothers Lane, Inverness, IV11PN, UK',
+        '+44 743 889 5016',
+        'India Office',
+        'R&D Center',
+        '5th, 3rd floor, Sadashiv Motkari Complex, Sadashiv Nagar, Opp Sagar Sweets, Govind Nagar, Nashik – 422009',
+        '+91 77200 86663',
+        '+91 93731 33117',
+        'Monday – Friday: 9:00 AM – 7:00 PM (IST / GMT)',
+        '24/7 SLA Support for Enterprise Tier',
+        'Enterprise Grade Security & Audits',
+        'ISO 27001 & SOC-2 Type II certified. All competency assessments & biometric data encrypted via AES-256 with optional dedicated VPC deployment.',
+        'Send Us a Message',
+        'Fill out the details below and we''ll get back to you immediately.',
+        'Message Sent Successfully!',
+        'Thank you for reaching out. Our enterprise specialist will contact you at your email address within 2 hours.'
+      )
+      ON CONFLICT (id) DO UPDATE SET
+        hero_title = EXCLUDED.hero_title,
+        hero_subtitle = EXCLUDED.hero_subtitle,
+        email = EXCLUDED.email,
+        uk_office_label = EXCLUDED.uk_office_label,
+        uk_office_badge = EXCLUDED.uk_office_badge,
+        uk_office_address = EXCLUDED.uk_office_address,
+        uk_office_phone = EXCLUDED.uk_office_phone,
+        india_office_label = EXCLUDED.india_office_label,
+        india_office_badge = EXCLUDED.india_office_badge,
+        india_office_address = EXCLUDED.india_office_address,
+        india_office_phone1 = EXCLUDED.india_office_phone1,
+        india_office_phone2 = EXCLUDED.india_office_phone2,
+        operating_hours = EXCLUDED.operating_hours,
+        sla_note = EXCLUDED.sla_note,
+        security_title = EXCLUDED.security_title,
+        security_description = EXCLUDED.security_description,
+        form_title = EXCLUDED.form_title,
+        form_subtitle = EXCLUDED.form_subtitle,
+        success_message = EXCLUDED.success_message,
+        success_description = EXCLUDED.success_description;
+    `;
+    console.log("✓ Seeded default contact page settings");
 
     // Seeding: Sample Blog Posts
     const postsCount = await sql`SELECT count(*) FROM posts;`;

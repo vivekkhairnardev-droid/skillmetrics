@@ -128,103 +128,100 @@ export function Navbar() {
                       <div className="grid grid-cols-12 gap-6 text-left">
 
                         {/* Features Grid (9 Cols) */}
-                        <div className="col-span-9 grid grid-cols-3 gap-5">
+                        <div className="col-span-9 grid grid-cols-3 gap-6">
 
                           {/* Column 1: SKILL EVALUATION */}
-                          <div className="space-y-3">
-                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
-                              <div className="h-1 w-4 rounded-full bg-brand-red" />
+                          <div className="space-y-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/40">
                               <span>Skill Evaluation</span>
                             </div>
-                            <div className="space-y-0.5">
-                              <NavigationMenuLink render={<Link href="/features/skill-matrix" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/15 shrink-0 group-hover/item:bg-brand-red group-hover/item:text-white transition-all duration-300">
-                                  <Layers className="h-4 w-4" />
+                            <div className="space-y-3">
+                              <NavigationMenuLink render={<Link href="/features/skill-matrix" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Layers className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-brand-red transition-colors">Skill Matrix</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Real-time competency grid</div>
-                                </div>
-                              </NavigationMenuLink>
-
-                              <NavigationMenuLink render={<Link href="/features/employee-metrics" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/15 shrink-0 group-hover/item:bg-brand-red group-hover/item:text-white transition-all duration-300">
-                                  <Users className="h-4 w-4" />
-                                </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-brand-red transition-colors">Employee Metrics</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Dynamic performance matrices</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Skill Matrix</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Real-time competency grid</div>
                                 </div>
                               </NavigationMenuLink>
 
-                              <NavigationMenuLink render={<Link href="/features/ai-assessments" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/15 shrink-0 group-hover/item:bg-brand-red group-hover/item:text-white transition-all duration-300">
-                                  <Bot className="h-4 w-4" />
+                              <NavigationMenuLink render={<Link href="/features/employee-metrics" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Users className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-brand-red transition-colors flex items-center gap-1.5">
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Employee Metrics</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Dynamic performance matrices</div>
+                                </div>
+                              </NavigationMenuLink>
+
+                              <NavigationMenuLink render={<Link href="/features/ai-assessments" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Bot className="h-4.5 w-4.5" />
+                                </div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors flex items-center gap-1.5">
                                     AI Assessments
-                                    <Badge variant="outline" className="text-[8px] uppercase font-bold text-brand-red border-brand-red/30 px-1 py-0">AI</Badge>
+                                    <Badge variant="outline" className="text-[8px] uppercase font-bold text-muted-foreground border-border px-1 py-0">AI</Badge>
                                   </div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Interactive capability bots</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Interactive capability bots</div>
                                 </div>
                               </NavigationMenuLink>
                             </div>
                           </div>
 
                           {/* Column 2: WORKFORCE & SKILLING */}
-                          <div className="space-y-3">
-                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
-                              <div className="h-1 w-4 rounded-full bg-amber-500" />
+                          <div className="space-y-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/40">
                               <span>Workforce &amp; Skilling</span>
                             </div>
-                            <div className="space-y-0.5">
-                              <NavigationMenuLink render={<Link href="/features/multi-skilling" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/15 shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-300">
-                                  <Zap className="h-4 w-4" />
+                            <div className="space-y-3">
+                              <NavigationMenuLink render={<Link href="/features/multi-skilling" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Zap className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-amber-600 transition-colors">Multi-Skilling</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Runtime skill allocation</div>
-                                </div>
-                              </NavigationMenuLink>
-
-                              <NavigationMenuLink render={<Link href="/features/competency-mapping" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/15 shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-300">
-                                  <Target className="h-4 w-4" />
-                                </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-amber-600 transition-colors">Competency Mapping</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Functional radar graphs</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Multi-Skilling</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Runtime skill allocation</div>
                                 </div>
                               </NavigationMenuLink>
 
-                              <NavigationMenuLink render={<Link href="/features/up-reskilling" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/15 shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-300">
-                                  <TrendingUp className="h-4 w-4" />
+                              <NavigationMenuLink render={<Link href="/features/competency-mapping" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Target className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-amber-600 transition-colors">Up &amp; Re-Skilling</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Workforce learning paths</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Competency Mapping</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Functional radar graphs</div>
+                                </div>
+                              </NavigationMenuLink>
+
+                              <NavigationMenuLink render={<Link href="/features/up-reskilling" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <TrendingUp className="h-4.5 w-4.5" />
+                                </div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Up &amp; Re-Skilling</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Workforce learning paths</div>
                                 </div>
                               </NavigationMenuLink>
                             </div>
                           </div>
 
                           {/* Column 3: ANALYTICS */}
-                          <div className="space-y-3">
-                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
-                              <div className="h-1 w-4 rounded-full bg-blue-500" />
+                          <div className="space-y-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/40">
                               <span>Analytics</span>
                             </div>
-                            <div className="space-y-0.5">
-                              <NavigationMenuLink render={<Link href="/features/powerful-dashboards" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-blue-500/8 text-blue-600 border border-blue-500/15 shrink-0 group-hover/item:bg-blue-500 group-hover/item:text-white transition-all duration-300">
-                                  <LayoutDashboard className="h-4 w-4" />
+                            <div className="space-y-3">
+                              <NavigationMenuLink render={<Link href="/features/powerful-dashboards" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <LayoutDashboard className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-blue-600 transition-colors">Dashboards</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">1-click reports &amp; matrices</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Dashboards</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">1-click reports &amp; matrices</div>
                                 </div>
                               </NavigationMenuLink>
                             </div>
@@ -233,48 +230,33 @@ export function Navbar() {
                         </div>
 
                         {/* Right Spotlight Sidebar (3 Cols) */}
-                        <div className="col-span-3 rounded-sm border border-border/60 bg-gradient-to-b from-brand-red/5 to-transparent p-5 flex flex-col justify-between">
+                        <div className="col-span-3 rounded-xl border border-border/60 bg-gradient-to-b from-brand-red/5 to-transparent p-5 flex flex-col justify-between">
                           <div className="space-y-3">
-
-                            <div className="p-3 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/20 w-fit">
+                            <div className="p-3 rounded-md bg-muted/60 text-muted-foreground border border-border/40 w-fit">
                               <Bot className="h-5 w-5" />
                             </div>
                             <div>
                               <h4 className="font-bold text-sm text-foreground leading-snug">AI-Powered Competency Management</h4>
-                              <p className="text-[11px] text-muted-foreground leading-relaxed mt-1">
+                              <p className="text-xs text-muted-foreground leading-relaxed mt-1.5">
                                 Centralize skills, automate evaluations, and generate matrices effortlessly with AI.
                               </p>
                             </div>
                           </div>
 
                           <NavigationMenuLink render={<Link href="/book-demo" className="w-full mt-4" />}>
-                            <Button size="sm" className="w-full cursor-pointer font-medium text-xs bg-brand-red hover:bg-brand-red/90 text-white border border-brand-red rounded-sm shadow-none [box-shadow:none]">
-                              Book a Demo <ArrowUpRight className="h-3 w-3 ml-1" />
+                            <Button size="sm" className="w-full cursor-pointer font-medium text-xs bg-brand-red hover:bg-brand-red/90 text-white border border-brand-red rounded-md shadow-none">
+                              Book a Demo <ArrowUpRight className="h-3.5 w-3.5 ml-1" />
                             </Button>
                           </NavigationMenuLink>
                         </div>
 
                       </div>
                     </div>
-
-                    {/* Bottom Feature Strip */}
-                    <div className="border-t border-border/60 bg-muted/20 px-6 py-2.5 flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-[11px] text-muted-foreground">
-                        <span><span className="font-bold text-foreground">7</span> Core Modules</span>
-                        <div className="h-3 w-px bg-border" />
-                        <span><span className="font-bold text-foreground">3</span> Categories</span>
-                        <div className="h-3 w-px bg-border" />
-                        <span>Enterprise Ready</span>
-                      </div>
-                      <NavigationMenuLink render={<Link href="/features" className="text-[11px] font-semibold text-brand-red hover:underline flex items-center gap-1" />}>
-                        View all features <ArrowUpRight className="h-3 w-3" />
-                      </NavigationMenuLink>
-                    </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
                 {/* Solutions MegaMenu Item (Commented Out) */}
-                {/* 
+
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent hover:bg-muted/30 data-[state=open]:bg-muted/30 text-foreground/80 hover:text-foreground font-medium px-3.5 py-2 rounded-sm cursor-pointer transition-colors">
                     Solutions
@@ -400,10 +382,9 @@ export function Navbar() {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-                */}
 
                 {/* Customers MegaMenu Item (Commented Out) */}
-                {/* 
+
                 <NavigationMenuItem>
                   <NavigationMenuTrigger className="bg-transparent hover:bg-muted/30 data-[state=open]:bg-muted/30 text-foreground/80 hover:text-foreground font-medium px-3.5 py-2 rounded-sm cursor-pointer transition-colors">
                     Customers
@@ -463,7 +444,7 @@ export function Navbar() {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-                */}
+
 
                 {/* Custom Nav Links */}
                 {(settings.navLinks || [])
@@ -575,8 +556,7 @@ export function Navbar() {
                 )}
               </div>
 
-              {/* Solutions Accordion (Commented Out) */}
-              {/* 
+              {/* Solutions Accordion */}
               <div className="border-b border-border/50">
                 <button
                   onClick={() => setMobileExpanded(mobileExpanded === "solutions" ? null : "solutions")}
@@ -635,7 +615,6 @@ export function Navbar() {
                   </div>
                 )}
               </div>
-              */}
 
               {/* Customers Accordion (Commented Out) */}
               {/* 
