@@ -42,6 +42,7 @@
   --color-brand-red: var(--brand-red);
   --color-brand-yellow: var(--brand-yellow);
   --color-brand-black: var(--brand-black);
+  --color-brand-dark: var(--brand-dark);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -59,6 +60,7 @@
   --brand-yellow: oklch(0.852 0.199 91.936);
   --brand-red: oklch(0.577 0.245 27.325);
   --brand-black: oklch(0.147 0.004 49.3);
+  --brand-dark: #0c0a09;
 
   --background: oklch(0.99 0.002 95);
   --foreground: var(--brand-black);

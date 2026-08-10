@@ -232,7 +232,7 @@ export function Navbar() {
                         {/* Right Spotlight Sidebar (3 Cols) */}
                         <div className="col-span-3 rounded-xl border border-border/60 bg-gradient-to-b from-brand-red/5 to-transparent p-5 flex flex-col justify-between">
                           <div className="space-y-3">
-                            <div className="p-3 rounded-md bg-muted/60 text-muted-foreground border border-border/40 w-fit">
+                            <div className="p-3 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/20 w-fit">
                               <Bot className="h-5 w-5" />
                             </div>
                             <div>
@@ -264,87 +264,94 @@ export function Navbar() {
                   <NavigationMenuContent className="w-[90vw] lg:w-[1216px] max-w-7xl bg-white dark:bg-black shadow-2xl rounded-sm overflow-hidden">
                     <div className="p-6">
                       <div className="grid grid-cols-12 gap-6 text-left">
-                        <div className="col-span-9 grid grid-cols-3 gap-5">
-                          <div className="space-y-3">
-                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
-                              <div className="h-1 w-4 rounded-full bg-brand-red" />
+                        <div className="col-span-9 grid grid-cols-3 gap-6">
+
+                          {/* Column 1: Discrete Manufacturing */}
+                          <div className="space-y-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/40">
                               <span>Discrete Manufacturing</span>
                             </div>
-                            <div className="space-y-0.5">
-                              <NavigationMenuLink render={<Link href="/solutions/automotive" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/15 shrink-0 group-hover/item:bg-brand-red group-hover/item:text-white transition-all duration-300">
-                                  <Car className="h-4 w-4" />
+                            <div className="space-y-3">
+                              <NavigationMenuLink render={<Link href="/solutions/automotive" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Car className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-brand-red transition-colors">Automotive</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Assembly &amp; parts production tracking</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Automotive</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Assembly &amp; parts production tracking</div>
                                 </div>
                               </NavigationMenuLink>
-                              <NavigationMenuLink render={<Link href="/solutions/electronics" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-brand-red/8 text-brand-red border border-brand-red/15 shrink-0 group-hover/item:bg-brand-red group-hover/item:text-white transition-all duration-300">
-                                  <Cpu className="h-4 w-4" />
+
+                              <NavigationMenuLink render={<Link href="/solutions/electronics" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Cpu className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-brand-red transition-colors">Electronics</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Precision hardware competency</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Electronics</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Precision hardware competency</div>
                                 </div>
                               </NavigationMenuLink>
                             </div>
                           </div>
-                          <div className="space-y-3">
-                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
-                              <div className="h-1 w-4 rounded-full bg-amber-500" />
+
+                          {/* Column 2: Process & Compliance */}
+                          <div className="space-y-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/40">
                               <span>Process &amp; Compliance</span>
                             </div>
-                            <div className="space-y-0.5">
-                              <NavigationMenuLink render={<Link href="/solutions/food-beverage" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/15 shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-300">
-                                  <Utensils className="h-4 w-4" />
+                            <div className="space-y-3">
+                              <NavigationMenuLink render={<Link href="/solutions/food-beverage" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Utensils className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-amber-600 transition-colors">Food &amp; Beverage</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Quality &amp; safety standard training</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Food &amp; Beverage</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Quality &amp; safety standard training</div>
                                 </div>
                               </NavigationMenuLink>
-                              <NavigationMenuLink render={<Link href="/solutions/pharmaceuticals" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-amber-500/8 text-amber-600 border border-amber-500/15 shrink-0 group-hover/item:bg-amber-500 group-hover/item:text-white transition-all duration-300">
-                                  <FlaskConical className="h-4 w-4" />
+
+                              <NavigationMenuLink render={<Link href="/solutions/pharmaceuticals" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <FlaskConical className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-amber-600 transition-colors">Pharmaceuticals</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">GxP compliance operations</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Pharmaceuticals</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">GxP compliance operations</div>
                                 </div>
                               </NavigationMenuLink>
                             </div>
                           </div>
-                          <div className="space-y-3">
-                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-2">
-                              <div className="h-1 w-4 rounded-full bg-blue-500" />
+
+                          {/* Column 3: Heavy Industries */}
+                          <div className="space-y-4">
+                            <div className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 pb-1 border-b border-border/40">
                               <span>Heavy Industries</span>
                             </div>
-                            <div className="space-y-0.5">
-                              <NavigationMenuLink render={<Link href="/solutions/aerospace" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-blue-500/8 text-blue-600 border border-blue-500/15 shrink-0 group-hover/item:bg-blue-500 group-hover/item:text-white transition-all duration-300">
-                                  <Plane className="h-4 w-4" />
+                            <div className="space-y-3">
+                              <NavigationMenuLink render={<Link href="/solutions/aerospace" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Plane className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-blue-600 transition-colors">Aerospace</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Safety-critical compliance systems</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Aerospace</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Safety-critical compliance systems</div>
                                 </div>
                               </NavigationMenuLink>
-                              <NavigationMenuLink render={<Link href="/solutions/heavy-manufacturing" className="group/item flex items-start gap-3 p-2.5 rounded-sm hover:bg-muted/30 transition-all duration-200" />}>
-                                <div className="p-2 rounded-sm bg-blue-500/8 text-blue-600 border border-blue-500/15 shrink-0 group-hover/item:bg-blue-500 group-hover/item:text-white transition-all duration-300">
-                                  <Factory className="h-4 w-4" />
+
+                              <NavigationMenuLink render={<Link href="/solutions/heavy-manufacturing" className="group/item flex items-start gap-3.5 p-3 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800/60 transition-all duration-200" />}>
+                                <div className="p-2.5 rounded-md bg-muted/60 text-muted-foreground border border-border/40 shrink-0 group-hover/item:bg-slate-200 dark:group-hover/item:bg-slate-700 group-hover/item:text-foreground transition-all duration-200">
+                                  <Factory className="h-4.5 w-4.5" />
                                 </div>
-                                <div>
-                                  <div className="text-sm font-bold text-foreground group-hover/item:text-blue-600 transition-colors">Heavy Manufacturing</div>
-                                  <div className="text-[11px] text-muted-foreground leading-snug">Industrial plant competencies</div>
+                                <div className="space-y-0.5">
+                                  <div className="text-sm font-bold text-foreground group-hover/item:text-foreground transition-colors">Heavy Manufacturing</div>
+                                  <div className="text-xs text-muted-foreground leading-snug">Industrial plant competencies</div>
                                 </div>
                               </NavigationMenuLink>
                             </div>
                           </div>
+
                         </div>
-                        <div className="col-span-3 rounded-sm border border-border/60 bg-gradient-to-b from-amber-500/5 to-transparent p-5 flex flex-col justify-between">
+                        <div className="col-span-3 rounded-xl border border-border/60 bg-gradient-to-b from-brand-red/5 to-transparent p-5 flex flex-col justify-between">
                           <div className="space-y-3">
                             <div className="flex items-center justify-between">
                               <Badge variant="outline" className="text-[9px] uppercase font-bold text-brand-red border-brand-red/30 px-1.5 py-0">Industry CMS</Badge>
@@ -368,18 +375,7 @@ export function Navbar() {
                         </div>
                       </div>
                     </div>
-                    <div className="border-t border-border/60 bg-muted/20 px-6 py-2.5 flex items-center justify-between">
-                      <div className="flex items-center gap-4 text-[11px] text-muted-foreground">
-                        <span><span className="font-bold text-foreground">6</span> Industries</span>
-                        <div className="h-3 w-px bg-border" />
-                        <span><span className="font-bold text-foreground">3</span> Sectors</span>
-                        <div className="h-3 w-px bg-border" />
-                        <span>ISO Compliant</span>
-                      </div>
-                      <NavigationMenuLink render={<Link href="/solutions" className="text-[11px] font-semibold text-brand-red hover:underline flex items-center gap-1" />}>
-                        View all solutions <ArrowUpRight className="h-3 w-3" />
-                      </NavigationMenuLink>
-                    </div>
+
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
