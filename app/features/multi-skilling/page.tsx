@@ -3,7 +3,6 @@
 import React from "react";
 import Link from "next/link";
 import {
-  RefreshCw,
   CheckCircle2,
   ArrowRight,
   Zap,
@@ -13,7 +12,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { SubscribeSection } from "@/components/subscribe-section";
@@ -27,10 +25,6 @@ export default function MultiSkillingPage() {
       <section className="bg-brand-dark text-white py-14 sm:py-20 border-b border-border/20 relative overflow-hidden">
         <div className="absolute -left-24 -top-24 w-96 h-96 bg-brand-red/20 rounded-full blur-3xl pointer-events-none" />
         <div className="container max-w-5xl mx-auto px-4 sm:px-8 text-center space-y-6 relative z-10">
-          <Badge className="bg-brand-red/20 text-brand-red border border-brand-red/30 px-3 py-1 text-xs uppercase font-extrabold tracking-wider">
-            Operational Versatility &amp; Agility
-          </Badge>
-
           <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-white leading-tight">
             Multi-Skilling: <span className="text-brand-yellow">Operational Versatility</span>
           </h1>
@@ -62,9 +56,6 @@ export default function MultiSkillingPage() {
         <div className="container max-w-7xl mx-auto px-4 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded bg-brand-red/10 text-brand-red font-extrabold text-xs uppercase tracking-wider">
-                <RefreshCw className="h-4 w-4" /> Workforce Fluidity Optimization
-              </div>
               <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground tracking-tight">
                 Minimize Production Bottlenecks With Multi-Skilled Operators
               </h2>

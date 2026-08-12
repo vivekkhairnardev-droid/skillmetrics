@@ -102,40 +102,12 @@ export default function AIAssessmentsPage() {
               </div>
             </div>
 
-            <div className="lg:col-span-6 rounded-xl border border-border/80 shadow-2xl overflow-hidden bg-slate-50 dark:bg-card p-4 sm:p-6 relative">
-              <div className="absolute top-3 right-3 flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">AI Evaluator Active</span>
-              </div>
-              <div className="space-y-4">
-                <div className="bg-slate-950 text-slate-300 font-mono text-xs p-4 rounded-lg space-y-2 border border-slate-800 shadow-inner">
-                  <p className="text-slate-500">// Ingesting internal SOP framework...</p>
-                  <p className="text-brand-yellow">✓ Detected: 12 Local Database Schemas</p>
-                  <p className="text-brand-yellow">✓ Detected: Next.js + PostgreSQL Boilerplate</p>
-                  <p className="text-slate-500">// Constructing specialized query evaluation task...</p>
-                  <p className="text-white">🚀 [Task Ready]: Multi-stage data normalization & index analysis.</p>
-                </div>
-                <div className="border border-border/60 bg-white dark:bg-slate-900/60 p-4 rounded-lg space-y-3">
-                  <div className="flex justify-between items-center text-xs">
-                    <span className="font-bold text-foreground">Assessment Blueprint: DB Architecture</span>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-brand-red">SOP Align</span>
-                  </div>
-                  <div className="space-y-2 text-xs text-muted-foreground">
-                    <div className="flex items-center gap-2">
-                      <Check className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>Evaluates connection pooling & transaction boundaries</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Check className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>Measures query performance on large indices</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Check className="h-3.5 w-3.5 text-emerald-600" />
-                      <span>Scores resource safety profiles (SQL Injection resilience)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="lg:col-span-6 rounded-xl border border-border/80 shadow-2xl overflow-hidden bg-slate-50 dark:bg-card p-2 sm:p-3 relative">
+              <img
+                src="/ai_asses.png"
+                alt="AI Assessment Platform Interface"
+                className="w-full h-auto rounded-lg object-cover"
+              />
             </div>
           </div>
         </div>
