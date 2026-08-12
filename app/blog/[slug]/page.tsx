@@ -85,7 +85,7 @@ export default async function BlogPostDetailPage({ params }: PageProps) {
 
   let relatedPosts: any[] = [];
   try {
-    const dbRelated = await sql`SELECT * FROM posts WHERE slug != ${slug} AND published = true ORDER BY created_at DESC LIMIT 2;`;
+    const dbRelated = await sql`SELECT * FROM posts WHERE slug != ${slug} AND published_at IS NOT NULL ORDER BY published_at DESC LIMIT 2;`;
     if (dbRelated && Array.isArray(dbRelated)) relatedPosts = dbRelated;
   } catch (e) {
     console.error("Error fetching related posts:", e);

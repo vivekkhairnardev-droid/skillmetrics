@@ -26,7 +26,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let blogRoutes: MetadataRoute.Sitemap = [];
   try {
-    const posts = await sql`SELECT slug, updated_at, created_at FROM posts WHERE published = true ORDER BY created_at DESC;`;
+    const posts = await sql`SELECT slug, updated_at, published_at FROM posts WHERE published_at IS NOT NULL ORDER BY published_at DESC;`;
     if (posts && Array.isArray(posts)) {
       blogRoutes = posts.map((post: any) => ({
         url: `${baseUrl}/blog/${post.slug}`,

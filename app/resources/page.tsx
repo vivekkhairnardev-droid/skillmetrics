@@ -11,9 +11,9 @@ export default async function ResourcesPage() {
 
   try {
     const [dbBlogs, dbStudies, dbRes] = await Promise.all([
-      sql`SELECT * FROM posts WHERE published = true ORDER BY created_at DESC;`,
-      sql`SELECT * FROM case_studies ORDER BY created_at DESC;`,
-      sql`SELECT * FROM resources ORDER BY created_at DESC;`,
+      sql`SELECT * FROM posts WHERE published_at IS NOT NULL ORDER BY published_at DESC;`,
+      sql`SELECT * FROM case_studies ORDER BY published_at DESC;`,
+      sql`SELECT * FROM resources ORDER BY published_at DESC;`,
     ]);
 
     if (dbBlogs && Array.isArray(dbBlogs)) blogs = dbBlogs;
